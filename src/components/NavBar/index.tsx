@@ -1,6 +1,6 @@
 'use client'
 
-import { Group, Code, NavLink, Stack } from '@mantine/core';
+import { Group, Code, NavLink, Stack, AppShell, Skeleton } from '@mantine/core';
 import {
     IconNotes,
     IconCalendarStats,
@@ -47,31 +47,14 @@ const mockdata = [
     },
 ];
 
-export default function Drawer(props: any) {
-    const links = mockdata.map((item) => <NavLink style={{ padding: '1rem' }} {...item} key={item.label} />);
+export default (props: any) => {
+    const links = mockdata.map((item) => <NavLink leftSection={<item.icon />} style={{ padding: '1.5rem' }} {...item} key={item.label} />);
 
     return (
-        <Container fluid h='100vh' w='12vw' mx='0' px='0' style={{ alignItems: 'flex-start' }}>
-            <Group h='7.5%' w='100%' justify="space-between" style={{ borderBottom: '1px solid #dee2e6' }}>
-                {/* <Logo style={{ width: rem(120) }} /> */}
-                <Code fw={700}>v3.1.2</Code>
-            </Group>
-
-            <Stack
-                bg="var(--mantine-color-body)"
-                align="stretch"
-                justify="flex-start"
-                gap="md"
-                h='85%'
-                style={{ overflow: 'scroll' }}
-            >
-                {links}
-            </Stack>
-
-            <Group h='7.5%' w='100%' justify="space-between" style={{ borderTop: '1px solid #dee2e6' }}>
-                {/* <Logo style={{ width: rem(120) }} /> */}
-                <Code fw={700}>v3.1.2</Code>
-            </Group>
-        </Container>
+        //usar com componentes AppShell, exemplo: /admin/detalhesEscola
+    
+        <AppShell.Navbar p="md">
+            {links}
+        </AppShell.Navbar>
     )
 };
