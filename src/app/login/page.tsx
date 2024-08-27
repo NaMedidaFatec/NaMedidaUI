@@ -1,37 +1,50 @@
 "use client";
-
-import React, { useState } from "react";
-import { ErrorMessage, Field, Form, withFormik } from "formik";
-import UserValidation from "../validations/login";
-import { User } from "../model/user";
-import UserService from "../services/user";
+import React from "react";
+import { useEffect, useState } from "react";
+import { Form, withFormik } from "formik";
+import UserValidation from "../../validations/login";
+import { User } from "../../model/user";
 import {
   Button,
   Container,
   Input,
   Paper,
   Title,
-} from "../components/general";
-import * as Yup from "yup";
+} from "../../components/general";
 import { Anchor, Image, Text } from "@mantine/core";
+import { useAuth } from "../../hooks/useAuth";
 
-function Login(props: any) {
-  const { errors, values, handleChange, handleSubmit, handleBlur } = props;
-  const [currentState, setCurrentState] = useState('LOGIN');
+function Login(props) {
+  const { errors, values, handleChange, handleSubmit, handleBlur, status } =
+    props;
+
+  const { signin } = useAuth();
+
+  const [currentState, setCurrentState] = useState("LOGIN");
+
+  useEffect(() => {
+    if (status && status.user) {
+      handleLogin(status.user);
+    }
+  }, [status]);
+
+  const handleLogin = async (values: User) => {
+    await signin(values);
+  };
 
   const renderState = () => {
     switch (currentState) {
-      case 'LOGIN':
+      case "LOGIN":
         return (
           <>
             <Image
-              fit='fill'
-              w='auto'
-              maw='60%'
-              h='100%'
-              src="/loginImage.png" />
-            <Paper radius={0} px={30} w='40%'>
-
+              fit="fill"
+              w="auto"
+              maw="60%"
+              h="100%"
+              src="/loginImage.png"
+            />
+            <Paper radius={0} px={30} w="40%">
               <Title order={2} ta="center" mt="md" mb={50}>
                 Seja bem-vindo!
               </Title>
@@ -67,27 +80,30 @@ function Login(props: any) {
               </Button>
 
               <Text ta="center" mt="md">
-                Não possui conta?{' '}
-                <Anchor href="#" fw={700} onClick={() => setCurrentState('REGISTRO')}>
+                Não possui conta?{" "}
+                <Anchor
+                  href="#"
+                  fw={700}
+                  onClick={() => setCurrentState("REGISTRO")}
+                >
                   Registre-se
                 </Anchor>
               </Text>
-
             </Paper>
           </>
         );
-      case 'REGISTRO':
+      case "REGISTRO":
         return (
           <>
             <Image
-              fit='fill'
-              w='auto'
-              maw='60%'
-              h='100%'
-              src="/loginImage.png" />
+              fit="fill"
+              w="auto"
+              maw="60%"
+              h="100%"
+              src="/loginImage.png"
+            />
 
-            <Paper radius={0} px={30} w='40%'>
-
+            <Paper radius={0} px={30} w="40%">
               <Title order={2} ta="center" mt="md" mb={50}>
                 Crie sua conta
               </Title>
@@ -131,7 +147,7 @@ function Login(props: any) {
                 sufixComponent={undefined}
               />
 
-              <Container display='flex' px={0} style={{ gap: '1rem' }}>
+              <Container display="flex" px={0} style={{ gap: "1rem" }}>
                 <Input
                   name="registroSenha"
                   value={values.registroSenha}
@@ -143,7 +159,7 @@ function Login(props: any) {
                   required
                   type={undefined}
                   sufixComponent={undefined}
-                  style={{ width: '50%' }}
+                  style={{ width: "50%" }}
                 />
 
                 <Input
@@ -157,37 +173,44 @@ function Login(props: any) {
                   required
                   type={undefined}
                   sufixComponent={undefined}
-                  style={{ width: '50%' }}
-
+                  style={{ width: "50%" }}
                 />
               </Container>
 
-              <Button fullWidth mt="xl" size="md" onClick={() => setCurrentState('CONTINUARREGISTRO')}>
+              <Button
+                fullWidth
+                mt="xl"
+                size="md"
+                onClick={() => setCurrentState("CONTINUARREGISTRO")}
+              >
                 CONTINUAR REGISTRO
               </Button>
 
               <Text ta="center" mt="md">
-                Já possui conta?{' '}
-                <Anchor href="#" fw={700} onClick={() => setCurrentState('LOGIN')}>
+                Já possui conta?{" "}
+                <Anchor
+                  href="#"
+                  fw={700}
+                  onClick={() => setCurrentState("LOGIN")}
+                >
                   Entrar
                 </Anchor>
               </Text>
-
             </Paper>
           </>
         );
-      case 'CONTINUARREGISTRO':
+      case "CONTINUARREGISTRO":
         return (
           <>
             <Image
-              fit='fill'
-              w='auto'
-              maw='60%'
-              h='100%'
-              src="/loginImage.png" />
+              fit="fill"
+              w="auto"
+              maw="60%"
+              h="100%"
+              src="/loginImage.png"
+            />
 
-            <Paper radius={0} px={30} w='40%'>
-
+            <Paper radius={0} px={30} w="40%">
               <Title order={2} ta="center" mt="md" mb={50}>
                 Concluir registro
               </Title>
@@ -231,7 +254,7 @@ function Login(props: any) {
                 sufixComponent={undefined}
               />
 
-              <Container display='flex' px={0} style={{ gap: '1rem' }}>
+              <Container display="flex" px={0} style={{ gap: "1rem" }}>
                 <Input
                   name="registroBairro"
                   value={values.registroBairro}
@@ -243,7 +266,7 @@ function Login(props: any) {
                   required
                   type={undefined}
                   sufixComponent={undefined}
-                  style={{ width: '50%' }}
+                  style={{ width: "50%" }}
                 />
 
                 <Input
@@ -257,12 +280,11 @@ function Login(props: any) {
                   required
                   type={undefined}
                   sufixComponent={undefined}
-                  style={{ width: '50%' }}
-
+                  style={{ width: "50%" }}
                 />
               </Container>
 
-              <Container display='flex' px={0} style={{ gap: '1rem' }}>
+              <Container display="flex" px={0} style={{ gap: "1rem" }}>
                 <Input
                   name="registroNumero"
                   value={values.registroNumero}
@@ -274,7 +296,7 @@ function Login(props: any) {
                   required
                   type={undefined}
                   sufixComponent={undefined}
-                  style={{ width: '50%' }}
+                  style={{ width: "50%" }}
                 />
 
                 <Input
@@ -288,8 +310,7 @@ function Login(props: any) {
                   required
                   type={undefined}
                   sufixComponent={undefined}
-                  style={{ width: '50%' }}
-
+                  style={{ width: "50%" }}
                 />
               </Container>
 
@@ -298,36 +319,46 @@ function Login(props: any) {
               </Button>
 
               <Text ta="center" mt="md">
-                Já possui conta?{' '}
-                <Anchor href="#" fw={700} onClick={() => setCurrentState('LOGIN')}>
+                Já possui conta?{" "}
+                <Anchor
+                  href="#"
+                  fw={700}
+                  onClick={() => setCurrentState("LOGIN")}
+                >
                   Entrar
                 </Anchor>
               </Text>
-
             </Paper>
           </>
         );
     }
-  }
+  };
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Container fluid display='flex' h='100vh' px={0} style={{ alignItems: 'center' }}>
+      <Container
+        fluid
+        display="flex"
+        h="100vh"
+        px={0}
+        style={{ alignItems: "center" }}
+      >
         {renderState()}
       </Container>
-    </Form >
+    </Form>
   );
-};
+}
 
 export default withFormik({
   validateOnChange: false,
   validateOnBlur: false,
   mapPropsToValues: () => new User(),
   validationSchema: UserValidation,
-  handleSubmit: async (values: User, { setStatus }) => {
-    const result = await UserService.signin(new User(values));
-    if (result) {
-      setStatus(true);
+  handleSubmit: async (user: User, { setStatus }) => {
+    try {
+      await setStatus({ user });
+    } catch (error) {
+      setStatus({ error: "Ocorreu um erro durante o login" });
     }
   },
 })(Login);

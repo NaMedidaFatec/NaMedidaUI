@@ -11,6 +11,8 @@
   "dependencies": {
     "@mantine/core": "^7.12.1",
     "@mantine/hooks": "^7.12.1",
+    "@mantine/notifications": "^7.12.1",
+    "@tabler/icons": "^3.12.0",
     "@tabler/icons-react": "^3.12.0",
     "axios": "^1.7.4",
     "formik": "^2.4.6",
@@ -28,5 +30,11 @@
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
     "typescript": "5.5.4"
+  },
+  "exports": {
+    "./*": [
+      "./icons/*"
+    ],
+    ".": "./icons"
   }
 }

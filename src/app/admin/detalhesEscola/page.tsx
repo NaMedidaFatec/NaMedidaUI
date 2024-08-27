@@ -6,7 +6,6 @@ export default function DetalhesEscola(props: any) {
 
     return (
         <>
-            <Drawer />
         </>
     )
 };
