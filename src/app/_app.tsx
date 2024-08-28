@@ -11,7 +11,7 @@ import {
 import React, { Suspense, useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useRouter, usePathname } from "next/navigation";
-import Drawer from "../components/drawer";
+import Drawer from "../components/NavBar";
 import {
   IconSun,
   IconMoon,
@@ -91,7 +91,7 @@ function Application({ children, ...props }) {
                   </Grid.Col>
                   <Grid.Col
                     span={2}
-                    sx={{
+                    style={{
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
