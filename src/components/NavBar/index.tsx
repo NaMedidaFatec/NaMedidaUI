@@ -43,7 +43,7 @@ export default function NavBar() {
       </div>
       <Group className={classes.footer} justify="space-between">
         Na Medida
-        <Code fw={700}>v3.1.2</Code>
+        <Code fw={700}>v0.0.3</Code>
       </Group>
     </>
   );

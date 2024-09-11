@@ -1,58 +1,88 @@
 'use client'
 
-import { CloseButton, Pagination, Table, Input, Text } from '@mantine/core';
-import { Container } from '../../../components/general';
+import { CloseButton, Pagination, Table, Input, Text, Box } from '@mantine/core';
 import { useState } from 'react';
+import { Button } from '../../../components/general';
+import { IconDots } from "@tabler/icons-react";
 
 export default function DetalhesEscola(props: any) {
     const [value, setValue] = useState('Clear me');
 
     const elements = [
-        { position: 6, mass: 12.011, symbol: 'C', name: 'Carbon' },
-        { position: 7, mass: 14.007, symbol: 'N', name: 'Nitrogen' },
-        { position: 39, mass: 88.906, symbol: 'Y', name: 'Yttrium' },
-        { position: 56, mass: 137.33, symbol: 'Ba', name: 'Barium' },
-        { position: 58, mass: 140.12, symbol: 'Ce', name: 'Cerium' },
+        { name: 'Escola 1' },
+        { name: 'Escola 2' },
+        { name: 'Escola 3' },
+        { name: 'Escola 4' },
     ];
 
     const rows = elements.map((element) => (
         <Table.Tr key={element.name}>
-            <Table.Td>{element.position}</Table.Td>
             <Table.Td>{element.name}</Table.Td>
-            <Table.Td>{element.symbol}</Table.Td>
-            <Table.Td>{element.mass}</Table.Td>
+            <Table.Td display='flex' style={{ justifyContent: 'end' }}>
+                <Button
+                    variant="light"
+                    onClick={() => 1}
+                >
+                    <IconDots />
+                </Button>
+            </Table.Td>
         </Table.Tr>
     ));
 
     return (
-        <Container w='80%'>
-            <Text size="xl">ESCOLAS</Text>
-            <Input
-                placeholder="Clearable input"
-                value={'PESQUISAR'}
-                onChange={(event) => setValue(event.currentTarget.value)}
-                rightSectionPointerEvents="all"
-                mt="md"
-                rightSection={
-                    <CloseButton
-                        aria-label="Clear input"
-                        onClick={() => setValue('')}
-                        style={{ display: value ? undefined : 'none' }}
-                    />
-                }
-            />
-            <Table stickyHeader stickyHeaderOffset={60}>
-                <Table.Thead>
-                    <Table.Tr>
-                        <Table.Th>Element position</Table.Th>
-                        <Table.Th>Element name</Table.Th>
-                        <Table.Th>Symbol</Table.Th>
-                        <Table.Th>Atomic mass</Table.Th>
-                    </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>{rows}</Table.Tbody>
-            </Table>
-            <Pagination total={10} size="sm" />
-        </Container>
+        <Box
+            w='100%'
+            h="89vh"
+            display='flex'
+            style={{ flexDirection: 'column' }}>
+
+            <Box h='15%'>
+                <Text size="xl" mb="md">ESCOLAS</Text>
+                <Input
+                    placeholder="Clearable input"
+                    value={value}
+                    onChange={(event) => setValue(event.currentTarget.value)}
+                    rightSectionPointerEvents="all"
+                    pt='1rem'
+                    rightSection={
+                        <CloseButton
+                            aria-label="Clear input"
+                            onClick={() => setValue('')}
+                            style={{ display: value ? undefined : 'none' }}
+                        />
+                    }
+                />
+            </Box>
+
+            <Box h='80%'>
+                <Table
+                    stickyHeader
+                    stickyHeaderOffset={60}
+                    verticalSpacing='sm'
+                    striped
+                    highlightOnHover 
+                    withRowBorders={false} 
+                    horizontalSpacing="xl" >
+                    <Table.Thead>
+                        <Table.Tr>
+                            <Table.Th>Nome da Escola</Table.Th>
+                        </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody mah='10%'>
+                        {rows}
+                    </Table.Tbody>
+                </Table>
+            </Box>
+
+            <Box h="5%"
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'end'
+                }}
+            >
+                <Pagination total={10} size="sm" />
+            </Box>
+        </Box>
     );
 };
