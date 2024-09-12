@@ -1,36 +1,20 @@
 'use client'
 
-import { Pagination, Table, Text, Box } from '@mantine/core';
-import { Button } from '../../../components/general';
-import { IconDots } from "@tabler/icons-react";
+import { Pagination, Text, Box, SimpleGrid, Button, Grid } from '@mantine/core';
 import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
+import { IconPlus } from '@tabler/icons-react';
 
-function DetalhesEscola(props: any) {
-
-    const tableHeaders = ["Nome da escola"];
+function DetalhesTurmas(props: any) {
+    const tableHeaders = ["Turma", "Qtd Alunos", "Nível", "Período"];
 
     const elements = [
-        { name: 'Escola 1' },
-        { name: 'Escola 2' },
-        { name: 'Escola 3' },
-        { name: 'Escola 4' },
+        { name: 'Turma 1', qtdAlunos: 20, nivel: 'medio', periodo: 'vespertino' },
+        { name: 'Turma 2', qtdAlunos: 20, nivel: 'fundamental', periodo: 'vespertino' },
+        { name: 'Turma 3', qtdAlunos: 20, nivel: 'medio', periodo: 'vespertino' },
+        { name: 'Turma 4', qtdAlunos: 20, nivel: 'medio', periodo: 'matutino' },
     ];
-
-    const rows = elements.map((element) => (
-        <Table.Tr key={element.name}>
-            <Table.Td>{element.name}</Table.Td>
-            <Table.Td display='flex' style={{ justifyContent: 'end' }}>
-                <Button
-                    variant="light"
-                    onClick={() => 1}
-                >
-                    <IconDots />
-                </Button>
-            </Table.Td>
-        </Table.Tr>
-    ));
 
     return (
         <Box
@@ -40,7 +24,16 @@ function DetalhesEscola(props: any) {
             style={{ flexDirection: 'column' }}>
 
             <Box h='15%' mt='1rem'>
-                <Text size="2rem">Escolas Cadastradas</Text>
+                <Grid>
+                    <Grid.Col span={6}>
+                        <Text size="2rem">Minhas Turmas</Text>
+                    </Grid.Col>
+
+                    <Grid.Col span={6} display='flex' style={{ justifyContent: 'end' }}>
+                        <Button leftSection={<IconPlus size={14} />}>Cadastrar </Button>
+                    </Grid.Col>
+                </Grid>
+
                 <ClearableInput placeholder="Pesquisar" />
             </Box>
 
@@ -65,4 +58,4 @@ export default withFormik({
     validateOnChange: false,
     validateOnBlur: false,
     handleSubmit: () => 1
-})(DetalhesEscola);
+})(DetalhesTurmas);

@@ -1,12 +1,13 @@
 import React from "react";
 import { Group, Code } from "@mantine/core";
-import { IconSettings, Icon2fa, IconDatabaseImport, IconSchool } from "@tabler/icons-react";
+import { IconSettings, Icon2fa, IconDatabaseImport, IconSchool, IconUsers } from "@tabler/icons-react";
 import classes from "./NavBar.module.css";
 import { usePathname } from "next/navigation";
 
 const data = {
   "instituicao-ensino": [
     { link: "/instituicao-ensino", label: "Home", icon: IconDatabaseImport },
+    { link: "/instituicao-ensino/turmas", label: "Turmas", icon: IconUsers },
     { link: "/instituicao-ensino/pedido", label: "Pedido", icon: Icon2fa },
     { link: "/instituicao-ensino/settings", label: "Configurações", icon: IconSettings },
   ],
