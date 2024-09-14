@@ -1,7 +1,14 @@
-import { Paper } from "@mantine/core";
+"use client";
+import { Grid } from "@mantine/core";
 import React from "react";
+import classes from "./paper.module.css";
 
-export default (props) => {
-  const { classes, children, ...other } = props;
-  return <Paper className={classes?.container} {...other}>{children}</Paper>;
-};
+export default function Paper(props) {
+  const { className, children, ...other } = props;
+
+  return (
+    <Grid className={classes.paper}>
+      <Grid.Col span={12} {...other}>{children}</Grid.Col>
+    </Grid>
+  );
+}
