@@ -1,23 +1,24 @@
 import React from "react";
 import { Group, Code } from "@mantine/core";
-import { IconSettings, Icon2fa, IconDatabaseImport } from "@tabler/icons-react";
-import classes from "./drawer.module.css";
+import { IconSettings, Icon2fa, IconDatabaseImport, IconSchool, IconUsers } from "@tabler/icons-react";
+import classes from "./NavBar.module.css";
 import { usePathname } from "next/navigation";
 
 const data = {
   "instituicao-ensino": [
     { link: "/instituicao-ensino", label: "Home", icon: IconDatabaseImport },
+    { link: "/instituicao-ensino/turmas", label: "Turmas", icon: IconUsers },
     { link: "/instituicao-ensino/pedido", label: "Pedido", icon: Icon2fa },
     { link: "/instituicao-ensino/settings", label: "Configurações", icon: IconSettings },
   ],
   admin: [
     { link: "/admin", label: "Home", icon: IconDatabaseImport },
-    { link: "/admin/escolas", label: "Escolas", icon: Icon2fa },
+    { link: "/admin/escolas", label: "Escolas", icon: IconSchool },
     { link: "/admin/settings", label: "Solicitações de suprimentos", icon: IconSettings },
   ],
 };
 
-export default function Drawer() {
+export default function NavBar() {
   const pathname = usePathname();
   const firstSegment = pathname ? pathname.split("/")[1] : "instituicao-ensino";
 
@@ -35,14 +36,16 @@ export default function Drawer() {
   ));
 
   return (
-    <nav className={classes.navbar}>
+    <>
       <div className={classes.navbarMain}>
-        <Group className={classes.header} justify="space-between">
-          Na Medida
-          <Code fw={700}>v3.1.2</Code>
-        </Group>
         {links}
+
+
       </div>
-    </nav>
+      <Group className={classes.footer} justify="space-between">
+        Na Medida
+        <Code fw={700}>v0.0.3</Code>
+      </Group>
+    </>
   );
 }

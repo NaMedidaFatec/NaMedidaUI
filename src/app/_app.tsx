@@ -11,7 +11,7 @@ import {
 import React, { Suspense, useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useRouter, usePathname } from "next/navigation";
-import Drawer from "../components/drawer";
+import NavBar from "../components/NavBar";
 import {
   IconSun,
   IconMoon,
@@ -82,23 +82,23 @@ function Application({ children, ...props }) {
                     size="sm"
                   />
                   <Grid.Col span={6}>
-                    <Title>{currentTitle}</Title>
+                    {/* <Title size="xl" weight={700}>    //Acho que isso poderia ser uma notificação né
+                      Seja bem-vindo {user.username}!
+                    </Title> */}
                   </Grid.Col>
                   <Grid.Col span={4}>
-                    <Title size="xl" weight={700}>
-                      Seja bem-vindo {user.username}!
-                    </Title>
+                    <Title>{currentTitle}</Title>
                   </Grid.Col>
                   <Grid.Col
                     span={2}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
+                    style={{
+                      display: 'flex',
+                      justifyContent: "flex-end",
+                      paddingRight: '1rem'
                     }}
                   >
                     <Grid>
-                      <Grid.Col span={2}>
+                      <Grid.Col span={4} >
                         <ActionIcon
                           onClick={() =>
                             setColorScheme(
@@ -121,9 +121,9 @@ function Application({ children, ...props }) {
                           )}
                         </ActionIcon>
                       </Grid.Col>
-                      <Grid.Col span={2}>
+                      <Grid.Col span={4}>
                         <ActionIcon
-                          onClick={() => {}}
+                          onClick={() => { }}
                           variant="default"
                           size="xl"
                         >
@@ -133,7 +133,7 @@ function Application({ children, ...props }) {
                           />
                         </ActionIcon>
                       </Grid.Col>
-                      <Grid.Col span={2}>
+                      <Grid.Col span={4}>
                         <ActionIcon
                           onClick={signout}
                           variant="default"
@@ -150,7 +150,7 @@ function Application({ children, ...props }) {
                 </Grid>
               </AppShell.Header>
               <AppShell.Navbar p="md">
-                <Drawer />
+                <NavBar />
               </AppShell.Navbar>
               <AppShell.Main className={classes.main}>{children}</AppShell.Main>
             </AppShell>
