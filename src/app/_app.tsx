@@ -152,7 +152,7 @@ function Application({ children, ...props }) {
               <AppShell.Navbar p="md">
                 <NavBar />
               </AppShell.Navbar>
-              <AppShell.Main>{children}</AppShell.Main>
+              <AppShell.Main className={classes.main}>{children}</AppShell.Main>
             </AppShell>
           ) : (
             children

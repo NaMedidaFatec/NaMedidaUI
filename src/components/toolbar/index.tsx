@@ -1,20 +1,12 @@
 "use client";
-import { Grid, useComputedColorScheme } from "@mantine/core";
+import { Grid } from "@mantine/core";
 import React from "react";
+import classes from "./toolbar.module.css";
 
 export default function ToolBar({ children }) {
-  const computedColorScheme = useComputedColorScheme("light", {
-    getInitialValueInEffect: true,
-  });
-
-  const classes = {
-    toolbar: {
-      backgroundColor: computedColorScheme === "dark" ? "#000" : "#fff",
-      color: computedColorScheme === "dark" ? "#fff" : "#000",
-      height: 100,
-      width: 20,
-    },
-  };
-
-  return <Grid className={classes.toolbar}>{children}</Grid>;
+  return (
+    <Grid className={classes.toolbar}>
+      <Grid.Col span={12}>{children}</Grid.Col>
+    </Grid>
+  );
 }
