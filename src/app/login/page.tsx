@@ -8,10 +8,9 @@ import {
   Button,
   Container,
   Input,
-  Paper,
   Title,
 } from "../../components/general";
-import { Anchor, Box, Grid, Image, Text } from "@mantine/core";
+import { Anchor, Box, Grid, Image, Text, useComputedColorScheme } from "@mantine/core";
 import { useAuth } from "../../hooks/useAuth";
 
 function Login(props) {
@@ -21,6 +20,10 @@ function Login(props) {
   const { signin } = useAuth();
 
   const [currentState, setCurrentState] = useState("LOGIN");
+
+  const computedColorScheme = useComputedColorScheme("light", {
+    getInitialValueInEffect: true,
+  });
 
   useEffect(() => {
     if (status && status.user) {
@@ -330,8 +333,9 @@ function Login(props) {
             style={{ alignItems: "center", flexDirection: "column" }}
           >
             <Image
-              src="/logoDark.png"
-              w={'30rem'}
+              src={computedColorScheme === "dark" ? "/logoDark.png" : "/logo.png"}
+              maw={'30rem'}
+              fit="contain"
               style={{ marginBlock: '6rem' }}
             />
             <Box w="90%">

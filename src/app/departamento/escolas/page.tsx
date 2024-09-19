@@ -9,13 +9,13 @@ import { withFormik } from 'formik';
 
 function DetalhesEscola(props: any) {
 
-    const tableHeaders = ["Nome da escola"];
+    const tableHeaders = ["NOME DA ESCOLA", 'STATUS'];
 
     const elements = [
-        { name: 'Escola 1' },
-        { name: 'Escola 2' },
-        { name: 'Escola 3' },
-        { name: 'Escola 4' },
+        { name: 'Escola Municipal Professor Eulalio Gruppi', ativo: true },
+        { name: 'Escola 2', ativo: true },
+        { name: 'Escola 3', ativo: false },
+        { name: 'Escola 4', ativo: true },
     ];
 
     const rows = elements.map((element) => (
@@ -40,12 +40,19 @@ function DetalhesEscola(props: any) {
             style={{ flexDirection: 'column' }}>
 
             <Box h='15%' mt='1rem'>
-                <Text size="2rem">Escolas Cadastradas</Text>
+                <Text
+                    size="2rem"
+                    fw={700}
+                    variant="gradient"
+                    gradient={{ from: '#e67d22', to: 'white', deg: 72 }}
+                >Escolas Cadastradas
+
+                </Text>
                 <ClearableInput placeholder="Pesquisar" />
             </Box>
 
             <Box h='80%'>
-                <DataTable headerElements={tableHeaders} elements={elements} />
+                <DataTable headerElements={tableHeaders} elements={elements} activate={true} />
             </Box>
 
             <Box h="5%"

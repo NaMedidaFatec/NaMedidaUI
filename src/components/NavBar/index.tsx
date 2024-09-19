@@ -11,10 +11,10 @@ const data = {
     { link: "/instituicao-ensino/pedido", label: "Pedido", icon: Icon2fa },
     { link: "/instituicao-ensino/settings", label: "Configurações", icon: IconSettings },
   ],
-  admin: [
-    { link: "/admin", label: "Home", icon: IconDatabaseImport },
-    { link: "/admin/escolas", label: "Escolas", icon: IconSchool },
-    { link: "/admin/settings", label: "Solicitações de suprimentos", icon: IconSettings },
+  departamento: [
+    { link: "/departamento", label: "Home", icon: IconDatabaseImport },
+    { link: "/departamento/escolas", label: "Escolas", icon: IconSchool },
+    { link: "/departamento/settings", label: "Solicitações de suprimentos", icon: IconSettings },
   ],
 };
 
