@@ -12,7 +12,6 @@ export default function (props) {
                 value={value}
                 onChange={(event) => setValue(event.currentTarget.value)}
                 rightSectionPointerEvents="all"
-                mt='calc(2rem * var(--mantine-scale))'
                 rightSection={
                     <CloseButton
                         aria-label="Limpar"

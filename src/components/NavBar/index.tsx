@@ -1,6 +1,6 @@
 import React from "react";
-import { Group, Code } from "@mantine/core";
-import { IconSettings, Icon2fa, IconDatabaseImport, IconSchool, IconUsers } from "@tabler/icons-react";
+import { Group, Code, Image, useComputedColorScheme } from "@mantine/core";
+import { IconSettings, Icon2fa, IconDatabaseImport, IconSchool, IconUsers, IconPackages } from "@tabler/icons-react";
 import classes from "./NavBar.module.css";
 import { usePathname } from "next/navigation";
 
@@ -14,6 +14,7 @@ const data = {
   departamento: [
     { link: "/departamento", label: "Home", icon: IconDatabaseImport },
     { link: "/departamento/escolas", label: "Escolas", icon: IconSchool },
+    { link: "/departamento/estoque", label: "Estoque", icon: IconPackages },
     { link: "/departamento/settings", label: "Solicitações de suprimentos", icon: IconSettings },
   ],
 };
@@ -22,6 +23,9 @@ export default function NavBar() {
   const pathname = usePathname();
   const firstSegment = pathname ? pathname.split("/")[1] : "instituicao-ensino";
 
+  const computedColorScheme = useComputedColorScheme("light", {
+    getInitialValueInEffect: true,
+  });
 
   const links = data[firstSegment] && data[firstSegment].map((item) => (
     <a
@@ -39,11 +43,12 @@ export default function NavBar() {
     <>
       <div className={classes.navbarMain}>
         {links}
-
-
       </div>
       <Group className={classes.footer} justify="space-between">
-        Na Medida
+        <Image
+          src={computedColorScheme === "dark" ? "/logoDark.png" : "/logo.png"}
+          w={'8rem'}
+        />
         <Code fw={700}>v0.0.3</Code>
       </Group>
     </>

@@ -23,17 +23,24 @@ function DetalhesTurmas(props: any) {
             display='flex'
             style={{ flexDirection: 'column' }}>
 
-            <Box h='15%' mt='1rem'>
-                <Grid>
-                    <Grid.Col span={6}>
-                        <Text size="2rem">Minhas Turmas</Text>
-                    </Grid.Col>
+            <Grid h='8%' mt='1rem'>
+                <Grid.Col span={6}>
+                    <Text
+                        size="2rem"
+                        fw={700}
+                        variant="gradient"
+                        gradient={{ from: '#e67d22', to: 'white', deg: 72 }}
+                    >
+                        Minhas Turmas
+                    </Text>
+                </Grid.Col>
 
-                    <Grid.Col span={6} display='flex' style={{ justifyContent: 'end' }}>
-                        <Button leftSection={<IconPlus size={14} />}>Cadastrar </Button>
-                    </Grid.Col>
-                </Grid>
+                <Grid.Col span={6} display='flex' style={{ justifyContent: 'end' }}>
+                    <Button leftSection={<IconPlus size={20} />}>Cadastrar </Button>
+                </Grid.Col>
+            </Grid>
 
+            <Box h='7%' mt='1rem'>
                 <ClearableInput placeholder="Pesquisar" />
             </Box>
 

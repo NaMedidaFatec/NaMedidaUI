@@ -39,7 +39,7 @@ function DetalhesEscola(props: any) {
             display='flex'
             style={{ flexDirection: 'column' }}>
 
-            <Box h='15%' mt='1rem'>
+            <Box h='8%' mt='1rem'>
                 <Text
                     size="2rem"
                     fw={700}
@@ -48,6 +48,9 @@ function DetalhesEscola(props: any) {
                 >Escolas Cadastradas
 
                 </Text>
+            </Box>
+
+            <Box h='7%'>
                 <ClearableInput placeholder="Pesquisar" />
             </Box>
 
