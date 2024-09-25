@@ -7,7 +7,7 @@ import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
 
-function DetalhesEscola(props: any) {
+function DepartamentoEstoque(props: any) {
 
     const tableHeaders = ["PRODUTO", "CATEGORIA", "EM ESTOQUE"];
 
@@ -90,4 +90,4 @@ export default withFormik({
     validateOnChange: false,
     validateOnBlur: false,
     handleSubmit: () => 1
-})(DetalhesEscola);
+})(DepartamentoEstoque);
