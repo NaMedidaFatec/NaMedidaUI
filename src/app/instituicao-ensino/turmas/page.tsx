@@ -36,7 +36,7 @@ function DetalhesTurmas(props: any) {
                 </Grid.Col>
 
                 <Grid.Col span={6} display='flex' style={{ justifyContent: 'end' }}>
-                    <Button leftSection={<IconPlus size={20} />}>Cadastrar </Button>
+                    <Button variant='light' leftSection={<IconPlus size={23} />}>Cadastrar </Button>
                 </Grid.Col>
             </Grid>
 
