@@ -1,8 +1,8 @@
 'use client'
 
-import { Text, Box, Grid, Paper, useComputedColorScheme, Button } from '@mantine/core';
+import { Text, Box, Grid, Paper, useComputedColorScheme, Button, Select } from '@mantine/core';
 import { withFormik } from 'formik';
-import { AreaChart } from '@mantine/charts';
+import { AreaChart, CompositeChart } from '@mantine/charts';
 import ChartCard from '../../../components/ChartCard';
 import { IconCoin, IconCurrencyDollar, IconDeviceIpadDollar, IconFileTypePdf, IconLicense, IconUserExclamation } from '@tabler/icons-react';
 import { DateInput } from '@mantine/dates';
@@ -136,32 +136,43 @@ function DepartamentoDashboards(props: any) {
                 mt="md"
                 bg={computedColorScheme == "dark" ? 'var(--mantine-color-dark-5)' : '#fff'}>
 
-                <Grid h='8%' mt='1rem'>
-                    <Grid.Col span={2} py='1.5rem' pl='1.5rem' >
-                        <DateInput
-                            onChange={() => 1}
-                            label="Data inicial"
-                            placeholder={filter.dataInicial}
-                        />
-                        <DateInput
-                            onChange={() => 1}
-                            label="Data inicial"
-                            placeholder={filter.dataInicial}
-                        />
-                    </Grid.Col>
-                    <Grid.Col span={10}>
-                        <AreaChart
-                            h={400}
-                            data={data}
-                            py='1.5rem'
-                            pr='1.5rem'
-                            dataKey="date"
-                            series={[{ name: 'Apples', color: 'indigo.6' }]}
-                            curveType="linear"
-                            connectNulls
-                        />
-                    </Grid.Col>
-                </Grid>
+                <Box h='8%' mt='1rem'>
+                    <Grid px='1.5rem'>
+                        <Grid.Col span={6}>
+                            <Select
+                                label="Escola"
+                                placeholder="Escola"
+                                data={['React', 'Angular', 'Vue', 'Svelte']}
+                            />
+                        </Grid.Col>
+
+                        <Grid.Col span={3}>
+                            <DateInput
+                                onChange={() => 1}
+                                label="Data inicial"
+                                placeholder={filter.dataInicial}
+                            />
+                        </Grid.Col>
+
+                        <Grid.Col span={3}>
+                            <DateInput
+                                onChange={() => 1}
+                                label="Data final"
+                                placeholder={filter.dataFinal}
+                            />
+                        </Grid.Col>
+                    </Grid>
+
+                    <AreaChart
+                        h={400}
+                        data={data}
+                        p='1.5rem'
+                        dataKey="date"
+                        series={[{ name: 'Apples', color: 'indigo.6' }]}
+                        curveType="linear"
+                        connectNulls
+                    />
+                </Box>
             </Paper>
 
             <Paper
@@ -171,36 +182,46 @@ function DepartamentoDashboards(props: any) {
                 mt="md"
                 bg={computedColorScheme == "dark" ? 'var(--mantine-color-dark-5)' : '#fff'}>
 
-                <Grid h='8%' mt='1rem'>
-                    <Grid.Col span={2} py='1.5rem' pl='1.5rem'>
-                        <DateInput
-                            onChange={() => 1}
-                            label="Data inicial"
-                            placeholder={filter.dataInicial}
-                        />
-                        <DateInput
-                            onChange={() => 1}
-                            label="Data inicial"
-                            placeholder={filter.dataInicial}
-                        />
-                    </Grid.Col>
-                    <Grid.Col span={10}>
-                        <AreaChart
-                            h={400}
-                            data={data2}
-                            dataKey="date"
-                            p='1.5rem'
-                            pr='1.5rem'
-                            type='stacked'
-                            series={[
-                                { name: 'Apples', color: 'indigo.6' },
-                                { name: 'Oranges', color: 'blue.6' },
-                                { name: 'Tomatoes', color: 'teal.6' },
-                            ]}
-                            curveType="linear"
-                        />
-                    </Grid.Col>
-                </Grid>
+                <Box h='8%' mt='1rem'>
+                    <Grid px='1.5rem'>
+                        <Grid.Col span={6}>
+                            <Select
+                                label="Produtos"
+                                placeholder="Arroz"
+                                data={['React', 'Angular', 'Vue', 'Svelte']}
+                            />
+                        </Grid.Col>
+
+                        <Grid.Col span={3}>
+                            <DateInput
+                                onChange={() => 1}
+                                label="Data inicial"
+                                placeholder={filter.dataInicial}
+                            />
+                        </Grid.Col>
+
+                        <Grid.Col span={3}>
+                            <DateInput
+                                onChange={() => 1}
+                                label="Data final"
+                                placeholder={filter.dataFinal}
+                            />
+                        </Grid.Col>
+                    </Grid>
+
+                    <CompositeChart
+                        h={300}
+                        data={data2}
+                        p='1.5rem'
+                        dataKey="date"
+                        maxBarWidth={30}
+                        series={[
+                            { name: 'Tomatoes', color: 'rgba(18, 120, 255, 0.2)', type: 'bar' },
+                            { name: 'Apples', color: 'red.8', type: 'line' },
+                            { name: 'Oranges', color: 'yellow.8', type: 'area' },
+                        ]}
+                    />
+                </Box>
             </Paper>
 
             <Box mih="1.5rem" />
