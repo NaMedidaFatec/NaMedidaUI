@@ -1,6 +1,6 @@
 'use client'
 
-import { Pagination, Text, Box, Button, Grid } from '@mantine/core';
+import { Pagination, Text, Box, Button, Grid, Paper, useComputedColorScheme } from '@mantine/core';
 import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
@@ -9,6 +9,11 @@ import { useState } from 'react';
 import { DateInput } from '@mantine/dates';
 
 function RelatoriosEscola(props: any) {
+
+    const computedColorScheme = useComputedColorScheme("light", {
+        getInitialValueInEffect: true,
+    });
+
     const [filter, setFilter] = useState({ codigo: 1, dataInicial: '2024-01-01', dataFinal: '2024-12-12' });
 
     const tableHeaders = ["Código", "Status", "Data de envio"];
@@ -18,6 +23,11 @@ function RelatoriosEscola(props: any) {
         { codigo: 2, status: 'EM ANÁLISE', dtEnvio: '22/02/2024' },
         { codigo: 3, status: 'EM ANÁLISE', dtEnvio: '22/02/2024' },
         { codigo: 4, status: 'ENVIADO', dtEnvio: '24/06/2024' },
+        { codigo: 5, status: 'ENVIADO', dtEnvio: '23/02/2024' },
+        { codigo: 6, status: 'EM ANÁLISE', dtEnvio: '22/02/2024' },
+        { codigo: 7, status: 'EM ANÁLISE', dtEnvio: '22/02/2024' },
+        { codigo: 8, status: 'ENVIADO', dtEnvio: '24/06/2024' },
+        { codigo: 9, status: 'ENVIADO', dtEnvio: '23/02/2024' },
     ];
 
     const additionalButtons = [
@@ -70,19 +80,31 @@ function RelatoriosEscola(props: any) {
                 </Grid.Col>
             </Grid>
 
-            <Box h='80%'>
-                <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons}/>
-            </Box>
+            <Paper
+                mah='90%'
+                shadow="md"
+                radius="lg"
+                mt="md"
+                bg={computedColorScheme == "dark" ? 'var(--mantine-color-dark-5)' : '#fff'}>
 
-            <Box h="5%"
+
+                <Box h='auto' mah='100%' >
+                    <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
+                </Box>
+
+            </Paper>
+
+            <Box h="auto"
+                display='flex'
+                my='md'
                 style={{
-                    display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'end'
                 }}
             >
                 <Pagination total={10} size="sm" />
             </Box>
+
         </Box>
     );
 };

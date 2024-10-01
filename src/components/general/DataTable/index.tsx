@@ -1,4 +1,4 @@
-import { Button, Table, Text } from "@mantine/core";
+import { Button, Table, Text, useComputedColorScheme } from "@mantine/core";
 import { IconDots } from "@tabler/icons-react";
 import { useState } from "react";
 
@@ -37,13 +37,14 @@ const DataTable: React.FC<MyComponentProps> = ({
     additionalButtons = undefined,
     activate = false,
 }) => {
+    
     const keys = elements.length > 0 ? Object.keys(elements[0]) : [];
     const headerKeys = headerElements.length > 0 ? headerElements : [];
 
     const headers = (
-        <Table.Tr>
+        <Table.Tr >
             {headerKeys.map((titulo) => (
-                <Table.Th key={titulo}>
+                <Table.Th key={titulo} >
                     <Text truncate="end" size="lg" lineClamp={2} fw={700}>
                         {titulo}
                     </Text>
@@ -104,7 +105,7 @@ const DataTable: React.FC<MyComponentProps> = ({
             withRowBorders={false}
             horizontalSpacing="xl"
         >
-            <Table.Thead>
+            <Table.Thead bg='transparent'>
                 {headers}
             </Table.Thead>
             <Table.Tbody mah="10%">
