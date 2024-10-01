@@ -1,6 +1,6 @@
 import React from "react";
 import { Group, Code, Image, useComputedColorScheme } from "@mantine/core";
-import { IconSettings, Icon2fa, IconDatabaseImport, IconSchool, IconUsers, IconPackages, IconChartBar } from "@tabler/icons-react";
+import { IconSettings, Icon2fa, IconDatabaseImport, IconSchool, IconUsers, IconPackages, IconChartBar, IconFileAnalytics } from "@tabler/icons-react";
 import classes from "./NavBar.module.css";
 import { usePathname } from "next/navigation";
 
@@ -9,6 +9,7 @@ const data = {
     { link: "/instituicao-ensino", label: "Home", icon: IconDatabaseImport },
     { link: "/instituicao-ensino/turmas", label: "Turmas", icon: IconUsers },
     { link: "/instituicao-ensino/pedido", label: "Pedido", icon: Icon2fa },
+    { link: "/instituicao-ensino/relatorios", label: "Relatorios", icon: IconFileAnalytics },
     { link: "/instituicao-ensino/settings", label: "Configurações", icon: IconSettings },
   ],
   departamento: [
