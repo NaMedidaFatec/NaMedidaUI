@@ -2,7 +2,7 @@
 
 import { Pagination, Table, Text, Box, Select, Grid } from '@mantine/core';
 import { Button } from '../../../components/general';
-import { IconDots, IconPackageImport } from "@tabler/icons-react";
+import { Icon123, IconDots, IconPackageImport } from "@tabler/icons-react";
 import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
@@ -31,6 +31,10 @@ function DepartamentoEstoque(props: any) {
             </Table.Td>
         </Table.Tr>
     ));
+
+    const additionalButtons = [
+        { id: 1, icon: "DETALHES" , onClick: () => 1 },
+    ];
 
     return (
         <Box
@@ -70,7 +74,7 @@ function DepartamentoEstoque(props: any) {
             </Grid>
 
             <Box h='80%'>
-                <DataTable headerElements={tableHeaders} elements={elements} />
+                <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons}/>
             </Box>
 
             <Box h="5%"

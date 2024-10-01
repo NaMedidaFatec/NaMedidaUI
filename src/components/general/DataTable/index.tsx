@@ -9,6 +9,7 @@ interface Element {
 interface MyComponentProps {
     headerElements: string[];
     elements: Element[];
+    additionalButtons?: Element[];
     activate?: boolean;
 }
 // EXEMPLO DE ELEMENTOS DE HEADER (array de strings)
@@ -21,12 +22,19 @@ interface MyComponentProps {
 //     { name: 'Turma 3', qtdAlunos: 20, nivel: 'medio', periodo: 'vespertino' },
 //     { name: 'Turma 4', qtdAlunos: 20, nivel: 'medio', periodo: 'matutino' },
 // ];
+
+// EXEMPLO DE BOTÕES ADICIONAIs
+//    const additionalButtons = [
+//    { id: 1, icon: "DETALHES" , onClick: () => 1 },
+//    { id: 2, icon: <Icon123/> , onClick: () => 1 },
+//];
 // SE O ARRAY TIVER UMA PROPRIEDADE CHAMADA "ativo" COM BOOLEANS, SERÁ AUTOMATICAMENTE CONVERTIDO NA TABELA PARA "ATIVO" "INATIVO"
 // SE TIVER A PROP "activate" COMO TRUE, SERÁ CRIADA UMA COLUNA NA TABELA PARA BOTÕES ATIVAR/DESATIVAR
 
-const MyComponent: React.FC<MyComponentProps> = ({
+const DataTable: React.FC<MyComponentProps> = ({
     headerElements,
     elements,
+    additionalButtons = undefined,
     activate = false,
 }) => {
     const keys = elements.length > 0 ? Object.keys(elements[0]) : [];
@@ -62,18 +70,26 @@ const MyComponent: React.FC<MyComponentProps> = ({
                 </Table.Td>
             ))}
             <Table.Td style={{ display: 'flex', justifyContent: 'end' }}>
+                {additionalButtons?.map((button) =>
+                    <Button
+                        key={button?.id}
+                        ml="1.5rem"
+                        variant="light"
+                        onClick={button?.onClick}
+                    >
+                        {button?.icon}
+                    </Button>
+                )}
                 {activate && (
-                    <Button variant="light" color="red" miw='8rem' onClick={() => 1}>
+                    <Button
+                        variant="light"
+                        color="red"
+                        miw='8rem'
+                        onClick={() => 1}
+                        ml="1.5rem">
                         {element['ativo'] ? 'DESATIVAR' : 'ATIVAR'}
                     </Button>
                 )}
-                <Button
-                    ml="1.5rem"
-                    variant="light"
-                    onClick={() => console.log('Button clicked')}
-                >
-                    <IconDots />
-                </Button>
             </Table.Td>
         </Table.Tr>
     ));
@@ -98,4 +114,4 @@ const MyComponent: React.FC<MyComponentProps> = ({
     );
 };
 
-export default MyComponent;
+export default DataTable;
