@@ -1,13 +1,25 @@
 'use client'
 
-import { Pagination, Table, Text, Box } from '@mantine/core';
+import { Pagination, Table, Box, Paper, useComputedColorScheme } from '@mantine/core';
 import { Button } from '../../../components/general';
 import { IconDots } from "@tabler/icons-react";
 import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
+import { useUpdateTitle } from '../../../hooks/useTitle';
+import { useEffect } from 'react';
 
 function DetalhesEscola(props: any) {
+
+    const updateTitle = useUpdateTitle();
+
+    useEffect(() => {
+        updateTitle('Escolas Cadastradas')
+    }, [])
+
+    const computedColorScheme = useComputedColorScheme("light", {
+        getInitialValueInEffect: true,
+    });
 
     const tableHeaders = ["NOME DA ESCOLA", 'STATUS'];
 
@@ -40,27 +52,27 @@ function DetalhesEscola(props: any) {
             style={{ flexDirection: 'column' }}>
 
             <Box h='8%' mt='1rem'>
-                <Text
-                    size="2rem"
-                    fw={700}
-                    variant="gradient"
-                    gradient={{ from: '#e67d22', to: 'white', deg: 72 }}
-                >Escolas Cadastradas
-
-                </Text>
+                <ClearableInput placeholder="Pesquisar" label='Pesquisar'/>
             </Box>
 
-            <Box h='7%'>
-                <ClearableInput placeholder="Pesquisar" />
-            </Box>
+            <Paper
+                mah='90%'
+                shadow="md"
+                radius="lg"
+                mt="md"
+                bg={computedColorScheme == "dark" ? 'var(--mantine-color-dark-5)' : '#fff'}>
 
-            <Box h='80%'>
-                <DataTable headerElements={tableHeaders} elements={elements} activate={true} />
-            </Box>
 
-            <Box h="5%"
+                <Box h='auto' mah='100%' >
+                    <DataTable headerElements={tableHeaders} elements={elements} activate />
+                </Box>
+
+            </Paper>
+
+            <Box h="auto"
+                display='flex'
+                my='md'
                 style={{
-                    display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'end'
                 }}

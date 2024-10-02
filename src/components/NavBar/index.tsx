@@ -17,7 +17,6 @@ const data = {
     { link: "/departamento/escolas", label: "Escolas", icon: IconSchool },
     { link: "/departamento/estoque", label: "Estoque", icon: IconPackages },
     { link: "/departamento/dashboards", label: "Dashboards", icon: IconChartBar },
-    { link: "/departamento/settings", label: "Solicitações de suprimentos", icon: IconSettings },
   ],
 };
 

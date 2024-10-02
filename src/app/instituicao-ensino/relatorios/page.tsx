@@ -4,11 +4,18 @@ import { Pagination, Text, Box, Button, Grid, Paper, useComputedColorScheme } fr
 import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
-import { IconPlus, IconUpload } from '@tabler/icons-react';
-import { useState } from 'react';
+import { IconUpload } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
 import { DateInput } from '@mantine/dates';
+import { useUpdateTitle } from '../../../hooks/useTitle';
 
 function RelatoriosEscola(props: any) {
+
+    const updateTitle = useUpdateTitle();
+
+    useEffect(() => {
+        updateTitle('Meus Relatórios')
+    }, [])
 
     const computedColorScheme = useComputedColorScheme("light", {
         getInitialValueInEffect: true,
@@ -41,29 +48,12 @@ function RelatoriosEscola(props: any) {
             display='flex'
             style={{ flexDirection: 'column' }}>
 
-            <Grid h='8%' mt='1rem'>
-                <Grid.Col span={6}>
-                    <Text
-                        size="2rem"
-                        fw={700}
-                        variant="gradient"
-                        gradient={{ from: '#e67d22', to: 'white', deg: 72 }}
-                    >
-                        Meus Relatórios
-                    </Text>
-                </Grid.Col>
-
-                <Grid.Col span={6} display='flex' style={{ justifyContent: 'end' }}>
-                    <Button variant='light' leftSection={<IconUpload size={23} />}>Enviar relatório </Button>
-                </Grid.Col>
-            </Grid>
-
-            <Grid h='7%' mb='1rem'>
-                <Grid.Col span={6}>
+            <Grid h='auto' mt='1rem'>
+                <Grid.Col span={3}>
                     <ClearableInput placeholder="Código" label="Código" />
                 </Grid.Col>
 
-                <Grid.Col span={3}>
+                <Grid.Col span={2}>
                     <DateInput
                         onChange={() => 1}
                         label="Data inicial"
@@ -71,12 +61,18 @@ function RelatoriosEscola(props: any) {
                     />
                 </Grid.Col>
 
-                <Grid.Col span={3}>
+                <Grid.Col span={2}>
                     <DateInput
                         onChange={() => 1}
                         label="Data final"
                         placeholder={filter.dataFinal}
                     />
+                </Grid.Col>
+
+                <Grid.Col span={5} display='flex' style={{ justifyContent: 'end' }}>
+                    <Button h='4rem' w='4rem' style={{ borderRadius: '10rem' }}>
+                        <IconUpload size={23} />
+                    </Button>
                 </Grid.Col>
             </Grid>
 

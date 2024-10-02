@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
 
   const themeOverride = createTheme({
     other: {
-      newWhite: '#f1f1f1'
+      newWhite: '#f8f8f8'
     },
   });
 

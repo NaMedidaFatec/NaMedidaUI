@@ -1,12 +1,25 @@
 'use client'
 
-import { Pagination, Text, Box, SimpleGrid, Button, Grid } from '@mantine/core';
+import { Pagination, Text, Box, Button, Grid, Paper, useComputedColorScheme } from '@mantine/core';
 import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
 import { IconPlus } from '@tabler/icons-react';
+import { useEffect } from 'react';
+import { useUpdateTitle } from '../../../hooks/useTitle';
 
 function DetalhesTurmas(props: any) {
+
+    const updateTitle = useUpdateTitle();
+
+    useEffect(() => {
+        updateTitle('Minhas Turmas')
+    }, [])
+
+    const computedColorScheme = useComputedColorScheme("light", {
+        getInitialValueInEffect: true,
+    });
+
     const tableHeaders = ["Turma", "Qtd Alunos", "Nível", "Período"];
 
     const elements = [
@@ -16,6 +29,10 @@ function DetalhesTurmas(props: any) {
         { name: 'Turma 4', qtdAlunos: 20, nivel: 'medio', periodo: 'matutino' },
     ];
 
+    const additionalButtons = [
+        { id: 1, icon: "DETALHES", onClick: () => 1 },
+    ];
+
     return (
         <Box
             w='100%'
@@ -23,34 +40,35 @@ function DetalhesTurmas(props: any) {
             display='flex'
             style={{ flexDirection: 'column' }}>
 
-            <Grid h='8%' mt='1rem'>
+            <Grid h='auto' mt='1rem'>
                 <Grid.Col span={6}>
-                    <Text
-                        size="2rem"
-                        fw={700}
-                        variant="gradient"
-                        gradient={{ from: '#e67d22', to: 'white', deg: 72 }}
-                    >
-                        Minhas Turmas
-                    </Text>
+                    <ClearableInput placeholder="Pesquisar" label="Pesquisar" />
                 </Grid.Col>
-
-                <Grid.Col span={6} display='flex' style={{ justifyContent: 'end' }}>
-                    <Button variant='light' leftSection={<IconPlus size={23} />}>Cadastrar </Button>
+                <Grid.Col span={3} offset={3} display='flex' style={{ justifyContent: 'flex-end' }}>
+                    <Button h='4rem' w='4rem' style={{ borderRadius: '10rem' }}>
+                        <IconPlus size={23} />
+                    </Button>
                 </Grid.Col>
             </Grid>
 
-            <Box h='7%' mt='1rem'>
-                <ClearableInput placeholder="Pesquisar" />
-            </Box>
+            <Paper
+                mah='90%'
+                shadow="md"
+                radius="lg"
+                mt="md"
+                bg={computedColorScheme == "dark" ? 'var(--mantine-color-dark-5)' : '#fff'}>
 
-            <Box h='80%'>
-                <DataTable headerElements={tableHeaders} elements={elements} />
-            </Box>
 
-            <Box h="5%"
+                <Box h='auto' mah='100%' >
+                    <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
+                </Box>
+
+            </Paper>
+
+            <Box h="auto"
+                display='flex'
+                my='md'
                 style={{
-                    display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'end'
                 }}

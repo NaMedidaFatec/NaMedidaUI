@@ -1,13 +1,25 @@
 'use client'
 
-import { Pagination, Table, Text, Box, Select, Grid } from '@mantine/core';
+import { Pagination, Table, Text, Box, Select, Grid, Paper, useComputedColorScheme } from '@mantine/core';
 import { Button } from '../../../components/general';
-import { Icon123, IconDots, IconPackageImport } from "@tabler/icons-react";
+import { IconDots, IconPackageImport } from "@tabler/icons-react";
 import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
+import { useUpdateTitle } from '../../../hooks/useTitle';
+import { useEffect } from 'react';
 
 function DepartamentoEstoque(props: any) {
+
+    const updateTitle = useUpdateTitle();
+
+    useEffect(() => {
+        updateTitle('Estoque')
+    }, [])
+
+    const computedColorScheme = useComputedColorScheme("light", {
+        getInitialValueInEffect: true,
+    });
 
     const tableHeaders = ["PRODUTO", "CATEGORIA", "EM ESTOQUE"];
 
@@ -18,22 +30,8 @@ function DepartamentoEstoque(props: any) {
         { produto: 'Laranja', categoria: "Frutas", estoque: 600 },
     ];
 
-    const rows = elements.map((element) => (
-        <Table.Tr key={element.produto}>
-            <Table.Td>{element.produto}</Table.Td>
-            <Table.Td display='flex' style={{ justifyContent: 'end' }}>
-                <Button
-                    variant="light"
-                    onClick={() => 1}
-                >
-                    <IconDots />
-                </Button>
-            </Table.Td>
-        </Table.Tr>
-    ));
-
     const additionalButtons = [
-        { id: 1, icon: "DETALHES" , onClick: () => 1 },
+        { id: 1, icon: "DETALHES", onClick: () => 1 },
     ];
 
     return (
@@ -44,42 +42,41 @@ function DepartamentoEstoque(props: any) {
             style={{ flexDirection: 'column' }}>
 
 
-            <Grid h='8%' mt='1rem'>
-                <Grid.Col span={6}>
-                    <Text
-                        size="2rem"
-                        fw={700}
-                        variant="gradient"
-                        gradient={{ from: '#e67d22', to: 'white', deg: 72 }}
-                    >
-                        Estoque
-                    </Text>
+            <Grid h='auto' mt='1rem'>
+                <Grid.Col span={5}>
+                    <ClearableInput placeholder="Pesquisar" label='Pesquisar'/>
                 </Grid.Col>
-
-                <Grid.Col span={6} display='flex' style={{ justifyContent: 'end' }}>
-                    <Button variant='light' leftSection={<IconPackageImport size={23} />}>Entrada </Button>
-                </Grid.Col>
-            </Grid>
-
-            <Grid h='7%'>
-                <Grid.Col span={8}>
-                    <ClearableInput placeholder="Pesquisar" />
-                </Grid.Col>
-                <Grid.Col span={4}>
+                <Grid.Col span={3}>
                     <Select
-                        placeholder="Categoria"
+                        placeholder="Categoria" label='Categoria'
                         data={['React', 'Angular', 'Vue', 'Svelte']}
                     />
                 </Grid.Col>
+                <Grid.Col span={4} display='flex' style={{ justifyContent: 'flex-end' }}>
+                    <Button h='4rem' w='4rem' style={{ borderRadius: '10rem' }}>
+                        <IconPackageImport size={23} />
+                    </Button>
+                </Grid.Col>
             </Grid>
 
-            <Box h='80%'>
-                <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons}/>
-            </Box>
+            <Paper
+                mah='90%'
+                shadow="md"
+                radius="lg"
+                mt="md"
+                bg={computedColorScheme == "dark" ? 'var(--mantine-color-dark-5)' : '#fff'}>
 
-            <Box h="5%"
+
+                <Box h='auto' mah='100%' >
+                    <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
+                </Box>
+
+            </Paper>
+
+            <Box h="auto"
+                display='flex'
+                my='md'
                 style={{
-                    display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'end'
                 }}
