@@ -42,7 +42,7 @@ function Application({ children, ...props }) {
         if (user.isAdmin) {
           return router.push("/admin");
         }
-        return router.push("/instituicao-ensino");
+        return router.push("/escola");
       }
       return router.push(pathname);
     }

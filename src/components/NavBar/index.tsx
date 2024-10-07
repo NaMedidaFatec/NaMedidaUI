@@ -1,16 +1,16 @@
 import React from "react";
 import { Group, Code, Image, useComputedColorScheme } from "@mantine/core";
-import { IconSettings, Icon2fa, IconDatabaseImport, IconSchool, IconUsers, IconPackages, IconChartBar, IconFileAnalytics } from "@tabler/icons-react";
+import { IconSettings, IconDatabaseImport, IconSchool, IconUsers, IconPackages, IconChartBar, IconFileAnalytics, IconSalad } from "@tabler/icons-react";
 import classes from "./NavBar.module.css";
 import { usePathname } from "next/navigation";
 
 const data = {
-  "instituicao-ensino": [
-    { link: "/instituicao-ensino", label: "Home", icon: IconDatabaseImport },
-    { link: "/instituicao-ensino/turmas", label: "Turmas", icon: IconUsers },
-    { link: "/instituicao-ensino/pedido", label: "Pedido", icon: Icon2fa },
-    { link: "/instituicao-ensino/relatorios", label: "Relatorios", icon: IconFileAnalytics },
-    { link: "/instituicao-ensino/settings", label: "Configurações", icon: IconSettings },
+  "escola": [
+    { link: "/escola", label: "Home", icon: IconDatabaseImport },
+    { link: "/escola/turmas", label: "Turmas", icon: IconUsers },
+    { link: "/escola/pedido", label: "Pedido", icon: IconSalad },
+    { link: "/escola/relatorios", label: "Relatorios", icon: IconFileAnalytics },
+    { link: "/escola/settings", label: "Configurações", icon: IconSettings },
   ],
   departamento: [
     { link: "/departamento", label: "Home", icon: IconDatabaseImport },
@@ -22,7 +22,7 @@ const data = {
 
 export default function NavBar() {
   const pathname = usePathname();
-  const firstSegment = pathname ? pathname.split("/")[1] : "instituicao-ensino";
+  const firstSegment = pathname ? pathname.split("/")[1] : "escola";
 
   const computedColorScheme = useComputedColorScheme("light", {
     getInitialValueInEffect: true,

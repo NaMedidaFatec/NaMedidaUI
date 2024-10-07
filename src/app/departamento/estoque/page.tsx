@@ -1,8 +1,8 @@
 'use client'
 
-import { Pagination, Table, Text, Box, Select, Grid, Paper, useComputedColorScheme } from '@mantine/core';
+import { Box, Select, Grid } from '@mantine/core';
 import { Button } from '../../../components/general';
-import { IconDots, IconPackageImport } from "@tabler/icons-react";
+import { IconPackageImport } from "@tabler/icons-react";
 import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
@@ -16,10 +16,6 @@ function DepartamentoEstoque(props: any) {
     useEffect(() => {
         updateTitle('Estoque')
     }, [])
-
-    const computedColorScheme = useComputedColorScheme("light", {
-        getInitialValueInEffect: true,
-    });
 
     const tableHeaders = ["PRODUTO", "CATEGORIA", "EM ESTOQUE"];
 
@@ -44,7 +40,7 @@ function DepartamentoEstoque(props: any) {
 
             <Grid h='auto' mt='1rem'>
                 <Grid.Col span={5}>
-                    <ClearableInput placeholder="Pesquisar" label='Pesquisar'/>
+                    <ClearableInput placeholder="Pesquisar" label='Pesquisar' />
                 </Grid.Col>
                 <Grid.Col span={3}>
                     <Select
@@ -59,30 +55,8 @@ function DepartamentoEstoque(props: any) {
                 </Grid.Col>
             </Grid>
 
-            <Paper
-                mah='90%'
-                shadow="md"
-                radius="lg"
-                mt="md"
-                bg={computedColorScheme == "dark" ? 'var(--mantine-color-dark-5)' : '#fff'}>
+            <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
 
-
-                <Box h='auto' mah='100%' >
-                    <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
-                </Box>
-
-            </Paper>
-
-            <Box h="auto"
-                display='flex'
-                my='md'
-                style={{
-                    justifyContent: 'center',
-                    alignItems: 'end'
-                }}
-            >
-                <Pagination total={10} size="sm" />
-            </Box>
         </Box>
     );
 };

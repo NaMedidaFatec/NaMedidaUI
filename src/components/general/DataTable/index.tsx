@@ -86,7 +86,7 @@ const DataTable: React.FC<MyComponentProps> = ({
                 {activate && (
                     <Button
                         variant="light"
-                        color="red"
+                        color={element['ativo'] ? 'red' : 'blue'}
                         miw='8rem'
                         onClick={() => 1}
                         ml="1.5rem">
@@ -108,13 +108,11 @@ const DataTable: React.FC<MyComponentProps> = ({
 
                 <Box h='auto' mah='100%' style={{ overflowX: 'scroll' }} >
                     <Table
-
                         verticalSpacing="md"
                         striped
                         highlightOnHover
                         withRowBorders={false}
-                        horizontalSpacing="xl"
-                    >
+                        horizontalSpacing="xl">
                         <Table.Thead bg='transparent'>
                             {headers}
                         </Table.Thead>

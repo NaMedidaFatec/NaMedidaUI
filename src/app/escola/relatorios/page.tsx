@@ -17,10 +17,6 @@ function RelatoriosEscola(props: any) {
         updateTitle('Meus Relatórios')
     }, [])
 
-    const computedColorScheme = useComputedColorScheme("light", {
-        getInitialValueInEffect: true,
-    });
-
     const [filter, setFilter] = useState({ codigo: 1, dataInicial: '2024-01-01', dataFinal: '2024-12-12' });
 
     const tableHeaders = ["Código", "Status", "Data de envio"];
@@ -76,30 +72,7 @@ function RelatoriosEscola(props: any) {
                 </Grid.Col>
             </Grid>
 
-            <Paper
-                mah='90%'
-                shadow="md"
-                radius="lg"
-                mt="md"
-                bg={computedColorScheme == "dark" ? 'var(--mantine-color-dark-5)' : '#fff'}>
-
-
-                <Box h='auto' mah='100%' >
-                    <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
-                </Box>
-
-            </Paper>
-
-            <Box h="auto"
-                display='flex'
-                my='md'
-                style={{
-                    justifyContent: 'center',
-                    alignItems: 'end'
-                }}
-            >
-                <Pagination total={10} size="sm" />
-            </Box>
+            <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
 
         </Box>
     );

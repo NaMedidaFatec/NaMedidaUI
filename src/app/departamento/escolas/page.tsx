@@ -17,10 +17,6 @@ function DetalhesEscola(props: any) {
         updateTitle('Escolas Cadastradas')
     }, [])
 
-    const computedColorScheme = useComputedColorScheme("light", {
-        getInitialValueInEffect: true,
-    });
-
     const tableHeaders = ["NOME DA ESCOLA", 'STATUS'];
 
     const elements = [
@@ -52,33 +48,11 @@ function DetalhesEscola(props: any) {
             style={{ flexDirection: 'column' }}>
 
             <Box h='8%' mt='1rem'>
-                <ClearableInput placeholder="Pesquisar" label='Pesquisar'/>
+                <ClearableInput placeholder="Pesquisar" label='Pesquisar' />
             </Box>
 
-            <Paper
-                mah='90%'
-                shadow="md"
-                radius="lg"
-                mt="md"
-                bg={computedColorScheme == "dark" ? 'var(--mantine-color-dark-5)' : '#fff'}>
+            <DataTable headerElements={tableHeaders} elements={elements} activate />
 
-
-                <Box h='auto' mah='100%' >
-                    <DataTable headerElements={tableHeaders} elements={elements} activate />
-                </Box>
-
-            </Paper>
-
-            <Box h="auto"
-                display='flex'
-                my='md'
-                style={{
-                    justifyContent: 'center',
-                    alignItems: 'end'
-                }}
-            >
-                <Pagination total={10} size="sm" />
-            </Box>
         </Box>
     );
 };

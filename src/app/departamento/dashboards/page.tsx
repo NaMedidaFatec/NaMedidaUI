@@ -6,13 +6,19 @@ import { AreaChart, CompositeChart } from '@mantine/charts';
 import ChartCard from '../../../components/ChartCard';
 import { IconCoin, IconCurrencyDollar, IconDeviceIpadDollar, IconFileTypePdf, IconLicense, IconUserExclamation } from '@tabler/icons-react';
 import { DateInput } from '@mantine/dates';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useUpdateTitle } from '../../../hooks/useTitle';
 
 function DepartamentoDashboards(props: any) {
 
     const [filter, setFilter] = useState({ produtos: [], dataInicial: '2024-01-01', dataFinal: '2024-12-12' });
     const [filter2, setFilter2] = useState({ produtos: [], dataInicial: '2024-01-01', dataFinal: '2024-12-12' });
 
+    const updateTitle = useUpdateTitle();
+
+    useEffect(() => {
+        updateTitle('Dashboards')
+    }, [])
 
     const computedColorScheme = useComputedColorScheme("light", {
         getInitialValueInEffect: true,
@@ -98,23 +104,6 @@ function DepartamentoDashboards(props: any) {
             h="89vh"
             display='flex'
             style={{ flexDirection: 'column' }}>
-
-            <Grid h='8%' mt='1rem'>
-                <Grid.Col span={6}>
-                    <Text
-                        size="2rem"
-                        fw={700}
-                        variant="gradient"
-                        gradient={{ from: '#e67d22', to: 'white', deg: 72 }}
-                    >
-                        Dashboards
-                    </Text>
-                </Grid.Col>
-
-                <Grid.Col span={6} display='flex' style={{ justifyContent: 'end' }}>
-                    <Button variant='light' leftSection={<IconFileTypePdf size={23} />}>Gerar relatório</Button>
-                </Grid.Col>
-            </Grid>
 
             <Grid h='auto' mt='xl'>
                 {cards.map((card) => (
@@ -224,7 +213,20 @@ function DepartamentoDashboards(props: any) {
                 </Box>
             </Paper>
 
-            <Box mih="1.5rem" />
+            <Box
+                display='flex'
+                h="2.5rem"
+                my='md'
+                style={{
+                    justifyContent: 'center',
+                    alignItems: 'end'
+                }}
+            >
+                <Button variant='light' leftSection={<IconFileTypePdf size={23} />}>Gerar relatório</Button>
+
+            </Box>
+
+            <div style={{ minHeight: '.3rem' }} />
         </Box>
     );
 };
