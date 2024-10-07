@@ -8,7 +8,6 @@ import {
     Text,
     useComputedColorScheme,
 } from "@mantine/core";
-import { Icon123, IconChartArea } from "@tabler/icons-react";
 
 
 export default function ChartCard(props: any) {

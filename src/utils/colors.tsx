@@ -1,68 +1,15 @@
-const Colors = {
-  primary: {
-    '100': '#BECBD9',
-    '200': '#96AABF',
-    '300': '#6E89A6',
-    '400': '#4D6F95',
-    '500': '#285886',
-    '600': '#20507D',
-    '700': '#174772',
-    '800': '#113D65',
-    '900': '#1A3756',
-  },
-  secondary: {
-    '100': '#F9CCD6',
-    '200': '#E899A1',
-    '300': '#DC727E',
-    '400': '#E7505F',
-    '500': '#ED3D4A',
-    '600': '#DE3447',
-    '700': '#CB2B40',
-    '800': '#BE2539',
-    '900': '#AF1A2E',
-  },
-  success: {
-    '50': '#E5F5EB',
-    '500': '#00AD60',
-    '800': '#007B3D',
-  },
-  warning: {
-    '50': '#FEFBE6',
-    '500': '#F2CC36',
-    '800': '#EC9D28',
-  },
-  danger: {
-    '50': '#FFECEF',
-    '500': '#FF4040',
-    '800': '#D02332',
-  },
-  gray: {
-    '100': '#F2F2F2',
-    '200': '#E6E6E6',
-    '300': '#D8D8D8',
-    '400': '#B3B3B3',
-    '500': '#949494',
-    '600': '#6C6C6C',
-    '700': '#595959',
-    '800': '#3A3A3A',
-    '900': '#A1A1A1',
-  },
+import { createTheme, CSSVariablesResolver } from "@mantine/core";
 
-  white: {
-    '900': '#FFFFFF',
-  },
+export const themeOverride = createTheme({
+  other: {
+    newWhite: '#f8f8f8'
+  }
+});
 
-  background: {
-    '900': '#F8F8F8',
+export const resolver: CSSVariablesResolver = (theme) => ({
+  variables: {},
+  light: {
+    '--mantine-color-white': theme.other.newWhite,
   },
-
-  dark: {
-    '900': '#4E4B4B',
-  },
-
-  black: {
-    '900': '#000000',
-  },
-};
-
-export { Colors };
+  dark: {},
+});

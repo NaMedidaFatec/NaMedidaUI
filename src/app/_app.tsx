@@ -22,7 +22,6 @@ import {
 import cx from "clsx";
 import classes from "./app.module.css";
 import { useDisclosure } from "@mantine/hooks";
-import { Title } from "../components/general";
 import Loading from "../components/loading";
 import { useCurrentTitle } from "../hooks/useCurrentTitle";
 
@@ -89,7 +88,7 @@ function Application({ children, ...props }) {
                       size="2rem"
                       fw={700}
                       variant="gradient"
-                      gradient={{ from: '#e67d22', to: 'white', deg: 72 }}
+                      gradient={{ from: '#e67d22', to: '#e3c7af', deg: 180 }}
                     >
                       {currentTitle}
                     </Text>

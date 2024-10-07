@@ -1,6 +1,4 @@
-import { Button, Table, Text, useComputedColorScheme } from "@mantine/core";
-import { IconDots } from "@tabler/icons-react";
-import { useState } from "react";
+import { Box, Button, Pagination, Paper, Table, Text, useComputedColorScheme } from "@mantine/core";
 
 interface Element {
     [key: string]: any;
@@ -37,7 +35,11 @@ const DataTable: React.FC<MyComponentProps> = ({
     additionalButtons = undefined,
     activate = false,
 }) => {
-    
+
+    const computedColorScheme = useComputedColorScheme("light", {
+        getInitialValueInEffect: true,
+    });
+
     const keys = elements.length > 0 ? Object.keys(elements[0]) : [];
     const headerKeys = headerElements.length > 0 ? headerElements : [];
 
@@ -54,7 +56,7 @@ const DataTable: React.FC<MyComponentProps> = ({
     );
 
     const rows = elements.map((element, index) => (
-        <Table.Tr key={index} maw="100%">
+        <Table.Tr key={index}>
             {keys.map((key) => (
                 <Table.Td key={key}>
                     <Text truncate="end" size="md" lineClamp={2}>
@@ -96,22 +98,44 @@ const DataTable: React.FC<MyComponentProps> = ({
     ));
 
     return (
-        <Table
-            stickyHeader
-            stickyHeaderOffset={60}
-            verticalSpacing="md"
-            striped
-            highlightOnHover
-            withRowBorders={false}
-            horizontalSpacing="xl"
-        >
-            <Table.Thead bg='transparent'>
-                {headers}
-            </Table.Thead>
-            <Table.Tbody mah="10%">
-                {rows}
-            </Table.Tbody>
-        </Table>
+        <>
+            <Paper
+                mah='90%'
+                shadow="lg"
+                radius="lg"
+                mt="md"
+                bg={computedColorScheme == "dark" ? 'var(--mantine-color-dark-5)' : '#fff'}>
+
+                <Box h='auto' mah='100%' style={{ overflowX: 'scroll' }} >
+                    <Table
+
+                        verticalSpacing="md"
+                        striped
+                        highlightOnHover
+                        withRowBorders={false}
+                        horizontalSpacing="xl"
+                    >
+                        <Table.Thead bg='transparent'>
+                            {headers}
+                        </Table.Thead>
+                        <Table.Tbody mah="10%">
+                            {rows}
+                        </Table.Tbody>
+                    </Table>
+                </Box>
+            </Paper>
+
+            <Box h="auto"
+                display='flex'
+                my='md'
+                style={{
+                    justifyContent: 'center',
+                    alignItems: 'end'
+                }}
+            >
+                <Pagination total={10} size="sm" />
+            </Box>
+        </>
     );
 };
 

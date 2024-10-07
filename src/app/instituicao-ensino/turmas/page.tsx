@@ -16,10 +16,6 @@ function DetalhesTurmas(props: any) {
         updateTitle('Minhas Turmas')
     }, [])
 
-    const computedColorScheme = useComputedColorScheme("light", {
-        getInitialValueInEffect: true,
-    });
-
     const tableHeaders = ["Turma", "Qtd Alunos", "Nível", "Período"];
 
     const elements = [
@@ -51,30 +47,8 @@ function DetalhesTurmas(props: any) {
                 </Grid.Col>
             </Grid>
 
-            <Paper
-                mah='90%'
-                shadow="md"
-                radius="lg"
-                mt="md"
-                bg={computedColorScheme == "dark" ? 'var(--mantine-color-dark-5)' : '#fff'}>
+            <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
 
-
-                <Box h='auto' mah='100%' >
-                    <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
-                </Box>
-
-            </Paper>
-
-            <Box h="auto"
-                display='flex'
-                my='md'
-                style={{
-                    justifyContent: 'center',
-                    alignItems: 'end'
-                }}
-            >
-                <Pagination total={10} size="sm" />
-            </Box>
         </Box>
     );
 };

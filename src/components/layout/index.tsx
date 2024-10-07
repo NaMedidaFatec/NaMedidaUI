@@ -5,23 +5,10 @@ import { ColorSchemeScript, createTheme, CSSVariablesResolver, MantineProvider }
 import "@mantine/core/styles.css";
 import Application from "../../app/_app";
 import { useCurrentTitle } from "../../hooks/useCurrentTitle";
+import { resolver, themeOverride } from "../../utils/colors";
 
 const Layout = ({ children }) => {
   const currentTitle = useCurrentTitle();
-
-  const themeOverride = createTheme({
-    other: {
-      newWhite: '#f8f8f8'
-    },
-  });
-
-  const resolver: CSSVariablesResolver = (theme) => ({
-    variables: {},
-    light: {
-      '--mantine-color-white': theme.other.newWhite,
-    },
-    dark: {},
-  });
 
   return (
     <html lang="en">
