@@ -1,15 +1,7 @@
 import { Box, Button, Pagination, Paper, Table, Text, useComputedColorScheme } from "@mantine/core";
+import ModalDetalheEscola from "../../Modals/ModalDetalheEscola";
+import { useDisclosure } from "@mantine/hooks";
 
-interface Element {
-    [key: string]: any;
-}
-
-interface MyComponentProps {
-    headerElements: string[];
-    elements: Element[];
-    additionalButtons?: Element[];
-    activate?: boolean;
-}
 // EXEMPLO DE ELEMENTOS DE HEADER (array de strings)
 // const headerElements = [ "receba", "graçasaDeus" ];
 
@@ -29,18 +21,34 @@ interface MyComponentProps {
 // SE O ARRAY TIVER UMA PROPRIEDADE CHAMADA "ativo" COM BOOLEANS, SERÁ AUTOMATICAMENTE CONVERTIDO NA TABELA PARA "ATIVO" "INATIVO"
 // SE TIVER A PROP "activate" COMO TRUE, SERÁ CRIADA UMA COLUNA NA TABELA PARA BOTÕES ATIVAR/DESATIVAR
 
+interface Element {
+    [key: string]: any;
+}
+
+interface MyComponentProps {
+    headerElements: string[];
+    elements: Element[];
+    additionalButtons?: Element[];
+    activate?: boolean;
+    detalheEscola?: boolean;
+}
+
 const DataTable: React.FC<MyComponentProps> = ({
     headerElements,
     elements,
     additionalButtons = undefined,
     activate = false,
+    detalheEscola = false,
 }) => {
 
     const computedColorScheme = useComputedColorScheme("light", {
         getInitialValueInEffect: true,
     });
 
+    const [opened, { open, close }] = useDisclosure(false);
+
     const keys = elements.length > 0 ? Object.keys(elements[0]) : [];
+
     const headerKeys = headerElements.length > 0 ? headerElements : [];
 
     const headers = (
@@ -56,7 +64,7 @@ const DataTable: React.FC<MyComponentProps> = ({
     );
 
     const rows = elements.map((element, index) => (
-        <Table.Tr key={index}>
+        <Table.Tr key={index} onClick={open}>
             {keys.map((key) => (
                 <Table.Td key={key}>
                     <Text truncate="end" size="md" lineClamp={2}>
@@ -99,6 +107,9 @@ const DataTable: React.FC<MyComponentProps> = ({
 
     return (
         <>
+
+            {detalheEscola && <ModalDetalheEscola open={opened} close={close} />}
+
             <Paper
                 mah='90%'
                 shadow="lg"

@@ -51,7 +51,7 @@ function DetalhesEscola(props: any) {
                 <ClearableInput placeholder="Pesquisar" label='Pesquisar' />
             </Box>
 
-            <DataTable headerElements={tableHeaders} elements={elements} activate />
+            <DataTable headerElements={tableHeaders} elements={elements} activate detalheEscola/>
 
         </Box>
     );
