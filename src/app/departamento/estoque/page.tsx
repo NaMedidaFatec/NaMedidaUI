@@ -17,13 +17,13 @@ function DepartamentoEstoque(props: any) {
         updateTitle('Estoque')
     }, [])
 
-    const tableHeaders = ["PRODUTO", "CATEGORIA", "EM ESTOQUE"];
+    const tableHeaders = ["CÓDIGO", "PRODUTO", "CATEGORIA", "EM ESTOQUE"];
 
     const elements = [
-        { produto: 'Arroz', categoria: 'Grãos', estoque: 5 },
-        { produto: 'Feijão', categoria: "Grãos", estoque: 6 },
-        { produto: 'Banana', categoria: "Frutas", estoque: 200 },
-        { produto: 'Laranja', categoria: "Frutas", estoque: 600 },
+        { id: 1, produto: 'Arroz', categoria: 'Grãos', estoque: 5 },
+        { id: 2, produto: 'Feijão', categoria: "Grãos", estoque: 6 },
+        { id: 3, produto: 'Banana', categoria: "Frutas", estoque: 200 },
+        { id: 4, produto: 'Laranja', categoria: "Frutas", estoque: 600 },
     ];
 
     const additionalButtons = [

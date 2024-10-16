@@ -1,6 +1,7 @@
 import { Box, Button, Pagination, Paper, Table, Text, useComputedColorScheme } from "@mantine/core";
-import ModalDetalheEscola from "../../Modals/ModalDetalheEscola";
 import { useDisclosure } from "@mantine/hooks";
+import ModalDetalheEscola from "../../Modals/Detalhes/ModalDetalheEscola";
+import ModalDetalhePedido from "../../Modals/Detalhes/ModalDetalhePedido";
 
 // EXEMPLO DE ELEMENTOS DE HEADER (array de strings)
 // const headerElements = [ "receba", "graçasaDeus" ];
@@ -31,6 +32,7 @@ interface MyComponentProps {
     additionalButtons?: Element[];
     activate?: boolean;
     detalheEscola?: boolean;
+    detalhePedido?: boolean;
 }
 
 const DataTable: React.FC<MyComponentProps> = ({
@@ -39,6 +41,7 @@ const DataTable: React.FC<MyComponentProps> = ({
     additionalButtons = undefined,
     activate = false,
     detalheEscola = false,
+    detalhePedido = false,
 }) => {
 
     const computedColorScheme = useComputedColorScheme("light", {
@@ -107,8 +110,9 @@ const DataTable: React.FC<MyComponentProps> = ({
 
     return (
         <>
-
             {detalheEscola && <ModalDetalheEscola open={opened} close={close} />}
+
+            {detalhePedido && <ModalDetalhePedido open={opened} close={close} />}
 
             <Paper
                 mah='90%'
