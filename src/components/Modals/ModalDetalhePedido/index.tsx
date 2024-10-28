@@ -51,6 +51,15 @@ export default function ModalDetalhePedido({ open, close }: ComponentProps) {
 
                 <Box display={'flex'} >
                     <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
+                        Representante:
+                    </Text>
+                    <Text size="1.1rem" fw={200} mt={'1.5rem'}>
+                        Fulano
+                    </Text>
+                </Box>
+
+                <Box display={'flex'} >
+                    <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
                         Endereço escola:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
