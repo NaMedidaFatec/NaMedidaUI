@@ -216,13 +216,15 @@ function DepartamentoDashboards(props: any) {
             <Box
                 display='flex'
                 h="2.5rem"
-                my='md'
-                style={{
-                    justifyContent: 'center',
-                    alignItems: 'end'
-                }}
+                my='xl'
             >
-                <Button variant='light' leftSection={<IconFileTypePdf size={23} />}>Gerar relatório</Button>
+                <Button
+                    variant="gradient"
+                    size='lg'
+                    fullWidth
+                    leftSection={<IconFileTypePdf size={23} />}>
+                    Gerar relatório
+                </Button>
 
             </Box>
 

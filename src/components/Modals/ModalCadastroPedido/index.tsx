@@ -1,6 +1,7 @@
-import { Box, Divider, Grid, Modal, Text } from "@mantine/core";
-import { useState } from "react";
+import { Badge, Box, Button, Divider, Group, Modal, Text } from "@mantine/core";
 import DataTable from "../../general/DataTable";
+import ClearableInput from "../../general/ClearableInput";
+import { useCounter } from "@mantine/hooks";
 
 interface ComponentProps {
     open?: boolean;
@@ -8,14 +9,24 @@ interface ComponentProps {
 }
 
 export default function ModalCadastroPedido({ open, close }: ComponentProps) {
-    const tableHeaders = ["Código", "Produto", "Descrição", "Quantidade"];
+    const tableHeaders = ["Código", "Produto", "Disponível", "Quantidade"];
 
     const elements = [
-        { id: 1, produto: 'Arroz', desc: 'SEILA', qtd: 10 },
-        { id: 2, produto: 'Feijão', desc: 'SEILA', qtd: 10 },
-        { id: 3, produto: 'Laranja', desc: 'SEILA', qtd: 10 },
-        { id: 4, produto: 'Pão', desc: 'SEILA', qtd: 10 },
+        { id: 1, produto: 'Arrozzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', desc: 50, quantidade: 10 },
+        { id: 2, produto: 'Feijão', desc: 50, quantidade: 10 },
+        { id: 3, produto: 'Laranja', desc: 50, quantidade: 10 },
+        { id: 4, produto: 'Pão', desc: 50, quantidade: 10 },
     ];
+
+    const additionalButtons = [
+        { id: 1, icon: "SELECIONAR", onClick: () => 1 },
+    ];
+
+    const [count, { increment, decrement }] = useCounter(3, { min: 0 });
+
+    const badges = Array(count)
+        .fill(0)
+        .map((_, index) => <Badge key={index}>Badge {index}</Badge>);
 
     return (
         <>
@@ -23,7 +34,7 @@ export default function ModalCadastroPedido({ open, close }: ComponentProps) {
                 opened={open}
                 onClose={close}
                 centered
-                size="50vw"
+                size="70vw"
                 title={
                     <Text size="xl" fw={200}>
                         Novo pedido
@@ -31,58 +42,29 @@ export default function ModalCadastroPedido({ open, close }: ComponentProps) {
             >
                 <Divider size="xs" />
 
-                <Grid>
-                    <Grid.Col span={6}>
-                        <Box display={'flex'}>
-                            <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
-                                Código:
-                            </Text>
-                            <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                                Receba
-                            </Text>
-                        </Box>
-                    </Grid.Col>
-                    <Grid.Col span={6} display={'flex'} style={{ justifyContent: 'end' }}>
-                        <Box display={'flex'}>
-                            <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
-                                Data do pedido:
-                            </Text>
-                            <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                                12/12/2012
-                            </Text>
-                        </Box>
-                    </Grid.Col>
-
-                </Grid>
-
-                <Box display={'flex'} >
-                    <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
-                        Escola solicitante:
-                    </Text>
-                    <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        Escola X
-                    </Text>
+                <Box my='md'>
+                    <ClearableInput placeholder="Pesquisar" label="Pesquisar" />
                 </Box>
 
-                <Box display={'flex'} >
-                    <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
-                        Endereço escola:
-                    </Text>
-                    <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        X
-                    </Text>
-                </Box>
+                <Group wrap="nowrap" mt="md">
+                    {badges}
+                </Group>
 
-                <Box display={'flex'} >
-                    <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
-                        Telefone contato:
-                    </Text>
-                    <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        X
-                    </Text>
-                </Box>
+                <DataTable
+                    headerElements={tableHeaders}
+                    elements={elements}
+                    stripped={false}
+                    withRowBorders
+                    withBgColor={false}
+                    withTableBorder
+                    additionalButtons={additionalButtons}
+                />
 
-                <DataTable headerElements={tableHeaders} elements={elements}/>
+                <Box mt='md' display="flex" style={{ justifyContent: "flex-end" }}>
+                    <Button size="md" variant="gradient">
+                        Finalizar Pedido
+                    </Button>
+                </Box>
 
             </Modal>
         </>

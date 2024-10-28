@@ -66,7 +66,7 @@ function RelatoriosEscola(props: any) {
                 </Grid.Col>
 
                 <Grid.Col span={5} display='flex' style={{ justifyContent: 'end' }}>
-                    <Button h='4rem' w='4rem' style={{ borderRadius: '10rem' }}>
+                    <Button h='4rem' w='4rem' variant="gradient" style={{ borderRadius: '10rem' }}>
                         <IconUpload size={23} />
                     </Button>
                 </Grid.Col>

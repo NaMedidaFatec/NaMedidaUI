@@ -49,7 +49,7 @@ function DepartamentoEstoque(props: any) {
                     />
                 </Grid.Col>
                 <Grid.Col span={4} display='flex' style={{ justifyContent: 'flex-end' }}>
-                    <Button h='4rem' w='4rem' style={{ borderRadius: '10rem' }}>
+                    <Button h='4rem' w='4rem' variant="gradient" style={{ borderRadius: '10rem' }}>
                         <IconPackageImport size={23} />
                     </Button>
                 </Grid.Col>

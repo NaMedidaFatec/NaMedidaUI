@@ -84,7 +84,7 @@ function Pedido(props: any) {
             <ClearableInput placeholder="Pesquisar" label="Pesquisar" />
           </Grid.Col>
           <Grid.Col span={3} offset={3} display='flex' style={{ justifyContent: 'flex-end' }}>
-            <Button h='4rem' w='4rem' onClick={open} style={{ borderRadius: '10rem' }}>
+            <Button h='4rem' w='4rem' onClick={open} variant="gradient" style={{ borderRadius: '10rem' }}>
               <IconPlus size={23} />
             </Button>
           </Grid.Col>

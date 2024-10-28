@@ -31,29 +31,14 @@ export default function ModalDetalhePedido({ open, close }: ComponentProps) {
             >
                 <Divider size="xs" />
 
-                <Grid>
-                    <Grid.Col span={6}>
-                        <Box display={'flex'}>
-                            <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
-                                Código:
-                            </Text>
-                            <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                                1
-                            </Text>
-                        </Box>
-                    </Grid.Col>
-                    <Grid.Col span={6} display={'flex'} style={{ justifyContent: 'end' }}>
-                        <Box display={'flex'}>
-                            <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
-                                Data do pedido:
-                            </Text>
-                            <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                                12/12/2012
-                            </Text>
-                        </Box>
-                    </Grid.Col>
-
-                </Grid>
+                <Box display={'flex'}>
+                    <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
+                        Código:
+                    </Text>
+                    <Text size="1.1rem" fw={200} mt={'1.5rem'}>
+                        1
+                    </Text>
+                </Box>
 
                 <Box display={'flex'} >
                     <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
@@ -82,7 +67,16 @@ export default function ModalDetalhePedido({ open, close }: ComponentProps) {
                     </Text>
                 </Box>
 
-                <DataTable headerElements={tableHeaders} elements={elements}/>
+                <Box display={'flex'}>
+                    <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
+                        Data do pedido:
+                    </Text>
+                    <Text size="1.1rem" fw={200} mt={'1.5rem'}>
+                        12/12/2012
+                    </Text>
+                </Box>
+
+                <DataTable headerElements={tableHeaders} elements={elements} />
 
             </Modal>
         </>

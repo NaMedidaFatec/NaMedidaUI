@@ -1,4 +1,5 @@
-import { Box, Button, Pagination, Paper, Table, Text, useComputedColorScheme } from "@mantine/core";
+import { Box, Button, Checkbox, NumberInput, Pagination, Paper, Table, Text, useComputedColorScheme } from "@mantine/core";
+import { useState } from "react";
 
 // EXEMPLO DE ELEMENTOS DE HEADER (array de strings)
 // const headerElements = [ "receba", "graçasaDeus" ];
@@ -28,6 +29,13 @@ interface MyComponentProps {
     elements: Element[];
     additionalButtons?: Element[];
     activate?: boolean;
+    selection?: boolean;
+    stripped?: boolean;
+    withColumnBorders?: boolean;
+    withRowBorders?: boolean;
+    highlightOnHover?: boolean;
+    withBgColor?: boolean;
+    withTableBorder?: boolean;
 }
 
 const DataTable: React.FC<MyComponentProps> = ({
@@ -35,11 +43,20 @@ const DataTable: React.FC<MyComponentProps> = ({
     elements,
     additionalButtons = undefined,
     activate = false,
+    selection = false,
+    stripped = true,
+    withColumnBorders = false,
+    withRowBorders = false,
+    highlightOnHover = false,
+    withBgColor = true,
+    withTableBorder = false,
 }) => {
 
     const computedColorScheme = useComputedColorScheme("light", {
         getInitialValueInEffect: true,
     });
+
+    const [selectedRows, setSelectedRows] = useState<number[]>([]);
 
     const keys = elements.length > 0 ? Object.keys(elements[0]) : [];
 
@@ -47,6 +64,8 @@ const DataTable: React.FC<MyComponentProps> = ({
 
     const headers = (
         <Table.Tr >
+            {selection && (<Table.Tr />)}
+
             {headerKeys.map((titulo) => (
                 <Table.Th key={titulo} >
                     <Text truncate="end" size="lg" lineClamp={2} fw={700}>
@@ -59,17 +78,46 @@ const DataTable: React.FC<MyComponentProps> = ({
 
     const rows = elements.map((element, index) => (
         <Table.Tr key={index}>
+
+            {selection && (
+                <Table.Td>
+                    <Checkbox
+                        aria-label="Select row"
+                        checked={selectedRows.includes(element.id)}
+                        onChange={(event) =>
+                            setSelectedRows(
+                                event.currentTarget.checked
+                                    ? [...selectedRows, element.id]
+                                    : selectedRows.filter((position) => position !== element.id)
+                            )
+                        }
+                    />
+                </Table.Td>
+            )}
+
             {keys.map((key) => (
                 <Table.Td key={key}>
                     <Text truncate="end" size="md" lineClamp={2}>
-                        {key === "ativo" && typeof (element[key] === "boolean") ? (
-                            element[key] ? "ATIVO" : "INATIVO"
-                        ) : (
-                            String(element[key])
-                        )}
+
+                        {(() => {
+                            switch (key) {
+                                case "ativo":
+                                    return typeof element[key] === "boolean"
+                                        ? element[key] ? "ATIVO" : "INATIVO"
+                                        : String(element[key]);
+                                case "quantidade":
+                                    return Number.isInteger(element[key])
+                                        ? <NumberInput maw={'65%'} placeholder="Quantidade"/>
+                                        : String(element[key]);
+                                default:
+                                    return String(element[key]);
+                            }
+                        })()}
+
                     </Text>
                 </Table.Td>
             ))}
+
             <Table.Td style={{ display: 'flex', justifyContent: 'end' }}>
                 {additionalButtons?.map((button) =>
                     <Button
@@ -104,14 +152,16 @@ const DataTable: React.FC<MyComponentProps> = ({
                 shadow="lg"
                 radius="lg"
                 mt="md"
-                bg={computedColorScheme == "dark" ? 'var(--mantine-color-dark-5)' : '#fff'}>
-
+                bg={withBgColor ? (computedColorScheme === "dark" ? 'var(--mantine-color-dark-5)' : '#fff') : undefined}
+            >
                 <Box h='auto' mah='100%' style={{ overflowX: 'scroll' }} >
                     <Table
+                        withTableBorder={withTableBorder}
                         verticalSpacing="md"
-                        striped
-                        highlightOnHover
-                        withRowBorders={false}
+                        striped={stripped}
+                        withColumnBorders={withColumnBorders}
+                        withRowBorders={withRowBorders}
+                        highlightOnHover={highlightOnHover}
                         horizontalSpacing="xl">
                         <Table.Thead bg='transparent'>
                             {headers}
@@ -121,7 +171,7 @@ const DataTable: React.FC<MyComponentProps> = ({
                         </Table.Tbody>
                     </Table>
                 </Box>
-            </Paper>
+            </Paper >
 
             <Box h="auto"
                 display='flex'
