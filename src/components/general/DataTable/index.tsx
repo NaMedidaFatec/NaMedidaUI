@@ -1,7 +1,4 @@
 import { Box, Button, Pagination, Paper, Table, Text, useComputedColorScheme } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import ModalDetalheEscola from "../../Modals/Detalhes/ModalDetalheEscola";
-import ModalDetalhePedido from "../../Modals/Detalhes/ModalDetalhePedido";
 
 // EXEMPLO DE ELEMENTOS DE HEADER (array de strings)
 // const headerElements = [ "receba", "graçasaDeus" ];
@@ -16,7 +13,7 @@ import ModalDetalhePedido from "../../Modals/Detalhes/ModalDetalhePedido";
 
 // EXEMPLO DE BOTÕES ADICIONAIs
 //    const additionalButtons = [
-//    { id: 1, icon: "DETALHES" , onClick: () => 1 },
+//    { id: 1, icon: <IconFileInfo/> , onClick: () => 1 },
 //    { id: 2, icon: <Icon123/> , onClick: () => 1 },
 //];
 // SE O ARRAY TIVER UMA PROPRIEDADE CHAMADA "ativo" COM BOOLEANS, SERÁ AUTOMATICAMENTE CONVERTIDO NA TABELA PARA "ATIVO" "INATIVO"
@@ -31,8 +28,6 @@ interface MyComponentProps {
     elements: Element[];
     additionalButtons?: Element[];
     activate?: boolean;
-    detalheEscola?: boolean;
-    detalhePedido?: boolean;
 }
 
 const DataTable: React.FC<MyComponentProps> = ({
@@ -40,15 +35,11 @@ const DataTable: React.FC<MyComponentProps> = ({
     elements,
     additionalButtons = undefined,
     activate = false,
-    detalheEscola = false,
-    detalhePedido = false,
 }) => {
 
     const computedColorScheme = useComputedColorScheme("light", {
         getInitialValueInEffect: true,
     });
-
-    const [opened, { open, close }] = useDisclosure(false);
 
     const keys = elements.length > 0 ? Object.keys(elements[0]) : [];
 
@@ -67,18 +58,14 @@ const DataTable: React.FC<MyComponentProps> = ({
     );
 
     const rows = elements.map((element, index) => (
-        <Table.Tr key={index} onClick={open}>
+        <Table.Tr key={index}>
             {keys.map((key) => (
                 <Table.Td key={key}>
                     <Text truncate="end" size="md" lineClamp={2}>
-                        {key === "ativo" ? (
-                            typeof element[key] === "boolean" ? (
-                                element[key] ? "ATIVO" : "INATIVO"
-                            ) : (
-                                String(element[key])
-                            )
+                        {key === "ativo" && typeof (element[key] === "boolean") ? (
+                            element[key] ? "ATIVO" : "INATIVO"
                         ) : (
-                            element[key]
+                            String(element[key])
                         )}
                     </Text>
                 </Table.Td>
@@ -88,7 +75,8 @@ const DataTable: React.FC<MyComponentProps> = ({
                     <Button
                         key={button?.id}
                         ml="1.5rem"
-                        variant="light"
+                        variant="subtle"
+                        radius="md"
                         onClick={button?.onClick}
                     >
                         {button?.icon}
@@ -99,6 +87,7 @@ const DataTable: React.FC<MyComponentProps> = ({
                         variant="light"
                         color={element['ativo'] ? 'red' : 'blue'}
                         miw='8rem'
+                        radius="md"
                         onClick={() => 1}
                         ml="1.5rem">
                         {element['ativo'] ? 'DESATIVAR' : 'ATIVAR'}
@@ -110,10 +99,6 @@ const DataTable: React.FC<MyComponentProps> = ({
 
     return (
         <>
-            {detalheEscola && <ModalDetalheEscola open={opened} close={close} />}
-
-            {detalhePedido && <ModalDetalhePedido open={opened} close={close} />}
-
             <Paper
                 mah='90%'
                 shadow="lg"

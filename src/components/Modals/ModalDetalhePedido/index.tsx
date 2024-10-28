@@ -1,6 +1,6 @@
 import { Box, Divider, Grid, Modal, Text } from "@mantine/core";
 import { useState } from "react";
-import DataTable from "../../../general/DataTable";
+import DataTable from "../../general/DataTable";
 
 interface ComponentProps {
     open?: boolean;

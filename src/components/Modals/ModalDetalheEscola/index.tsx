@@ -42,6 +42,15 @@ export default function ModalDetalheEscola({ open, close }: ComponentProps) {
 
                 <Box display={'flex'} >
                     <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
+                        Representante:
+                    </Text>
+                    <Text size="1.1rem" fw={200} mt={'1.5rem'}>
+                        Fulano de tal
+                    </Text>
+                </Box>
+
+                <Box display={'flex'} >
+                    <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
                         E-mail:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>

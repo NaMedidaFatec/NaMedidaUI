@@ -2,7 +2,7 @@
 
 import { Box, Select, Grid } from '@mantine/core';
 import { Button } from '../../../components/general';
-import { IconPackageImport } from "@tabler/icons-react";
+import { IconFileInfo, IconPackageImport } from "@tabler/icons-react";
 import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
@@ -27,7 +27,7 @@ function DepartamentoEstoque(props: any) {
     ];
 
     const additionalButtons = [
-        { id: 1, icon: "DETALHES", onClick: () => 1 },
+        { id: 1, icon: <IconFileInfo/>, onClick: () => 1 },
     ];
 
     return (

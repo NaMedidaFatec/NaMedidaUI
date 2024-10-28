@@ -8,9 +8,12 @@ import UserService from "../../../services/user";
 import { Button } from "../../../components/general";
 import { useUpdateTitle } from "../../../hooks/useTitle";
 import { Grid, keys, Box } from "@mantine/core";
-import { IconPlus } from "@tabler/icons-react";
+import { IconFileInfo, IconPlus } from "@tabler/icons-react";
 import ClearableInput from "../../../components/general/ClearableInput";
 import DataTable from "../../../components/general/DataTable";
+import ModalDetalhePedido from "../../../components/Modals/ModalDetalhePedido";
+import { useDisclosure } from "@mantine/hooks";
+import ModalCadastroPedido from "../../../components/Modals/ModalCadastroPedido";
 
 // function filterData(data, search: string) {
 //   const query = search.toLowerCase().trim();
@@ -45,24 +48,31 @@ function Pedido(props: any) {
   const updateTitle = useUpdateTitle();
 
   useEffect(() => {
-      updateTitle('Meus Pedidos')
+    updateTitle('Meus Pedidos')
   }, [])
+
+  const [openedDetalhe, handlers] = useDisclosure(false);
+  const [openedCadastro, { open, close }] = useDisclosure(false);
+
 
   const tableHeaders = ["Código", "Data do pedido", "Situação", "Observação"];
 
   const elements = [
-      { id: 1, data: '2024-01-01', situacao: 'ENTREGUE', obs: '' },
-      { id: 2, data: '2024-01-01', situacao: 'ENTREGUE', obs: 'TESTE' },
-      { id: 3, data: '2024-01-01', situacao: 'ENTREGUE', obs: '' },
-      { id: 4, data: '2024-01-01', situacao: 'ENTREGUE', obs: '' },
+    { id: 1, data: '2024-01-01', situacao: 'ENTREGUE', obs: '' },
+    { id: 2, data: '2024-01-01', situacao: 'ENTREGUE', obs: 'TESTE' },
+    { id: 3, data: '2024-01-01', situacao: 'ENTREGUE', obs: '' },
+    { id: 4, data: '2024-01-01', situacao: 'ENTREGUE', obs: '' },
   ];
 
   const additionalButtons = [
-      { id: 1, icon: "DETALHES", onClick: () => 1 },
+    { id: 1, icon: <IconFileInfo/>, onClick: () => handlers?.open() },
   ];
 
   return (
     <>
+      <ModalDetalhePedido open={openedDetalhe} close={() => handlers?.close()} />
+
+      <ModalCadastroPedido open={openedCadastro} close={close} />
       <Box
         w='100%'
         h="89vh"
@@ -74,13 +84,13 @@ function Pedido(props: any) {
             <ClearableInput placeholder="Pesquisar" label="Pesquisar" />
           </Grid.Col>
           <Grid.Col span={3} offset={3} display='flex' style={{ justifyContent: 'flex-end' }}>
-            <Button h='4rem' w='4rem' style={{ borderRadius: '10rem' }}>
+            <Button h='4rem' w='4rem' onClick={open} style={{ borderRadius: '10rem' }}>
               <IconPlus size={23} />
             </Button>
           </Grid.Col>
         </Grid>
 
-        <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} detalhePedido/>
+        <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
 
       </Box>
     </>

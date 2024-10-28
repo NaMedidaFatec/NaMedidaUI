@@ -4,7 +4,7 @@ import { Pagination, Text, Box, Button, Grid, Paper, useComputedColorScheme } fr
 import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
-import { IconUpload } from '@tabler/icons-react';
+import { IconFileInfo, IconUpload } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { DateInput } from '@mantine/dates';
 import { useUpdateTitle } from '../../../hooks/useTitle';
@@ -34,7 +34,7 @@ function RelatoriosEscola(props: any) {
     ];
 
     const additionalButtons = [
-        { id: 1, icon: "DETALHES", onClick: () => 1 },
+        { id: 1, icon: <IconFileInfo/>, onClick: () => 1 },
     ];
 
     return (
