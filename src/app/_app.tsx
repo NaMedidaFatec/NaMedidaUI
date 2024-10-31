@@ -5,6 +5,7 @@ import {
   AppShell,
   Burger,
   Grid,
+  Text,
   useComputedColorScheme,
   useMantineColorScheme,
 } from "@mantine/core";
@@ -21,7 +22,6 @@ import {
 import cx from "clsx";
 import classes from "./app.module.css";
 import { useDisclosure } from "@mantine/hooks";
-import { Title } from "../components/general";
 import Loading from "../components/loading";
 import { useCurrentTitle } from "../hooks/useCurrentTitle";
 
@@ -42,7 +42,7 @@ function Application({ children, ...props }) {
         if (user.isAdmin) {
           return router.push("/admin");
         }
-        return router.push("/instituicao-ensino");
+        return router.push("/escola");
       }
       return router.push(pathname);
     }
@@ -65,6 +65,7 @@ function Application({ children, ...props }) {
         <>
           {isLoggedIn ? (
             <AppShell
+              layout="alt"
               header={{ height: 60 }}
               navbar={{
                 width: 300,
@@ -73,7 +74,7 @@ function Application({ children, ...props }) {
               }}
               padding="md"
             >
-              <AppShell.Header>
+              <AppShell.Header bg={computedColorScheme == "dark" ? 'var(--mantine-color-dark-6)' : '#fff'}>
                 <Grid align="center" className={classes.header}>
                   <Burger
                     opened={opened}
@@ -81,22 +82,22 @@ function Application({ children, ...props }) {
                     hiddenFrom="sm"
                     size="sm"
                   />
-                  <Grid.Col span={6}>
-                    {/* <Title size="xl" weight={700}>    //Acho que isso poderia ser uma notificação né
-                      Seja bem-vindo {user.username}!
-                    </Title> */}
-                  </Grid.Col>
-                  <Grid.Col span={4}>
-                    <Title>{currentTitle}</Title>
+                  <Grid.Col span={6} pl='1.5rem' >
+                    <Text
+                      mt='xs'
+                      size="2rem"
+                      fw={700}
+                      variant="gradient"
+                      gradient={{ from: '#e67d22', to: '#e3c7af', deg: 180 }}
+                    >
+                      {currentTitle}
+                    </Text>
                   </Grid.Col>
                   <Grid.Col
-                    span={2}
-                    style={{
-                      display: 'flex',
-                      justifyContent: "flex-end",
-                      paddingRight: '1rem'
-                    }}
-                  >
+                    span={6}
+                    pr='1rem'
+                    display='flex'
+                    style={{ justifyContent: "flex-end" }} >
                     <Grid>
                       <Grid.Col span={4} >
                         <ActionIcon
@@ -149,7 +150,9 @@ function Application({ children, ...props }) {
                   </Grid.Col>
                 </Grid>
               </AppShell.Header>
-              <AppShell.Navbar p="md">
+              <AppShell.Navbar
+                p="md"
+                bg={computedColorScheme == "dark" ? 'var(--mantine-color-dark-6)' : '#fff'}>
                 <NavBar />
               </AppShell.Navbar>
               <AppShell.Main className={classes.main}>{children}</AppShell.Main>

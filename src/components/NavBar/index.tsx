@@ -1,27 +1,33 @@
 import React from "react";
-import { Group, Code } from "@mantine/core";
-import { IconSettings, Icon2fa, IconDatabaseImport, IconSchool, IconUsers } from "@tabler/icons-react";
+import { Group, Code, Image, useComputedColorScheme } from "@mantine/core";
+import { IconSettings, IconHome, IconSchool, IconUsers, IconPackages, IconChartBar, IconFileAnalytics, IconTruckDelivery, IconTruckReturn } from "@tabler/icons-react";
 import classes from "./NavBar.module.css";
 import { usePathname } from "next/navigation";
 
 const data = {
-  "instituicao-ensino": [
-    { link: "/instituicao-ensino", label: "Home", icon: IconDatabaseImport },
-    { link: "/instituicao-ensino/turmas", label: "Turmas", icon: IconUsers },
-    { link: "/instituicao-ensino/pedido", label: "Pedido", icon: Icon2fa },
-    { link: "/instituicao-ensino/settings", label: "Configurações", icon: IconSettings },
+  "escola": [
+    { link: "/escola", label: "Home", icon: IconHome },
+    { link: "/escola/turmas", label: "Turmas", icon: IconUsers },
+    { link: "/escola/pedido", label: "Pedido", icon: IconTruckDelivery },
+    { link: "/escola/relatorios", label: "Relatorios", icon: IconFileAnalytics },
+    { link: "/escola/settings", label: "Configurações", icon: IconSettings },
   ],
-  admin: [
-    { link: "/admin", label: "Home", icon: IconDatabaseImport },
-    { link: "/admin/escolas", label: "Escolas", icon: IconSchool },
-    { link: "/admin/settings", label: "Solicitações de suprimentos", icon: IconSettings },
+  departamento: [
+    { link: "/departamento", label: "Home", icon: IconHome },
+    { link: "/departamento/escolas", label: "Escolas", icon: IconSchool },
+    { link: "/departamento/estoque", label: "Estoque", icon: IconPackages },
+    { link: "/departamento/pedidos", label: "Pedidos", icon: IconTruckReturn },
+    { link: "/departamento/dashboards", label: "Dashboards", icon: IconChartBar },
   ],
 };
 
 export default function NavBar() {
   const pathname = usePathname();
-  const firstSegment = pathname ? pathname.split("/")[1] : "instituicao-ensino";
+  const firstSegment = pathname ? pathname.split("/")[1] : "escola";
 
+  const computedColorScheme = useComputedColorScheme("light", {
+    getInitialValueInEffect: true,
+  });
 
   const links = data[firstSegment] && data[firstSegment].map((item) => (
     <a
@@ -39,11 +45,12 @@ export default function NavBar() {
     <>
       <div className={classes.navbarMain}>
         {links}
-
-
       </div>
       <Group className={classes.footer} justify="space-between">
-        Na Medida
+        <Image
+          src={computedColorScheme === "dark" ? "/logoDark.png" : "/logo.png"}
+          w={'8rem'}
+        />
         <Code fw={700}>v0.0.3</Code>
       </Group>
     </>

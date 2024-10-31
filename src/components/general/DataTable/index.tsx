@@ -1,62 +1,190 @@
-import { Button, Table } from "@mantine/core";
-import { IconDots } from "@tabler/icons-react";
+import { Box, Button, Checkbox, NumberInput, Pagination, Paper, Table, Text, useComputedColorScheme } from "@mantine/core";
+import { useState } from "react";
 
-export default ({ headerElements, elements }) => {
-    // EXEMPLO DE ELEMENTOS, podem ser adicionados mais ou menos propriedades
-    // const elements = [
-    //     { name: 'Turma 1', qtdAlunos: 20, nivel: 'medio', periodo: 'vespertino' },
-    //     { name: 'Turma 2', qtdAlunos: 20, nivel: 'fundamental', periodo: 'vespertino' },
-    //     { name: 'Turma 3', qtdAlunos: 20, nivel: 'medio', periodo: 'vespertino' },
-    //     { name: 'Turma 4', qtdAlunos: 20, nivel: 'medio', periodo: 'matutino' },
-    // ];
+// EXEMPLO DE ELEMENTOS DE HEADER (array de strings)
+// const headerElements = [ "receba", "graçasaDeus" ];
 
-    // EXEMPLO DE ELEMENTOS DE HEADER (array de strings)
-    // const headerElements = [ "receba", "graçasaDeus" ];
+// EXEMPLO DE ELEMENTOS, podem ser adicionados mais ou menos propriedades
+// const elements = [
+//     { name: 'Turma 1', qtdAlunos: 20, nivel: 'medio', periodo: 'vespertino' },
+//     { name: 'Turma 2', qtdAlunos: 20, nivel: 'fundamental', periodo: 'vespertino' },
+//     { name: 'Turma 3', qtdAlunos: 20, nivel: 'medio', periodo: 'vespertino' },
+//     { name: 'Turma 4', qtdAlunos: 20, nivel: 'medio', periodo: 'matutino' },
+// ];
+
+// EXEMPLO DE BOTÕES ADICIONAIs
+//    const additionalButtons = [
+//    { id: 1, icon: <IconFileInfo/> , onClick: () => 1 },
+//    { id: 2, icon: <Icon123/> , onClick: () => 1 },
+//];
+// SE O ARRAY TIVER UMA PROPRIEDADE CHAMADA "ativo" COM BOOLEANS, SERÁ AUTOMATICAMENTE CONVERTIDO NA TABELA PARA "ATIVO" "INATIVO"
+// SE TIVER A PROP "activate" COMO TRUE, SERÁ CRIADA UMA COLUNA NA TABELA PARA BOTÕES ATIVAR/DESATIVAR
+
+interface Element {
+    [key: string]: any;
+}
+
+interface MyComponentProps {
+    headerElements: string[];
+    elements: Element[];
+    additionalButtons?: Element[];
+    activate?: boolean;
+    selection?: boolean;
+    stripped?: boolean;
+    withColumnBorders?: boolean;
+    withRowBorders?: boolean;
+    highlightOnHover?: boolean;
+    withBgColor?: boolean;
+    withTableBorder?: boolean;
+}
+
+const DataTable: React.FC<MyComponentProps> = ({
+    headerElements,
+    elements,
+    additionalButtons = undefined,
+    activate = false,
+    selection = false,
+    stripped = true,
+    withColumnBorders = false,
+    withRowBorders = false,
+    highlightOnHover = false,
+    withBgColor = true,
+    withTableBorder = false,
+}) => {
+
+    const computedColorScheme = useComputedColorScheme("light", {
+        getInitialValueInEffect: true,
+    });
+
+    const [selectedRows, setSelectedRows] = useState<number[]>([]);
 
     const keys = elements.length > 0 ? Object.keys(elements[0]) : [];
+
     const headerKeys = headerElements.length > 0 ? headerElements : [];
+
+    const headers = (
+        <Table.Tr >
+            {selection && (<Table.Tr />)}
+
+            {headerKeys.map((titulo) => (
+                <Table.Th key={titulo} >
+                    <Text truncate="end" size="lg" lineClamp={2} fw={700}>
+                        {titulo}
+                    </Text>
+                </Table.Th>
+            ))}
+        </Table.Tr>
+    );
 
     const rows = elements.map((element, index) => (
         <Table.Tr key={index}>
+
+            {selection && (
+                <Table.Td>
+                    <Checkbox
+                        aria-label="Select row"
+                        checked={selectedRows.includes(element.id)}
+                        onChange={(event) =>
+                            setSelectedRows(
+                                event.currentTarget.checked
+                                    ? [...selectedRows, element.id]
+                                    : selectedRows.filter((position) => position !== element.id)
+                            )
+                        }
+                    />
+                </Table.Td>
+            )}
+
             {keys.map((key) => (
-                <Table.Td key={key}>{element[key]}</Table.Td>
+                <Table.Td key={key}>
+                    <Text truncate="end" size="md" lineClamp={2}>
+
+                        {(() => {
+                            switch (key) {
+                                case "ativo":
+                                    return typeof element[key] === "boolean"
+                                        ? element[key] ? "ATIVO" : "INATIVO"
+                                        : String(element[key]);
+                                case "quantidade":
+                                    return Number.isInteger(element[key])
+                                        ? <NumberInput maw={'65%'} placeholder="Quantidade"/>
+                                        : String(element[key]);
+                                default:
+                                    return String(element[key]);
+                            }
+                        })()}
+
+                    </Text>
+                </Table.Td>
             ))}
-            <Table.Td display='flex' style={{ justifyContent: 'end' }}>
-                <Button
-                    variant="light"
-                    onClick={() => console.log('Button clicked')}
-                >
-                    <IconDots />
-                </Button>
+
+            <Table.Td style={{ display: 'flex', justifyContent: 'end' }}>
+                {additionalButtons?.map((button) =>
+                    <Button
+                        key={button?.id}
+                        ml="1.5rem"
+                        variant="subtle"
+                        radius="md"
+                        onClick={button?.onClick}
+                    >
+                        {button?.icon}
+                    </Button>
+                )}
+                {activate && (
+                    <Button
+                        variant="light"
+                        color={element['ativo'] ? 'red' : 'blue'}
+                        miw='8rem'
+                        radius="md"
+                        onClick={() => 1}
+                        ml="1.5rem">
+                        {element['ativo'] ? 'DESATIVAR' : 'ATIVAR'}
+                    </Button>
+                )}
             </Table.Td>
         </Table.Tr>
     ));
 
-    const headers = (
-        <Table.Tr>
-            {headerKeys.map((titulo) => (
-                <Table.Th key={titulo}>{titulo}</Table.Th>
-            ))}
-        </Table.Tr>
-    );
-
     return (
         <>
-            <Table
-                stickyHeader
-                stickyHeaderOffset={60}
-                verticalSpacing='sm'
-                striped
-                highlightOnHover
-                withRowBorders={false}
-                horizontalSpacing="xl" >
-                <Table.Thead>
-                    {headers}
-                </Table.Thead>
-                <Table.Tbody mah='10%'>
-                    {rows}
-                </Table.Tbody>
-            </Table>
+            <Paper
+                mah='90%'
+                shadow="lg"
+                radius="lg"
+                mt="md"
+                bg={withBgColor ? (computedColorScheme === "dark" ? 'var(--mantine-color-dark-5)' : '#fff') : undefined}
+            >
+                <Box h='auto' mah='100%' style={{ overflowX: 'scroll' }} >
+                    <Table
+                        withTableBorder={withTableBorder}
+                        verticalSpacing="md"
+                        striped={stripped}
+                        withColumnBorders={withColumnBorders}
+                        withRowBorders={withRowBorders}
+                        highlightOnHover={highlightOnHover}
+                        horizontalSpacing="xl">
+                        <Table.Thead bg='transparent'>
+                            {headers}
+                        </Table.Thead>
+                        <Table.Tbody mah="10%">
+                            {rows}
+                        </Table.Tbody>
+                    </Table>
+                </Box>
+            </Paper >
+
+            <Box h="auto"
+                display='flex'
+                my='md'
+                style={{
+                    justifyContent: 'center',
+                    alignItems: 'end'
+                }}
+            >
+                <Pagination total={10} size="sm" />
+            </Box>
         </>
     );
 };
+
+export default DataTable;

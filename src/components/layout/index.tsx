@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
-import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+import { ColorSchemeScript, createTheme, CSSVariablesResolver, MantineProvider } from "@mantine/core";
 
 import "@mantine/core/styles.css";
 import Application from "../../app/_app";
 import { useCurrentTitle } from "../../hooks/useCurrentTitle";
+import { resolver, themeOverride } from "../../utils/colors";
 
 const Layout = ({ children }) => {
   const currentTitle = useCurrentTitle();
@@ -18,7 +19,7 @@ const Layout = ({ children }) => {
         <ColorSchemeScript />
       </head>
       <body>
-        <MantineProvider defaultColorScheme="dark">
+        <MantineProvider defaultColorScheme="dark" theme={themeOverride} cssVariablesResolver={resolver}>
           <Application>{children}</Application>
         </MantineProvider>
       </body>
