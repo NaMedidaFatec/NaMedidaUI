@@ -25,27 +25,28 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const signin = async (user: User): Promise<void> => {
+const signin = async (user: User): Promise<void> => {
     try {
-      // const user = await UserService.signin(user);
-      user = new User({
-        id: 1,
-        username: "Usuário 1",
-        email: "email@email.com.br",
-        isAdmin: false,
-      });
-      
-      localStorage.setItem("@namedida:user", JSON.stringify(user));
-      setState({ isLoggedIn: true, user });
-      notifications.show({ title: 'Login', message: "Login realizado com sucesso!" })
+      const accessToken = await UserService.signin(user);
+      if (accessToken) {
+        await localStorage.setItem("@namedida:accessToken", accessToken);
+
+        const user = await UserService.getMe();
+
+        localStorage.setItem("@namedida:user", JSON.stringify(user));
+        setState({ isLoggedIn: true, user });
+        notifications.show({ title: 'Login', message: "Login realizado com sucesso!", position: 'bottom-left' })
+      }
     } catch (error) {
       console.log(error);
+      notifications.show({ title: 'Erro no login!', message: error?.message, position: 'bottom-left', color: 'red' })
     }
   };
 
   const signout = async (): Promise<void> => {
     try {
       localStorage.removeItem("@namedida:user");
+      localStorage.removeItem("@namedida:accessToken");
       setState({ isLoggedIn: false })
     } catch (error) {
       console.log(error);

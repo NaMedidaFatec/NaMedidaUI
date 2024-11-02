@@ -6,6 +6,8 @@ import "@mantine/core/styles.css";
 import Application from "../../app/_app";
 import { useCurrentTitle } from "../../hooks/useCurrentTitle";
 import { resolver, themeOverride } from "../../utils/colors";
+import { Notifications } from "@mantine/notifications";
+import '@mantine/notifications/styles.css';
 
 const Layout = ({ children }) => {
   const currentTitle = useCurrentTitle();
@@ -21,6 +23,8 @@ const Layout = ({ children }) => {
       <body>
         <MantineProvider defaultColorScheme="dark" theme={themeOverride} cssVariablesResolver={resolver}>
           <Application>{children}</Application>
+          <Notifications />
+
         </MantineProvider>
       </body>
     </html>
