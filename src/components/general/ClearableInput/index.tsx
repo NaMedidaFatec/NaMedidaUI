@@ -1,13 +1,18 @@
 import { CloseButton, Input } from "@mantine/core";
 import { useState } from "react";
 
-export default function (props) {
-    const { placeholder, label } = props
+interface ComponentProps {
+    placeholder?: string;
+    label?: string;
+    required?: boolean;
+}
+
+export default function ({ placeholder, label, required = false }: ComponentProps) {
     const [value, setValue] = useState('');
 
     return (
         <>
-            <Input.Wrapper label={label}>
+            <Input.Wrapper label={label} required={required}>
                 <Input
                     placeholder={placeholder}
                     value={value}

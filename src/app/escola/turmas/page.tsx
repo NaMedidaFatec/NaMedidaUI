@@ -8,6 +8,7 @@ import { IconFileInfo, IconPlus } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { useUpdateTitle } from '../../../hooks/useTitle';
 import ModalCadastroTurma from '../../../components/Modals/ModalCadastroTurma';
+import ModalDetalheTurma from '../../../components/Modals/ModalDetalheTurma';
 import { useDisclosure } from '@mantine/hooks';
 
 function DetalhesTurmas(props: any) {
@@ -19,6 +20,8 @@ function DetalhesTurmas(props: any) {
     }, [])
 
     const [openedCadastro, { open, close }] = useDisclosure(false);
+    
+    const [openedDetalhe, handlers] = useDisclosure(false);
 
     const tableHeaders = ["Turma", "Qtd Alunos", "Nível", "Período"];
 
@@ -30,12 +33,14 @@ function DetalhesTurmas(props: any) {
     ];
 
     const additionalButtons = [
-        { id: 1, icon: <IconFileInfo />, onClick: () => 1 },
+        { id: 1, icon: <IconFileInfo />, onClick: () => handlers?.open()},
     ];
 
     return (
         <>
             <ModalCadastroTurma open={openedCadastro} close={close} />
+
+            <ModalDetalheTurma open={openedDetalhe} close={() => handlers?.close()} />
 
             <Box
                 w='100%'

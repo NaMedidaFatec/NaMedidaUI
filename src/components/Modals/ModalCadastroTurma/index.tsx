@@ -2,6 +2,7 @@ import { Box, Button, Divider, Grid, Modal, NumberInput, Select, Text } from "@m
 import { useState } from "react";
 import DataTable from "../../general/DataTable";
 import ClearableInput from "../../general/ClearableInput";
+import { TimeInput } from "@mantine/dates";
 
 interface ComponentProps {
     open?: boolean;
@@ -36,27 +37,39 @@ export default function ModalCadastroTurma({ open, close }: ComponentProps) {
             >
                 <Divider size="xs" />
 
-                <Grid mt='sm'>
-                    <Grid.Col span={6}>
-                        <ClearableInput placeholder="Turma 1º Ano A" label='Descrição' />
-                    </Grid.Col>
-                    <Grid.Col span={3}>
-                        <NumberInput
-                            label="Nº Alunos"
-                            placeholder="Nº Alunos"
+                <Grid mt='md'>
+                    <Grid.Col span={5}>
+                        <ClearableInput
+                            placeholder="Turma 1º Ano A"
+                            label='Descrição'
+                            required
                         />
                     </Grid.Col>
                     <Grid.Col span={3}>
                         <Select
+                            required
                             label="Periodo"
                             placeholder="Escolha..."
                             data={['Matutino', 'Vespertino']}
                         />
                     </Grid.Col>
+                    <Grid.Col span={2}>
+                        <NumberInput
+                            label="Nº Alunos"
+                            placeholder="Nº Alunos"
+                            required
+                        />
+                    </Grid.Col>
+                    <Grid.Col span={2}>
+                        <NumberInput
+                            label="Nº Sala"
+                            placeholder="Nº Sala"
+                        />
+                    </Grid.Col>
                 </Grid>
 
                 <Button
-                    mt='sm'
+                    mt='md'
                     fullWidth
                     variant="gradient"
                     fs='22rem'
