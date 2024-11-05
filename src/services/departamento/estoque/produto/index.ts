@@ -1,29 +1,29 @@
-import api from '../api';
+import api from '../../../api';
 
 
-class EscolaService {
+export default class ProdutoService {
 
-    static createTurma = async (escola) => {
+    static createProduto = async (produto) => {
         try {
-            const { data } = await api.post(`/unidadeensino/save`, escola)
+            const { data } = await api.post(`/produtos/save`, produto)
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);
         }
     }
 
-    static saveTurma = async (escolaId, escola) => {
+    static saveProduto = async (produtoId, produto) => {
         try {
-            const { data } = await api.put(`/unidadeensino/${escolaId}`, escola)
+            const { data } = await api.put(`/produtos/${produtoId}`, produto)
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);
         }
     }
 
-    static fetchEscola = async (id) => {
+    static fetchProduto = async (id) => {
         try{
-           const { data } = await api.get(`/unidadeensino/${id}`)
+           const { data } = await api.get(`/produtos/${id}`)
            return data;
         }catch(e){
             throw new Error(e?.response?.data?.message);
@@ -32,16 +32,16 @@ class EscolaService {
 
     static fetchAll = async () => {
         try{
-           const { data } = await api.get(`/unidadeensino`)
+           const { data } = await api.get(`/produtos`)
            return data;
         }catch(e){
             throw new Error(e?.response?.data?.message);
         }  
     }
 
-    static deleteTurma = async (id) => {
+    static deleteProduto = async (id) => {
         try {
-            const { data } = await api.delete(`/unidadeensino/${id}`)
+            const { data } = await api.delete(`/produtos/${id}`)
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);
@@ -49,5 +49,3 @@ class EscolaService {
     }
 
 }
-
-export default EscolaService;

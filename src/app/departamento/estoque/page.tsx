@@ -8,6 +8,8 @@ import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
 import { useUpdateTitle } from '../../../hooks/useTitle';
 import { useEffect } from 'react';
+import ModalEntradaEstoque from '../../../components/Modals/ModalEntradaEstoque';
+import { useDisclosure } from '@mantine/hooks';
 
 function DepartamentoEstoque(props: any) {
 
@@ -16,6 +18,8 @@ function DepartamentoEstoque(props: any) {
     useEffect(() => {
         updateTitle('Estoque')
     }, [])
+
+    const [opened, { open, close }] = useDisclosure(false);
 
     const tableHeaders = ["CÓDIGO", "PRODUTO", "CATEGORIA", "EM ESTOQUE"];
 
@@ -27,37 +31,40 @@ function DepartamentoEstoque(props: any) {
     ];
 
     const additionalButtons = [
-        { id: 1, icon: <IconFileInfo/>, onClick: () => 1 },
+        { id: 1, icon: <IconFileInfo />, onClick: () => 1 },
     ];
 
     return (
-        <Box
-            w='100%'
-            h="89vh"
-            display='flex'
-            style={{ flexDirection: 'column' }}>
+        <>
+            <ModalEntradaEstoque open={opened} close={close} />
+            <Box
+                w='100%'
+                h="89vh"
+                display='flex'
+                style={{ flexDirection: 'column' }}>
 
 
-            <Grid h='auto' mt='1rem'>
-                <Grid.Col span={5}>
-                    <ClearableInput placeholder="Pesquisar" label='Pesquisar' />
-                </Grid.Col>
-                <Grid.Col span={3}>
-                    <Select
-                        placeholder="Categoria" label='Categoria'
-                        data={['React', 'Angular', 'Vue', 'Svelte']}
-                    />
-                </Grid.Col>
-                <Grid.Col span={4} display='flex' style={{ justifyContent: 'flex-end' }}>
-                    <Button h='4rem' w='4rem' variant="gradient" style={{ borderRadius: '10rem' }}>
-                        <IconPackageImport size={23} />
-                    </Button>
-                </Grid.Col>
-            </Grid>
+                <Grid h='auto' mt='1rem'>
+                    <Grid.Col span={5}>
+                        <ClearableInput placeholder="Pesquisar" label='Pesquisar' />
+                    </Grid.Col>
+                    <Grid.Col span={3}>
+                        <Select
+                            placeholder="Categoria" label='Categoria'
+                            data={['React', 'Angular', 'Vue', 'Svelte']}
+                        />
+                    </Grid.Col>
+                    <Grid.Col span={4} display='flex' style={{ justifyContent: 'flex-end' }}>
+                        <Button h='4rem' w='4rem' variant="gradient" onClick={open} style={{ borderRadius: '10rem' }}>
+                            <IconPackageImport size={23} />
+                        </Button>
+                    </Grid.Col>
+                </Grid>
 
-            <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
+                <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
 
-        </Box>
+            </Box>
+        </>
     );
 };
 

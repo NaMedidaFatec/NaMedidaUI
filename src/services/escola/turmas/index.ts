@@ -23,7 +23,7 @@ export default class EscolaTurmaService {
 
     static fetchTurma = async (id) => {
         try{
-           const { data } = await api.get(`/api/unidadeensinoturma/${id}`)
+           const { data } = await api.get(`/unidadeensinoturma/${id}`)
            return data;
         }catch(e){
             throw new Error(e?.response?.data?.message);
@@ -32,7 +32,7 @@ export default class EscolaTurmaService {
 
     static fetchAllTurmas = async () => {
         try{
-           const { data } = await api.get(`/api/unidadeensinoturma`)
+           const { data } = await api.get(`/unidadeensinoturma`)
            return data;
         }catch(e){
             throw new Error(e?.response?.data?.message);
