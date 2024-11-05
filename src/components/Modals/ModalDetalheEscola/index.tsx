@@ -15,6 +15,10 @@ export default function ModalDetalheEscola({ open, close }: ComponentProps) {
                 onClose={close}
                 centered
                 size="35rem"
+                overlayProps={{
+                    backgroundOpacity: 0.55,
+                    blur: 3,
+                }}
                 title={
                     <Text size="xl" fw={200}>
                         Detalhes da escola

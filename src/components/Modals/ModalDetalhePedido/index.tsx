@@ -24,6 +24,10 @@ export default function ModalDetalhePedido({ open, close }: ComponentProps) {
                 onClose={close}
                 centered
                 size="50vw"
+                overlayProps={{
+                    backgroundOpacity: 0.55,
+                    blur: 3,
+                }}
                 title={
                     <Text size="xl" fw={200}>
                         Detalhes do pedido

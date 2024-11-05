@@ -8,6 +8,8 @@ import { IconFileInfo, IconUpload } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { DateInput } from '@mantine/dates';
 import { useUpdateTitle } from '../../../hooks/useTitle';
+import { useDisclosure } from '@mantine/hooks';
+import ModalDropzone from '../../../components/Modals/ModalDropzone';
 
 function RelatoriosEscola(props: any) {
 
@@ -16,6 +18,8 @@ function RelatoriosEscola(props: any) {
     useEffect(() => {
         updateTitle('Meus Relatórios')
     }, [])
+
+    const [opened, { open, close }] = useDisclosure(false);
 
     const [filter, setFilter] = useState({ codigo: 1, dataInicial: '2024-01-01', dataFinal: '2024-12-12' });
 
@@ -34,47 +38,51 @@ function RelatoriosEscola(props: any) {
     ];
 
     const additionalButtons = [
-        { id: 1, icon: <IconFileInfo/>, onClick: () => 1 },
+        { id: 1, icon: <IconFileInfo />, onClick: () => 1 },
     ];
 
     return (
-        <Box
-            w='100%'
-            h="89vh"
-            display='flex'
-            style={{ flexDirection: 'column' }}>
+        <>
+            <ModalDropzone open={opened} close={close}/>
+            
+            <Box
+                w='100%'
+                h="89vh"
+                display='flex'
+                style={{ flexDirection: 'column' }}>
 
-            <Grid h='auto' mt='1rem'>
-                <Grid.Col span={3}>
-                    <ClearableInput placeholder="Código" label="Código" />
-                </Grid.Col>
+                <Grid h='auto' mt='1rem'>
+                    <Grid.Col span={3}>
+                        <ClearableInput placeholder="Código" label="Código" />
+                    </Grid.Col>
 
-                <Grid.Col span={2}>
-                    <DateInput
-                        onChange={() => 1}
-                        label="Data inicial"
-                        placeholder={filter.dataInicial}
-                    />
-                </Grid.Col>
+                    <Grid.Col span={2}>
+                        <DateInput
+                            onChange={() => 1}
+                            label="Data inicial"
+                            placeholder={filter.dataInicial}
+                        />
+                    </Grid.Col>
 
-                <Grid.Col span={2}>
-                    <DateInput
-                        onChange={() => 1}
-                        label="Data final"
-                        placeholder={filter.dataFinal}
-                    />
-                </Grid.Col>
+                    <Grid.Col span={2}>
+                        <DateInput
+                            onChange={() => 1}
+                            label="Data final"
+                            placeholder={filter.dataFinal}
+                        />
+                    </Grid.Col>
 
-                <Grid.Col span={5} display='flex' style={{ justifyContent: 'end' }}>
-                    <Button h='4rem' w='4rem' variant="gradient" style={{ borderRadius: '10rem' }}>
-                        <IconUpload size={23} />
-                    </Button>
-                </Grid.Col>
-            </Grid>
+                    <Grid.Col span={5} display='flex' style={{ justifyContent: 'end' }}>
+                        <Button h='4rem' w='4rem' variant="gradient" onClick={open} style={{ borderRadius: '10rem' }}>
+                            <IconUpload size={23} />
+                        </Button>
+                    </Grid.Col>
+                </Grid>
 
-            <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
+                <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
 
-        </Box>
+            </Box>
+        </>
     );
 };
 

@@ -31,6 +31,10 @@ export default function ModalCadastroPedido({ open, close }: ComponentProps) {
                 onClose={close}
                 centered
                 size="70vw"
+                overlayProps={{
+                    backgroundOpacity: 0.55,
+                    blur: 3,
+                }}
                 title={
                     <Text size="xl" fw={200}>
                         Novo pedido

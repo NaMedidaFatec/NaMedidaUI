@@ -7,6 +7,8 @@ import { withFormik } from 'formik';
 import { IconFileInfo, IconPlus } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { useUpdateTitle } from '../../../hooks/useTitle';
+import ModalCadastroTurma from '../../../components/Modals/ModalCadastroTurma';
+import { useDisclosure } from '@mantine/hooks';
 
 function DetalhesTurmas(props: any) {
 
@@ -15,6 +17,8 @@ function DetalhesTurmas(props: any) {
     useEffect(() => {
         updateTitle('Minhas Turmas')
     }, [])
+
+    const [openedCadastro, { open, close }] = useDisclosure(false);
 
     const tableHeaders = ["Turma", "Qtd Alunos", "Nível", "Período"];
 
@@ -26,30 +30,34 @@ function DetalhesTurmas(props: any) {
     ];
 
     const additionalButtons = [
-        { id: 1, icon: <IconFileInfo/>, onClick: () => 1 },
+        { id: 1, icon: <IconFileInfo />, onClick: () => 1 },
     ];
 
     return (
-        <Box
-            w='100%'
-            h="89vh"
-            display='flex'
-            style={{ flexDirection: 'column' }}>
+        <>
+            <ModalCadastroTurma open={openedCadastro} close={close} />
 
-            <Grid h='auto' mt='1rem'>
-                <Grid.Col span={6}>
-                    <ClearableInput placeholder="Pesquisar" label="Pesquisar" />
-                </Grid.Col>
-                <Grid.Col span={3} offset={3} display='flex' style={{ justifyContent: 'flex-end' }}>
-                    <Button h='4rem' w='4rem' variant="gradient" style={{ borderRadius: '10rem' }}>
-                        <IconPlus size={23} />
-                    </Button>
-                </Grid.Col>
-            </Grid>
+            <Box
+                w='100%'
+                h="89vh"
+                display='flex'
+                style={{ flexDirection: 'column' }}>
 
-            <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
+                <Grid h='auto' mt='1rem'>
+                    <Grid.Col span={6}>
+                        <ClearableInput placeholder="Pesquisar" label="Pesquisar" />
+                    </Grid.Col>
+                    <Grid.Col span={3} offset={3} display='flex' style={{ justifyContent: 'flex-end' }}>
+                        <Button h='4rem' w='4rem' variant="gradient" onClick={open} style={{ borderRadius: '10rem' }}>
+                            <IconPlus size={23} />
+                        </Button>
+                    </Grid.Col>
+                </Grid>
 
-        </Box>
+                <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons}/>
+
+            </Box>
+        </>
     );
 };
 
