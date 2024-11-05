@@ -1,38 +1,38 @@
-import api from '../api';
+import api from '../../api';
 
 
-class EscolaService {
+export default class EscolaTurmaService {
 
-    static createTurma = async (escola) => {
+    static createTurma = async (turma) => {
         try {
-            const { data } = await api.post(`/unidadeensino/save`, escola)
+            const { data } = await api.post(`/unidadeensinoturma/save`, turma)
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);
         }
     }
 
-    static saveTurma = async (escolaId, escola) => {
+    static saveTurma = async (turmaId, turma) => {
         try {
-            const { data } = await api.put(`/unidadeensino/${escolaId}`, escola)
+            const { data } = await api.put(`/unidadeensinoturma/save/${turmaId}`, turma)
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);
         }
     }
 
-    static fetchEscola = async (id) => {
+    static fetchTurma = async (id) => {
         try{
-           const { data } = await api.get(`/api/unidadeensino/${id}`)
+           const { data } = await api.get(`/api/unidadeensinoturma/${id}`)
            return data;
         }catch(e){
             throw new Error(e?.response?.data?.message);
         }  
     }
 
-    static fetchAll = async () => {
+    static fetchAllTurmas = async () => {
         try{
-           const { data } = await api.get(`/unidadeensino`)
+           const { data } = await api.get(`/api/unidadeensinoturma`)
            return data;
         }catch(e){
             throw new Error(e?.response?.data?.message);
@@ -41,7 +41,7 @@ class EscolaService {
 
     static deleteTurma = async (id) => {
         try {
-            const { data } = await api.delete(`/unidadeensino/${id}`)
+            const { data } = await api.delete(`/unidadeensinoturma/${id}`)
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);
@@ -49,5 +49,3 @@ class EscolaService {
     }
 
 }
-
-export default EscolaService;
