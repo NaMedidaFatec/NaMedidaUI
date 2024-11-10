@@ -70,7 +70,7 @@ function Login(props) {
 
   const fetchAddress = async () => {
     const cidades = await UserService.fetchCidades();
-    setCidades(cidades?.content.map(cidade => ({
+    setCidades(cidades?.content?.map(cidade => ({
       id: cidade.id,
       nome: cidade.nome
     })));
@@ -78,7 +78,7 @@ function Login(props) {
 
   const fetchEscolas = async () => {
     const escolas = await EscolaService.fetchAll();
-    setEscolas(escolas?.content.map(escola => ({
+    setEscolas(escolas?.content?.map(escola => ({
       id: escola.id,
       nome: escola.nome
     })));;
@@ -115,10 +115,17 @@ function Login(props) {
   };
 
   const formatarCPF = (cpf) => {
+    // Apenas numeros
     cpf = cpf.replace(/\D/g, '');
+
+    // Maximo 11 digitos
+    cpf = cpf.slice(0, 11);
+
+    // Formatar com pontos a cada 3 numeros e hifen
     cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
     cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
     cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
     return cpf;
   }
 
@@ -338,7 +345,7 @@ function Login(props) {
             </Title>
 
             <Select
-              data={escolas.map(escola => ({
+              data={escolas?.map(escola => ({
                 value: escola.id.toString(),
                 label: escola.nome
               }))}

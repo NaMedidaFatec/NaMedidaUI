@@ -25,28 +25,24 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-const signin = async (user: User): Promise<void> => {
+  const signin = async (user: User): Promise<void> => {
     try {
-      // const accessToken = await UserService.signin(user);
-      // if (accessToken) {
-      //   await localStorage.setItem("@namedida:accessToken", accessToken);
+      const accessToken = await UserService.signin(user);
+      if (accessToken) {
+        await localStorage.setItem("@namedida:accessToken", accessToken);
 
-      //   const user = await UserService.getMe();
+        const { userDepartamento, userUnidadeEnsino } = await UserService.getMe();
+        
+        if (user.tipoUsuario == "DEPARTAMENTO") {
+          localStorage.setItem("@namedida:user", JSON.stringify(userDepartamento));
+        } else {
+          localStorage.setItem("@namedida:user", JSON.stringify(userUnidadeEnsino));
+        }
 
-      //   localStorage.setItem("@namedida:user", JSON.stringify(user));
-      //   setState({ isLoggedIn: true, user });
-      //   notifications.show({ title: 'Login', message: "Login realizado com sucesso!", position: 'bottom-left' })
-      // }
-      user = new User({
-        id: 1,
-        username: "Usuário 1",
-        email: "email@email.com.br",
-        isAdmin: false,
-      });
-      
-      localStorage.setItem("@namedida:user", JSON.stringify(user));
-      setState({ isLoggedIn: true, user });
-      notifications.show({ title: 'Login', message: "Login realizado com sucesso!" })
+        localStorage.setItem("@namedida:user", JSON.stringify(user));
+        setState({ isLoggedIn: true, user });
+        notifications.show({ title: 'Login', message: "Login realizado com sucesso!", position: 'bottom-left' })
+      }
     } catch (error) {
       console.log(error);
       notifications.show({ title: 'Erro no login!', message: error?.message, position: 'bottom-left', color: 'red' })

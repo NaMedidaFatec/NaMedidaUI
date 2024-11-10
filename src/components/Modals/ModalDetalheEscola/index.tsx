@@ -1,12 +1,7 @@
 import { Box, Divider, Modal, Text } from "@mantine/core";
 import { useState } from "react";
 
-interface ComponentProps {
-    open?: boolean;
-    close?: () => void;
-}
-
-export default function ModalDetalheEscola({ open, close }: ComponentProps) {
+export default function ModalDetalheEscola({ open, close, escola }) {
 
     return (
         <>
@@ -14,7 +9,7 @@ export default function ModalDetalheEscola({ open, close }: ComponentProps) {
                 opened={open}
                 onClose={close}
                 centered
-                size="35rem"
+                size="auto"
                 overlayProps={{
                     backgroundOpacity: 0.55,
                     blur: 3,
@@ -31,7 +26,7 @@ export default function ModalDetalheEscola({ open, close }: ComponentProps) {
                         Nome da escola:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        Escola 1
+                        {escola?.nome}
                     </Text>
                 </Box>
 
@@ -40,7 +35,7 @@ export default function ModalDetalheEscola({ open, close }: ComponentProps) {
                         Código identificador da escola (CIE):
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        X
+                        {escola?.cie}
                     </Text>
                 </Box>
 
@@ -49,7 +44,7 @@ export default function ModalDetalheEscola({ open, close }: ComponentProps) {
                         Representante:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        Fulano de tal
+                        {escola?.representante}
                     </Text>
                 </Box>
 
@@ -58,7 +53,7 @@ export default function ModalDetalheEscola({ open, close }: ComponentProps) {
                         E-mail:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        X
+                        {escola?.email}
                     </Text>
                 </Box>
 
@@ -67,7 +62,16 @@ export default function ModalDetalheEscola({ open, close }: ComponentProps) {
                         Endereço:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        X
+                        {escola?.logradouro},  {escola?.bairro},  {escola?.numero}
+                    </Text>
+                </Box>
+
+                <Box display={'flex'} >
+                    <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
+                        CEP:
+                    </Text>
+                    <Text size="1.1rem" fw={200} mt={'1.5rem'}>
+                        {escola?.cep}
                     </Text>
                 </Box>
 
@@ -76,7 +80,7 @@ export default function ModalDetalheEscola({ open, close }: ComponentProps) {
                         Telefone:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        X
+                        ( {escola?.ddd} ) {escola?.telefone}
                     </Text>
                 </Box>
 
@@ -85,7 +89,7 @@ export default function ModalDetalheEscola({ open, close }: ComponentProps) {
                         Qtd turmas:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        X
+                        {escola?.qtdTurmas}
                     </Text>
                 </Box>
             </Modal>

@@ -4,12 +4,12 @@ import { useState } from "react";
 interface ComponentProps {
     placeholder?: string;
     label?: string;
+    value: string;
+    setValue: (e) => void;
     required?: boolean;
 }
 
-export default function ({ placeholder, label, required = false }: ComponentProps) {
-    const [value, setValue] = useState('');
-
+export default function ({ placeholder, label, value, setValue ,required = false }: ComponentProps) {
     return (
         <>
             <Input.Wrapper label={label} required={required}>

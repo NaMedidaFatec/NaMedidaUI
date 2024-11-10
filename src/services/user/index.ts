@@ -13,7 +13,7 @@ class UserService {
 
     static getMe = async () => {
         try {
-            const { data } = await api.get('authenticate/me')
+            const { data } = await api.get('/authenticate/me')
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);
@@ -22,7 +22,7 @@ class UserService {
 
     static register = async (newUser) => {
         try {
-            const { data } = await api.post('authenticate/signup', newUser)
+            const { data } = await api.post('/authenticate/signup', newUser)
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);
@@ -31,7 +31,7 @@ class UserService {
 
     static fetchCidades = async () => {
         try {
-            const { data } = await api.get('cidades')
+            const { data } = await api.get('/cidades')
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);
@@ -40,7 +40,7 @@ class UserService {
 
     static fetchEstados = async () => {
         try {
-            const { data } = await api.get('estados')
+            const { data } = await api.get('/estados')
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);

@@ -1,4 +1,5 @@
 import { Box, Button, Checkbox, NumberInput, Pagination, Paper, Table, Text, useComputedColorScheme } from "@mantine/core";
+import { IconFileInfo } from "@tabler/icons-react";
 import { useState } from "react";
 
 // EXEMPLO DE ELEMENTOS DE HEADER (array de strings)
@@ -27,8 +28,8 @@ interface Element {
 interface MyComponentProps {
     headerElements: string[];
     elements: Element[];
-    additionalButtons?: Element[];
     activate?: boolean;
+    infoButton?: boolean;
     selection?: boolean;
     stripped?: boolean;
     withColumnBorders?: boolean;
@@ -36,13 +37,15 @@ interface MyComponentProps {
     highlightOnHover?: boolean;
     withBgColor?: boolean;
     withTableBorder?: boolean;
+    toggleActivationFunction?: (element: any) => Promise<void>;
+    openInfoModal?: (element: any) => Promise<void>;
 }
 
 const DataTable: React.FC<MyComponentProps> = ({
     headerElements,
     elements,
-    additionalButtons = undefined,
     activate = false,
+    infoButton = false,
     selection = false,
     stripped = true,
     withColumnBorders = false,
@@ -50,12 +53,26 @@ const DataTable: React.FC<MyComponentProps> = ({
     highlightOnHover = false,
     withBgColor = true,
     withTableBorder = false,
+    toggleActivationFunction = undefined,
+    openInfoModal = undefined,
 }) => {
 
     const computedColorScheme = useComputedColorScheme("light", {
         getInitialValueInEffect: true,
     });
 
+    const handleActivationButtonClick = (rowData: any) => {
+        if (toggleActivationFunction) {
+            toggleActivationFunction(rowData);
+        }
+    };
+
+    const returnRowId = (rowId: any) => {
+        if (openInfoModal) {
+            openInfoModal(rowId);
+        }
+    };
+    
     const [selectedRows, setSelectedRows] = useState<number[]>([]);
 
     const keys = elements.length > 0 ? Object.keys(elements[0]) : [];
@@ -107,7 +124,7 @@ const DataTable: React.FC<MyComponentProps> = ({
                                         : String(element[key]);
                                 case "quantidade":
                                     return Number.isInteger(element[key])
-                                        ? <NumberInput maw={'65%'} placeholder="Quantidade"/>
+                                        ? <NumberInput maw={'65%'} placeholder="Quantidade" />
                                         : String(element[key]);
                                 default:
                                     return String(element[key]);
@@ -119,24 +136,24 @@ const DataTable: React.FC<MyComponentProps> = ({
             ))}
 
             <Table.Td style={{ display: 'flex', justifyContent: 'end' }}>
-                {additionalButtons?.map((button) =>
+                {infoButton && (
                     <Button
-                        key={button?.id}
-                        ml="1.5rem"
                         variant="subtle"
+                        miw='8rem'
                         radius="md"
-                        onClick={button?.onClick}
-                    >
-                        {button?.icon}
+                        onClick={() => returnRowId(element?.id)}
+                        ml="1.5rem">
+                        <IconFileInfo />
                     </Button>
                 )}
+
                 {activate && (
                     <Button
                         variant="light"
                         color={element['ativo'] ? 'red' : 'blue'}
                         miw='8rem'
                         radius="md"
-                        onClick={() => 1}
+                        onClick={() => handleActivationButtonClick(element)}
                         ml="1.5rem">
                         {element['ativo'] ? 'DESATIVAR' : 'ATIVAR'}
                     </Button>
