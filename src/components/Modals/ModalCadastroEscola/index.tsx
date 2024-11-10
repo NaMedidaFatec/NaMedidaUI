@@ -251,7 +251,7 @@ export default function ModalCadastroEscola({ open, close }: ComponentProps) {
                         />
                     </Grid.Col>
                     <Grid.Col span={6}>
-                        <Select
+                        {/* <Select
                             name="enderecoForm.cidade"
                             value={formData.enderecoForm.cidade.toString()}
 
@@ -263,8 +263,8 @@ export default function ModalCadastroEscola({ open, close }: ComponentProps) {
                             placeholder="Cidade"
                             onChange={handleChange}
                             required
-                        />
-                        <Input.Wrapper label={"Nivel de ensino"} required>
+                        /> */}
+                        <Input.Wrapper label={"Cidade"} required>
                             <Input
                                 component="select"
                                 name="enderecoForm.cidade"
@@ -273,15 +273,12 @@ export default function ModalCadastroEscola({ open, close }: ComponentProps) {
                                 rightSection={<IconChevronDown size={14} stroke={1.5} />}
                                 pointer
                             >
-                                {cidades.map(cidade => ({
-                                    value: cidade.id.toString(),
-                                    label: cidade.nome
-                                })
-                                )}
-                                <option value="INFANTIL">Infantil</option>
-                                <option value="ENSINO_FUNDAMENTAL">Fundamental</option>
-                                <option value="MEDIO">Médio</option>
-                                <option value="SUPERIOR">Superior</option>
+                                {cidades.map(cidade => (
+                                    <option
+                                        key={cidade?.id}
+                                        value={cidade?.id}>{cidade?.nome}
+                                    </option>
+                                ))}
                             </Input>
                         </Input.Wrapper>
                     </Grid.Col>
