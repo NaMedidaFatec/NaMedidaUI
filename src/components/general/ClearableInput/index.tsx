@@ -4,8 +4,8 @@ import { useState } from "react";
 interface ComponentProps {
     placeholder?: string;
     label?: string;
-    value: string;
-    setValue: (e) => void;
+    value?: string;
+    setValue?: (e) => void;
     required?: boolean;
 }
 
