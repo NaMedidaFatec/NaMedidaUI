@@ -1,12 +1,7 @@
 import { Box, Divider, Modal, Text } from "@mantine/core";
 import { useState } from "react";
 
-interface ComponentProps {
-    open?: boolean;
-    close?: () => void;
-}
-
-export default function ModalDetalheTurma({ open, close }: ComponentProps) {
+export default function ModalDetalheTurma({ open, close, turma }) {
 
     return (
         <>
@@ -31,16 +26,25 @@ export default function ModalDetalheTurma({ open, close }: ComponentProps) {
                         Descrição:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        Turma 1º fundamental
+                        {turma?.descricao}
                     </Text>
                 </Box>
 
                 <Box display={'flex'} >
                     <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
-                        Periodo:
+                        Inicío da turma:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        Matutino
+                        {turma?.horarioInicial}
+                    </Text>
+                </Box>
+
+                <Box display={'flex'} >
+                    <Text size="1.1rem" fw={700} mt={'1.5rem'} mr={'.5rem'}>
+                        Fim da turma:
+                    </Text>
+                    <Text size="1.1rem" fw={200} mt={'1.5rem'}>
+                        {turma?.horarioFinal}
                     </Text>
                 </Box>
 
@@ -49,7 +53,7 @@ export default function ModalDetalheTurma({ open, close }: ComponentProps) {
                         Número de alunos:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        20
+                        {turma?.qtdAlunos}
                     </Text>
                 </Box>
 
@@ -58,7 +62,7 @@ export default function ModalDetalheTurma({ open, close }: ComponentProps) {
                         Número da sala:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        12
+                        {turma?.sala}
                     </Text>
                 </Box>
             </Modal>

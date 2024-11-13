@@ -216,7 +216,7 @@ const DataTable: React.FC<MyComponentProps> = ({
                     alignItems: 'end'
                 }}
             >
-                <Pagination total={10} size="sm" />
+                {/* <Pagination total={10} size="sm" /> */}
             </Box>
         </>
     );

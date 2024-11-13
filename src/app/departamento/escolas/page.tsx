@@ -49,6 +49,7 @@ function DetalhesEscola(props: any) {
     const filterLista = (item) => {
         const regex = new RegExp(searchField, 'ig');
         return (
+            regex.test(item.id) ||
             regex.test(item.nome) ||
             regex.test(item.quantidade) ||
             regex.test(item.representante) ||
