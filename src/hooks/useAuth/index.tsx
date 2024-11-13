@@ -32,14 +32,9 @@ export const AuthProvider = ({ children }) => {
         await localStorage.setItem("@namedida:accessToken", accessToken);
 
         const { userDepartamento, userUnidadeEnsino } = await UserService.getMe();
-        
-        if (user.tipoUsuario == "DEPARTAMENTO") {
-          localStorage.setItem("@namedida:user", JSON.stringify(userDepartamento));
-        } else {
-          localStorage.setItem("@namedida:user", JSON.stringify(userUnidadeEnsino));
-        }
 
-        localStorage.setItem("@namedida:user", JSON.stringify(user));
+        localStorage.setItem("@namedida:user", JSON.stringify(user.tipoUsuario == "DEPARTAMENTO" ? userDepartamento : userUnidadeEnsino));
+
         setState({ isLoggedIn: true, user });
         notifications.show({ title: 'Login', message: "Login realizado com sucesso!", position: 'bottom-left' })
       }

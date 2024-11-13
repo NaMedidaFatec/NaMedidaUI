@@ -3,7 +3,7 @@ import api from '../api';
 
 class EscolaService {
 
-    static createTurma = async (escola) => {
+    static createEscola = async (escola) => {
         try {
             const { data } = await api.post(`/unidadeensino/save`, escola)
             return data;

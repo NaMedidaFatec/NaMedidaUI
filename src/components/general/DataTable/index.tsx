@@ -1,5 +1,5 @@
 import { Box, Button, Checkbox, NumberInput, Pagination, Paper, Table, Text, useComputedColorScheme } from "@mantine/core";
-import { IconFileInfo } from "@tabler/icons-react";
+import { IconFileInfo, IconUserFilled } from "@tabler/icons-react";
 import { useState } from "react";
 
 // EXEMPLO DE ELEMENTOS DE HEADER (array de strings)
@@ -30,6 +30,7 @@ interface MyComponentProps {
     elements: Element[];
     activate?: boolean;
     infoButton?: boolean;
+    representanteButton?: boolean;
     selection?: boolean;
     stripped?: boolean;
     withColumnBorders?: boolean;
@@ -39,6 +40,7 @@ interface MyComponentProps {
     withTableBorder?: boolean;
     toggleActivationFunction?: (element: any) => Promise<void>;
     openInfoModal?: (element: any) => Promise<void>;
+    openRepresentanteModal?: (element: any) => Promise<void>;
 }
 
 const DataTable: React.FC<MyComponentProps> = ({
@@ -46,6 +48,7 @@ const DataTable: React.FC<MyComponentProps> = ({
     elements,
     activate = false,
     infoButton = false,
+    representanteButton = false,
     selection = false,
     stripped = true,
     withColumnBorders = false,
@@ -55,6 +58,7 @@ const DataTable: React.FC<MyComponentProps> = ({
     withTableBorder = false,
     toggleActivationFunction = undefined,
     openInfoModal = undefined,
+    openRepresentanteModal = undefined,
 }) => {
 
     const computedColorScheme = useComputedColorScheme("light", {
@@ -67,12 +71,16 @@ const DataTable: React.FC<MyComponentProps> = ({
         }
     };
 
-    const returnRowId = (rowId: any) => {
-        if (openInfoModal) {
-            openInfoModal(rowId);
-        }
+    const returnRowId = (rowId: any, ) => {
+        openInfoModal?.(rowId);
+        openRepresentanteModal?.(rowId);
     };
     
+    const returnRowIdRepresentante = (rowId: any, ) => {
+        openInfoModal?.(rowId);
+        openRepresentanteModal?.(rowId);
+    };
+
     const [selectedRows, setSelectedRows] = useState<number[]>([]);
 
     const keys = elements.length > 0 ? Object.keys(elements[0]) : [];
@@ -127,7 +135,7 @@ const DataTable: React.FC<MyComponentProps> = ({
                                         ? <NumberInput maw={'65%'} placeholder="Quantidade" />
                                         : String(element[key]);
                                 default:
-                                    return String(element[key]);
+                                    return String(element[key] !== null ? element[key] : "N/A");
                             }
                         })()}
 
@@ -136,10 +144,22 @@ const DataTable: React.FC<MyComponentProps> = ({
             ))}
 
             <Table.Td style={{ display: 'flex', justifyContent: 'end' }}>
+                {representanteButton && (
+                    <Button
+                        variant="subtle"
+                        miw='4rem'
+                        radius="md"
+                        onClick={() => returnRowIdRepresentante(element?.id)}
+                        ml="1.5rem">
+                        <IconUserFilled />
+                    </Button>
+                )}
+
+
                 {infoButton && (
                     <Button
                         variant="subtle"
-                        miw='8rem'
+                        miw='4rem'
                         radius="md"
                         onClick={() => returnRowId(element?.id)}
                         ml="1.5rem">

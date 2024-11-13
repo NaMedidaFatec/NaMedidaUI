@@ -5,6 +5,8 @@ import ClearableInput from "../../general/ClearableInput";
 import { TimeInput } from "@mantine/dates";
 import { IconChevronDown } from "@tabler/icons-react";
 import UserService from "../../../services/user";
+import EscolaService from "../../../services/escola";
+import { notifications } from "@mantine/notifications";
 
 interface ComponentProps {
     open?: boolean;
@@ -12,16 +14,16 @@ interface ComponentProps {
 }
 
 export default function ModalCadastroEscola({ open, close }: ComponentProps) {
+    useEffect(() => {
+        const loggedUser = JSON.parse(localStorage.getItem('@namedida:user'));
+        setFormData(prevState => ({
+            ...prevState,
+            departamento: loggedUser?.departamento.id ? loggedUser?.departamento.id : undefined
+        }));
+        fetchCidades();
+    }, [open]);
+
     const [cidades, setCidades] = useState([]);
-
-    const tableHeaders = ["Código", "Produto", "Descrição", "Quantidade"];
-
-    const elements = [
-        { id: 1, produto: 'Arroz', desc: 'SEILA', qtd: 10 },
-        { id: 2, produto: 'Feijão', desc: 'SEILA', qtd: 10 },
-        { id: 3, produto: 'Laranja', desc: 'SEILA', qtd: 10 },
-        { id: 4, produto: 'Pão', desc: 'SEILA', qtd: 10 },
-    ];
 
     const [formData, setFormData] = useState({
         nome: '',
@@ -29,10 +31,10 @@ export default function ModalCadastroEscola({ open, close }: ComponentProps) {
         cnpj: '',
         email: '',
         tipoPessoa: 'PJ',
-        departamento: 1,
+        departamento: undefined,
         horarioAbertura: '06:00',
         horarioFechamento: '18:00',
-        nivelEnsino: 'SUPERIOR',
+        nivelEnsino: 'INFANTIL',
         telefoneForm: {
             numero: '',
             ddd: ''
@@ -43,7 +45,7 @@ export default function ModalCadastroEscola({ open, close }: ComponentProps) {
             complemento: '',
             bairro: '',
             cep: '',
-            cidade: 3
+            cidade: undefined
         },
     });
 
@@ -52,11 +54,13 @@ export default function ModalCadastroEscola({ open, close }: ComponentProps) {
 
         if (name.startsWith('telefoneForm') || name.startsWith('enderecoForm')) {
             const [section, field] = name.split('.');
+            console.log(section, field);
+
             setFormData((prevState) => ({
                 ...prevState,
                 [section]: {
                     ...prevState[section],
-                    [field]: value
+                    [field]: field === 'cidade' ? Number(value) : value
                 }
             }));
         } else {
@@ -75,9 +79,18 @@ export default function ModalCadastroEscola({ open, close }: ComponentProps) {
         })));
     };
 
-    useEffect(() => {
-        fetchCidades();
-    }, [open]);
+    const saveEscola = async () => {
+        try {
+            await EscolaService.createEscola(formData);
+            notifications.show({ title: 'Salvo com sucesso', message: '', position: 'bottom-left', color: 'blue' });
+            setTimeout(() => {
+                window.location.reload();
+            }, 2500);
+        } catch (error) {
+            console.log(error);
+            notifications.show({ title: 'Erro ao salvar', message: error?.message, position: 'bottom-left', color: 'red' });
+        }
+    };
 
     return (
         <>
@@ -178,6 +191,7 @@ export default function ModalCadastroEscola({ open, close }: ComponentProps) {
                         <Input.Wrapper label={"Nivel de ensino"} required>
                             <Input
                                 component="select"
+                                name="nivelEnsino"
                                 onChange={handleChange}
                                 rightSection={<IconChevronDown size={14} stroke={1.5} />}
                                 pointer
@@ -235,7 +249,6 @@ export default function ModalCadastroEscola({ open, close }: ComponentProps) {
                             name="enderecoForm.complemento"
                             onChange={handleChange}
                             label='Complemento'
-                            required
                         />
                     </Grid.Col>
                 </Grid>
@@ -251,32 +264,27 @@ export default function ModalCadastroEscola({ open, close }: ComponentProps) {
                         />
                     </Grid.Col>
                     <Grid.Col span={6}>
-                        {/* <Select
-                            name="enderecoForm.cidade"
-                            value={formData.enderecoForm.cidade.toString()}
-
-                            data={cidades.map(cidade => ({
-                                value: cidade.id.toString(),
-                                label: cidade.nome
-                            }))}
-                            label="Cidade"
-                            placeholder="Cidade"
-                            onChange={handleChange}
-                            required
-                        /> */}
                         <Input.Wrapper label={"Cidade"} required>
                             <Input
                                 component="select"
                                 name="enderecoForm.cidade"
-                                value={formData.enderecoForm.cidade}
                                 onChange={handleChange}
                                 rightSection={<IconChevronDown size={14} stroke={1.5} />}
                                 pointer
                             >
+                                <option
+                                    defaultValue=""
+                                    disabled
+                                    selected
+                                >
+                                    Selecione a cidade
+                                </option>
                                 {cidades.map(cidade => (
                                     <option
                                         key={cidade?.id}
-                                        value={cidade?.id}>{cidade?.nome}
+                                        value={Number(cidade?.id)}
+                                    >
+                                        {cidade?.nome}
                                     </option>
                                 ))}
                             </Input>
@@ -289,6 +297,7 @@ export default function ModalCadastroEscola({ open, close }: ComponentProps) {
                     fullWidth
                     variant="gradient"
                     fs='22rem'
+                    onClick={saveEscola}
                 >
                     CADASTRAR
                 </Button>

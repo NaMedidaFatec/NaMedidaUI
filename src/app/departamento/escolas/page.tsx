@@ -13,11 +13,13 @@ import { useDisclosure } from '@mantine/hooks';
 import EscolaService from '../../../services/escola';
 import { notifications } from '@mantine/notifications';
 import ModalCadastroEscola from '../../../components/Modals/ModalCadastroEscola';
+import UserService from '../../../services/user';
 
 function DetalhesEscola(props: any) {
     const [escolas, setEscolas] = useState([]);
     const [searchField, setSearchField] = useState("");
     const [selectedEscola, setSelectedEscola] = useState({});
+    const [filteredEscolas, setFilteredEscolas] = useState([]);
 
     const [opened, { open, close }] = useDisclosure(false);
     const [openedCadastro, handlers] = useDisclosure(false);
@@ -30,27 +32,37 @@ function DetalhesEscola(props: any) {
     }, [])
 
     useEffect(() => {
-        console.log(searchField);
+        search();
     }, [searchField])
 
     const search = async () => {
-        const escolas = await EscolaService.fetchAll();
-        setEscolas(escolas?.content?.map(escola => ({
-            id: escola?.id,
-            nome: escola?.nome,
-            ativo: escola?.enabled,
-            representante: escola?.responsavel?.nome,
-            email: escola?.email,
-            ddd: escola?.telefone?.ddd,
-            telefone: escola?.telefone?.numero,
-            qtdTurmas: escola?.unidadeEnsinoTurmas?.length,
-            cie: escola?.cie
-        })));
+        if (escolas && searchField) {
+            const filtered = escolas.filter(filterLista);
+            setFilteredEscolas(filtered);
+        } else {
+            setFilteredEscolas(escolas);
+        }
+    };
+
+    const filterLista = (item) => {
+        const regex = new RegExp(searchField, 'ig');
+        return (
+            regex.test(item.nome) ||
+            regex.test(item.quantidade) ||
+            regex.test(item.representante) ||
+            regex.test(item.email) ||
+            regex.test(item.telefone) ||
+            regex.test(item.cie) ||
+            regex.test(item.logradouro) ||
+            regex.test(item.bairro) ||
+            regex.test(item.numero) ||
+            regex.test(item.cep)
+        );
     };
 
     const fetchEscolas = async () => {
         const escolas = await EscolaService.fetchAll();
-        setEscolas(escolas?.content?.map(escola => ({
+        const escolasList = escolas?.content?.map(escola => ({
             id: escola?.id,
             nome: escola?.nome,
             ativo: escola?.enabled,
@@ -64,7 +76,10 @@ function DetalhesEscola(props: any) {
             bairro: escola?.endereco?.bairro,
             numero: escola?.endereco?.numero,
             cep: escola?.endereco?.cep
-        })));
+        }));
+    
+        setEscolas(escolasList);
+        setFilteredEscolas(escolasList);
     };
 
     const tableHeaders = ["CÓD", "NOME DA ESCOLA", 'REPRESENTANTE', 'STATUS'];
@@ -85,12 +100,17 @@ function DetalhesEscola(props: any) {
         open();
     };
 
+    const fetchRepresentantes = async (rowId: any) => {
+        const representantes = await UserService.fetchAllUsersResponsaveis();
+        console.log(representantes);
+    };
+
     return (
         <>
             <ModalDetalheEscola open={opened} close={close} escola={selectedEscola} />
 
             <ModalCadastroEscola open={openedCadastro} close={handlers?.close} />
-            
+
             <Box
                 w='100%'
                 h="89vh"
@@ -115,12 +135,14 @@ function DetalhesEscola(props: any) {
 
                 <DataTable
                     headerElements={tableHeaders}
-                    elements={escolas?.map(escola => ({
+                    elements={filteredEscolas?.map(escola => ({
                         id: escola?.id,
                         nome: escola?.nome,
                         representante: escola?.representante,
                         ativo: escola?.ativo,
                     }))}
+                    representanteButton
+                    openRepresentanteModal={fetchRepresentantes}
                     infoButton
                     openInfoModal={openInfoModal}
                     activate

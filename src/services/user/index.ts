@@ -46,6 +46,43 @@ class UserService {
             throw new Error(e?.response?.data?.message);
         }
     }
+
+    static fetchUser = async (id) => {
+        try {
+            const { data } = await api.get(`/usuarios/${id}`)
+            return data;
+        } catch (e) {
+            throw new Error(e?.response?.data?.message);
+        }
+    }
+
+    static fetchUserUE = async (id) => {
+        try {
+            const { data } = await api.get(`/usuarioUnidadeEnsino/${id}`)
+            return data;
+        } catch (e) {
+            throw new Error(e?.response?.data?.message);
+        }
+    }
+
+    static fetchAllUsersUE = async () => {
+        try {
+            const { data } = await api.get(`/usuarioUnidadeEnsino/enabled/${true}`)
+            return data;
+        } catch (e) {
+            throw new Error(e?.response?.data?.message);
+        }
+    }
+
+    static fetchAllUsersResponsaveis = async () => {
+        try {
+            const { data } = await api.get(`/usuarios/responsaveis`)
+            return data;
+        } catch (e) {
+            throw new Error(e?.response?.data?.message);
+        }
+    }
+
 }
 
 export default UserService;
