@@ -8,7 +8,7 @@ interface ComponentProps {
     close?: () => void;
 }
 
-export default function ModalEntradaEstoque({ open, close }: ComponentProps) {
+export default function ModalSelecaoRepresentante({ open, close }: ComponentProps) {
     const tableHeaders = ["Código", "Produto", "Descrição", "Quantidade"];
 
     // useEffect(() => {

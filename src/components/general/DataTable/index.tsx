@@ -73,11 +73,9 @@ const DataTable: React.FC<MyComponentProps> = ({
 
     const returnRowId = (rowId: any, ) => {
         openInfoModal?.(rowId);
-        openRepresentanteModal?.(rowId);
     };
     
     const returnRowIdRepresentante = (rowId: any, ) => {
-        openInfoModal?.(rowId);
         openRepresentanteModal?.(rowId);
     };
 

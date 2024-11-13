@@ -14,6 +14,7 @@ import EscolaService from '../../../services/escola';
 import { notifications } from '@mantine/notifications';
 import ModalCadastroEscola from '../../../components/Modals/ModalCadastroEscola';
 import UserService from '../../../services/user';
+import ModalSelecaoRepresentante from '../../../components/Modals/ModalSelecaoRepresentante';
 
 function DetalhesEscola(props: any) {
     const [escolas, setEscolas] = useState([]);
@@ -23,6 +24,7 @@ function DetalhesEscola(props: any) {
 
     const [opened, { open, close }] = useDisclosure(false);
     const [openedCadastro, handlers] = useDisclosure(false);
+    const [openedResponsavel, setOpenedResponsavel] = useState(false);
 
     const updateTitle = useUpdateTitle();
 
@@ -101,8 +103,8 @@ function DetalhesEscola(props: any) {
     };
 
     const fetchRepresentantes = async (rowId: any) => {
-        const representantes = await UserService.fetchAllUsersResponsaveis();
-        console.log(representantes);
+        // const representantes = await UserService.fetchAllUsersResponsaveis();
+        setOpenedResponsavel(true)
     };
 
     return (
@@ -110,6 +112,8 @@ function DetalhesEscola(props: any) {
             <ModalDetalheEscola open={opened} close={close} escola={selectedEscola} />
 
             <ModalCadastroEscola open={openedCadastro} close={handlers?.close} />
+
+            <ModalSelecaoRepresentante open={openedResponsavel} close={() => setOpenedResponsavel(false)} />
 
             <Box
                 w='100%'
