@@ -1,4 +1,5 @@
 import { Box, Button, Checkbox, NumberInput, Pagination, Paper, Table, Text, useComputedColorScheme } from "@mantine/core";
+import { IconFileInfo, IconUserFilled } from "@tabler/icons-react";
 import { useState } from "react";
 
 // EXEMPLO DE ELEMENTOS DE HEADER (array de strings)
@@ -27,8 +28,9 @@ interface Element {
 interface MyComponentProps {
     headerElements: string[];
     elements: Element[];
-    additionalButtons?: Element[];
     activate?: boolean;
+    infoButton?: boolean;
+    representanteButton?: boolean;
     selection?: boolean;
     stripped?: boolean;
     withColumnBorders?: boolean;
@@ -36,13 +38,17 @@ interface MyComponentProps {
     highlightOnHover?: boolean;
     withBgColor?: boolean;
     withTableBorder?: boolean;
+    toggleActivationFunction?: (element: any) => Promise<void>;
+    openInfoModal?: (element: any) => Promise<void>;
+    openRepresentanteModal?: (element: any) => Promise<void>;
 }
 
 const DataTable: React.FC<MyComponentProps> = ({
     headerElements,
     elements,
-    additionalButtons = undefined,
     activate = false,
+    infoButton = false,
+    representanteButton = false,
     selection = false,
     stripped = true,
     withColumnBorders = false,
@@ -50,11 +56,28 @@ const DataTable: React.FC<MyComponentProps> = ({
     highlightOnHover = false,
     withBgColor = true,
     withTableBorder = false,
+    toggleActivationFunction = undefined,
+    openInfoModal = undefined,
+    openRepresentanteModal = undefined,
 }) => {
 
     const computedColorScheme = useComputedColorScheme("light", {
         getInitialValueInEffect: true,
     });
+
+    const handleActivationButtonClick = (rowData: any) => {
+        if (toggleActivationFunction) {
+            toggleActivationFunction(rowData);
+        }
+    };
+
+    const returnRowId = (rowId: any, ) => {
+        openInfoModal?.(rowId);
+    };
+    
+    const returnRowIdRepresentante = (rowId: any, ) => {
+        openRepresentanteModal?.(rowId);
+    };
 
     const [selectedRows, setSelectedRows] = useState<number[]>([]);
 
@@ -107,10 +130,10 @@ const DataTable: React.FC<MyComponentProps> = ({
                                         : String(element[key]);
                                 case "quantidade":
                                     return Number.isInteger(element[key])
-                                        ? <NumberInput maw={'65%'} placeholder="Quantidade"/>
+                                        ? <NumberInput maw={'65%'} placeholder="Quantidade" />
                                         : String(element[key]);
                                 default:
-                                    return String(element[key]);
+                                    return String(element[key] !== null ? element[key] : "N/A");
                             }
                         })()}
 
@@ -119,24 +142,36 @@ const DataTable: React.FC<MyComponentProps> = ({
             ))}
 
             <Table.Td style={{ display: 'flex', justifyContent: 'end' }}>
-                {additionalButtons?.map((button) =>
+                {representanteButton && (
                     <Button
-                        key={button?.id}
-                        ml="1.5rem"
                         variant="subtle"
+                        miw='4rem'
                         radius="md"
-                        onClick={button?.onClick}
-                    >
-                        {button?.icon}
+                        onClick={() => returnRowIdRepresentante(element?.id)}
+                        ml="1.5rem">
+                        <IconUserFilled />
                     </Button>
                 )}
+
+
+                {infoButton && (
+                    <Button
+                        variant="subtle"
+                        miw='4rem'
+                        radius="md"
+                        onClick={() => returnRowId(element?.id)}
+                        ml="1.5rem">
+                        <IconFileInfo />
+                    </Button>
+                )}
+
                 {activate && (
                     <Button
                         variant="light"
                         color={element['ativo'] ? 'red' : 'blue'}
                         miw='8rem'
                         radius="md"
-                        onClick={() => 1}
+                        onClick={() => handleActivationButtonClick(element)}
                         ml="1.5rem">
                         {element['ativo'] ? 'DESATIVAR' : 'ATIVAR'}
                     </Button>
@@ -181,7 +216,7 @@ const DataTable: React.FC<MyComponentProps> = ({
                     alignItems: 'end'
                 }}
             >
-                <Pagination total={10} size="sm" />
+                {/* <Pagination total={10} size="sm" /> */}
             </Box>
         </>
     );

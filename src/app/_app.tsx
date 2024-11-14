@@ -39,10 +39,10 @@ function Application({ children, ...props }) {
   useEffect(() => {
     if (isLoggedIn && router) {
       if (pathname == "/login") {
-        if (user.isAdmin) {
-          return router.push("/admin");
+        if (user?.tipoUsuario === "UNIDADE_ENSINO") {
+          return router.push("/escola");
         }
-        return router.push("/escola");
+        return router.push("/departamento/dashboards");
       }
       return router.push(pathname);
     }

@@ -12,7 +12,7 @@ export default function ModalCadastroPedido({ open, close }: ComponentProps) {
     const tableHeaders = ["Código", "Produto", "Disponível", "Quantidade"];
 
     const elements = [
-        { id: 1, produto: 'Arrozzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', desc: 50, quantidade: 10 },
+        { id: 1, produto: 'Arroz', desc: 50, quantidade: 10 },
         { id: 2, produto: 'Feijão', desc: 50, quantidade: 10 },
         { id: 3, produto: 'Laranja', desc: 50, quantidade: 10 },
         { id: 4, produto: 'Pão', desc: 50, quantidade: 10 },
@@ -24,10 +24,6 @@ export default function ModalCadastroPedido({ open, close }: ComponentProps) {
 
     const [count, { increment, decrement }] = useCounter(3, { min: 0 });
 
-    const badges = Array(count)
-        .fill(0)
-        .map((_, index) => <Badge key={index}>Badge {index}</Badge>);
-
     return (
         <>
             <Modal
@@ -35,6 +31,10 @@ export default function ModalCadastroPedido({ open, close }: ComponentProps) {
                 onClose={close}
                 centered
                 size="70vw"
+                overlayProps={{
+                    backgroundOpacity: 0.55,
+                    blur: 3,
+                }}
                 title={
                     <Text size="xl" fw={200}>
                         Novo pedido
@@ -47,7 +47,10 @@ export default function ModalCadastroPedido({ open, close }: ComponentProps) {
                 </Box>
 
                 <Group wrap="nowrap" mt="md">
-                    {badges}
+                    <Badge>Arroz 10</Badge>
+                    <Badge>Feijão 1</Badge>
+                    <Badge>Laranja 7</Badge>
+                    <Badge>Pão 2</Badge>
                 </Group>
 
                 <DataTable

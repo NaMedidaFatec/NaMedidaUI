@@ -10,8 +10,12 @@ import {
   Input,
   Title,
 } from "../../components/general";
-import { Anchor, Box, Grid, Image, Text, useComputedColorScheme } from "@mantine/core";
+import { Anchor, Box, Grid, Group, Image, PasswordInput, Radio, Select, Text, useComputedColorScheme } from "@mantine/core";
 import { useAuth } from "../../hooks/useAuth";
+import UserService from "../../services/user";
+import moment from "moment";
+import { notifications } from "@mantine/notifications";
+import EscolaService from "../../services/escola";
 
 function Login(props) {
   const { errors, values, handleChange, handleSubmit, handleBlur, status } =
@@ -20,6 +24,34 @@ function Login(props) {
   const { signin } = useAuth();
 
   const [currentState, setCurrentState] = useState("LOGIN");
+  const [cidades, setCidades] = useState([]);
+  const [escolas, setEscolas] = useState([]);
+
+  const [registerFields, setRegisterFields] = useState({
+    tipoUsuario: "UNIDADE_ENSINO",
+    nome: "",
+    cpf: "",
+    dataNascimento: moment().format('YYYY-MM-DD'),
+    email: "",
+    username: "",
+    password: "",
+    setor: undefined,
+    cargo: undefined,
+    registro: undefined,
+    unidadeEnsino: undefined,
+    enderecoForm: {
+      numero: "",
+      logradouro: "",
+      complemento: "",
+      bairro: "",
+      cep: "",
+      cidade: undefined
+    },
+    telefoneForm: {
+      numero: "",
+      ddd: ""
+    }
+  });
 
   const computedColorScheme = useComputedColorScheme("light", {
     getInitialValueInEffect: true,
@@ -31,9 +63,71 @@ function Login(props) {
     }
   }, [status]);
 
-  const handleLogin = async (values: User) => {
-    await signin(values);
+  useEffect(() => {
+    fetchAddress();
+    fetchEscolas();
+  }, []);
+
+  const fetchAddress = async () => {
+    const cidades = await UserService.fetchCidades();
+    setCidades(cidades?.content?.map(cidade => ({
+      id: cidade.id,
+      nome: cidade.nome
+    })));
   };
+
+  const fetchEscolas = async () => {
+    const escolas = await EscolaService.fetchAll();
+    setEscolas(escolas?.content?.map(escola => ({
+      id: escola.id,
+      nome: escola.nome
+    })));;
+  };
+
+
+  const handleLogin = async (values: User) => {
+    try {
+      await signin(values);
+    } catch (error) {
+      console.error(error);
+      notifications.show({ title: 'Erro no login!', message: error?.message, position: 'bottom-left', color: 'red' })
+    }
+  };
+
+  const handleRegistro = async (event) => {
+    try {
+      const novoRegistro = await UserService.register(registerFields);
+      console.log(novoRegistro);
+      notifications.show({ title: 'Registrado com sucesso!', message: "Entre em sua conta agora", position: 'bottom-left' });
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 2500);
+    } catch (error) {
+      console.error(error);
+      notifications.show({ title: 'Erro no registro!', message: error, position: 'bottom-left', color: 'red' })
+    }
+  };
+
+  const handleCPFChange = (event) => {
+    const formattedCPF = formatarCPF(event.target.value);
+    setRegisterFields({ ...registerFields, cpf: formattedCPF });
+  };
+
+  const formatarCPF = (cpf) => {
+    // Apenas numeros
+    cpf = cpf.replace(/\D/g, '');
+
+    // Maximo 11 digitos
+    cpf = cpf.slice(0, 11);
+
+    // Formatar com pontos a cada 3 numeros e hifen
+    cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+    cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+    cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+    return cpf;
+  }
 
   const renderState = () => {
     switch (currentState) {
@@ -53,22 +147,39 @@ function Login(props) {
               onBlur={handleBlur}
               validate={errors.email}
               required
-              type={undefined}
+              type={String}
               sufixComponent={undefined}
             />
 
-            <Input
-              name="senha"
-              value={values.senha}
+            <PasswordInput
+              name="password"
+              value={values.password}
               label="Senha"
               placeholder="Senha"
               onChange={handleChange}
               onBlur={handleBlur}
-              validate={errors.senha}
               required
-              type={undefined}
-              sufixComponent={undefined}
+              mt='sm'
             />
+
+            <Radio.Group
+              label="Sou um usuário:"
+              withAsterisk
+              mt='sm'
+            >
+              <Group mt="xs">
+                <Radio
+                  name="tipoUsuario"
+                  value="DEPARTAMENTO"
+                  label="DEPARTAMENTO"
+                  onChange={handleChange} />
+                <Radio
+                  name="tipoUsuario"
+                  value="UNIDADE_ENSINO"
+                  label="ESCOLA"
+                  onChange={handleChange} />
+              </Group>
+            </Radio.Group>
 
             <Button fullWidth mt="xl" size="md" type="submit">
               Login
@@ -94,70 +205,106 @@ function Login(props) {
             </Title>
 
             <Input
-              name="registroNomeRepresentante"
-              value={values.registroNomeRepresentante}
-              label="Nome do representante"
-              placeholder="Nome do representante"
-              onChange={handleChange}
+              name="nome"
+              value={registerFields.nome}
+              onChange={(event) => setRegisterFields({ ...registerFields, nome: event.target.value })}
+              label="Nome"
+              placeholder="Nome"
               onBlur={handleBlur}
-              validate={errors.registroNomeRepresentante}
+              // validate={errors.registroNomeRepresentante}
               required
               type={undefined}
               sufixComponent={undefined}
             />
 
             <Input
-              name="registroCpf"
-              value={values.registroCpf}
+              name="cpf"
+              value={registerFields.cpf}
+              onChange={handleCPFChange}
               label="CPF"
               placeholder="CPF"
-              onChange={handleChange}
               onBlur={handleBlur}
-              validate={errors.registroCpf}
               required
               type={undefined}
               sufixComponent={undefined}
             />
 
+            <Grid>
+              <Grid.Col span={2}>
+                <Input
+                  name="ddd"
+                  value={registerFields.telefoneForm?.ddd}
+                  onChange={(event) => setRegisterFields({
+                    ...registerFields,
+                    telefoneForm: {
+                      ...registerFields.telefoneForm,
+                      ddd: event.target.value
+                    }
+                  })}
+                  label="DDD"
+                  placeholder="DDD"
+                  onBlur={handleBlur}
+                  required
+                  type={undefined}
+                  sufixComponent={undefined}
+                />
+              </Grid.Col>
+              <Grid.Col span={10}>
+                <Input
+                  name="telefone"
+                  value={registerFields.telefoneForm?.numero}
+                  onChange={(event) => setRegisterFields({
+                    ...registerFields,
+                    telefoneForm: {
+                      ...registerFields.telefoneForm,
+                      numero: event.target.value
+                    }
+                  })}
+                  label="Telefone"
+                  placeholder="Contato"
+                  onBlur={handleBlur}
+                  required
+                  type={undefined}
+                  sufixComponent={undefined}
+                />
+              </Grid.Col>
+            </Grid>
+
             <Input
-              name="registroEmail"
-              value={values.registroEmail}
+              name="email"
+              value={registerFields.email}
+              onChange={(event) => setRegisterFields({ ...registerFields, email: event.target.value })}
               label="E-mail"
               placeholder="E-mail"
-              onChange={handleChange}
               onBlur={handleBlur}
-              validate={errors.registroEmail}
+              validate={errors.email}
               required
               type={undefined}
               sufixComponent={undefined}
             />
 
             <Container display="flex" px={0} style={{ gap: "1rem" }}>
-              <Input
+              <PasswordInput
                 name="registroSenha"
-                value={values.registroSenha}
+                value={registerFields.password}
+                onChange={(event) => setRegisterFields({ ...registerFields, password: event.target.value })}
                 label="Senha"
                 placeholder="Senha"
-                onChange={handleChange}
                 onBlur={handleBlur}
-                validate={errors.registroSenha}
                 required
                 type={undefined}
-                sufixComponent={undefined}
                 style={{ width: "50%" }}
               />
 
-              <Input
+              <PasswordInput
                 name="registroSenhaConfirmar"
                 value={values.registroSenhaConfirmar}
                 label="Confirmar Senha"
                 placeholder="Confirmar Senha"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                validate={errors.registroSenhaConfirmar}
                 required
                 type={undefined}
-                sufixComponent={undefined}
                 style={{ width: "50%" }}
               />
             </Container>
@@ -166,7 +313,14 @@ function Login(props) {
               fullWidth
               mt="xl"
               size="md"
-              onClick={() => setCurrentState("CONTINUARREGISTRO")}
+              onClick={() => {
+                if (registerFields.password !== values.registroSenhaConfirmar) {
+                  notifications.show({ title: 'Erro no registro!', message: "Senhas não coincidem!", position: 'bottom-left', color: 'red' })
+                  return;
+                }
+                setCurrentState("CONTINUARREGISTRO");
+              }
+              }
             >
               CONTINUAR REGISTRO
             </Button>
@@ -190,38 +344,33 @@ function Login(props) {
               Concluir registro
             </Title>
 
-            <Input
-              name="registroDiretorResponsavel"
-              value={values.registroDiretorResponsavel}
-              label="Diretor responsável"
-              placeholder="Diretor responsável"
-              onChange={handleChange}
+            <Select
+              data={escolas?.map(escola => ({
+                value: escola.id.toString(),
+                label: escola.nome
+              }))}
+              label="Escola"
+              placeholder="Escola"
+              onChange={(value) => setRegisterFields({
+                ...registerFields,
+                unidadeEnsino: parseInt(value)
+              })}
               onBlur={handleBlur}
-              validate={errors.registroDiretorResponsavel}
               required
-              type={undefined}
-              sufixComponent={undefined}
-            />
-
-            <Input
-              name="registroNomeEscola"
-              value={values.registroNomeEscola}
-              label="Nome da Escola"
-              placeholder="Nome da Escola"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              validate={errors.registroNomeEscola}
-              required
-              type={undefined}
-              sufixComponent={undefined}
             />
 
             <Input
               name="registroRua"
-              value={values.registroRua}
+              value={registerFields.enderecoForm?.logradouro}
+              onChange={(event) => setRegisterFields({
+                ...registerFields,
+                enderecoForm: {
+                  ...registerFields.enderecoForm,
+                  logradouro: event.target.value
+                }
+              })}
               label="Rua"
               placeholder="Rua"
-              onChange={handleChange}
               onBlur={handleBlur}
               validate={errors.registroRua}
               required
@@ -232,10 +381,16 @@ function Login(props) {
             <Container display="flex" px={0} style={{ gap: "1rem" }}>
               <Input
                 name="registroBairro"
-                value={values.registroBairro}
+                value={registerFields.enderecoForm?.bairro}
+                onChange={(event) => setRegisterFields({
+                  ...registerFields,
+                  enderecoForm: {
+                    ...registerFields.enderecoForm,
+                    bairro: event.target.value
+                  }
+                })}
                 label="Bairro"
                 placeholder="Bairro"
-                onChange={handleChange}
                 onBlur={handleBlur}
                 validate={errors.registroBairro}
                 required
@@ -244,17 +399,23 @@ function Login(props) {
                 style={{ width: "50%" }}
               />
 
-              <Input
-                name="registroComplemento"
-                value={values.registroSenhaConfirmar}
-                label="Confirmar Senha"
-                placeholder="Confirmar Senha"
-                onChange={handleChange}
+              <Select
+                name="registroCidade"
+                data={cidades.map(cidade => ({
+                  value: cidade.id.toString(),
+                  label: cidade.nome
+                }))}
+                label="Cidade"
+                placeholder="Cidade"
+                onChange={(value) => setRegisterFields({
+                  ...registerFields,
+                  enderecoForm: {
+                    ...registerFields.enderecoForm,
+                    cidade: parseInt(value)
+                  }
+                })}
                 onBlur={handleBlur}
-                validate={errors.registroSenhaConfirmar}
                 required
-                type={undefined}
-                sufixComponent={undefined}
                 style={{ width: "50%" }}
               />
             </Container>
@@ -262,10 +423,16 @@ function Login(props) {
             <Container display="flex" px={0} style={{ gap: "1rem" }}>
               <Input
                 name="registroNumero"
-                value={values.registroNumero}
+                value={registerFields.enderecoForm?.numero}
+                onChange={(event) => setRegisterFields({
+                  ...registerFields,
+                  enderecoForm: {
+                    ...registerFields.enderecoForm,
+                    numero: event.target.value
+                  }
+                })}
                 label="Número"
                 placeholder="Número"
-                onChange={handleChange}
                 onBlur={handleBlur}
                 validate={errors.registroNumero}
                 required
@@ -276,10 +443,16 @@ function Login(props) {
 
               <Input
                 name="registroCEP"
-                value={values.registroCEP}
+                value={registerFields.enderecoForm?.cep}
+                onChange={(event) => setRegisterFields({
+                  ...registerFields,
+                  enderecoForm: {
+                    ...registerFields.enderecoForm,
+                    cep: event.target.value
+                  }
+                })}
                 label="CEP"
                 placeholder="CEP"
-                onChange={handleChange}
                 onBlur={handleBlur}
                 validate={errors.registroCEP}
                 required
@@ -289,7 +462,7 @@ function Login(props) {
               />
             </Container>
 
-            <Button fullWidth mt="xl" size="md" type="submit">
+            <Button fullWidth mt="xl" size="md" type="button" onClick={(e) => handleRegistro(e)}>
               FINALIZAR REGISTRO
             </Button>
 

@@ -13,11 +13,10 @@ const data = {
     { link: "/escola/settings", label: "Configurações", icon: IconSettings },
   ],
   departamento: [
-    { link: "/departamento", label: "Home", icon: IconHome },
+    { link: "/departamento/dashboards", label: "Dashboards", icon: IconChartBar },
     { link: "/departamento/escolas", label: "Escolas", icon: IconSchool },
     { link: "/departamento/estoque", label: "Estoque", icon: IconPackages },
     { link: "/departamento/pedidos", label: "Pedidos", icon: IconTruckReturn },
-    { link: "/departamento/dashboards", label: "Dashboards", icon: IconChartBar },
   ],
 };
 
@@ -51,7 +50,7 @@ export default function NavBar() {
           src={computedColorScheme === "dark" ? "/logoDark.png" : "/logo.png"}
           w={'8rem'}
         />
-        <Code fw={700}>v0.0.3</Code>
+        <Code fw={700}>v0.8.5</Code>
       </Group>
     </>
   );
