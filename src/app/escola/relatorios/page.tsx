@@ -4,82 +4,106 @@ import { Pagination, Text, Box, Button, Grid, Paper, useComputedColorScheme } fr
 import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
-import { IconFileInfo, IconUpload } from '@tabler/icons-react';
+import { IconFileInfo, IconPlus, IconUpload } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { DateInput } from '@mantine/dates';
 import { useUpdateTitle } from '../../../hooks/useTitle';
 import { useDisclosure } from '@mantine/hooks';
 import ModalDropzone from '../../../components/Modals/ModalDropzone';
+import MinioService from '../../../services/general/minio';
+import RelatorioService from '../../../services/general/relatorio';
+import { notifications } from "@mantine/notifications";
 
-function RelatoriosEscola(props: any) {
-
+function Relatoriosrelatorio(props: any) {
     const updateTitle = useUpdateTitle();
 
     useEffect(() => {
         updateTitle('Meus Relatórios')
+        fetchRelatorios();
     }, [])
 
+    const [searchField, setSearchField] = useState("");
+    const [relatorios, setRelatorios] = useState([]);
     const [opened, { open, close }] = useDisclosure(false);
 
     const [filter, setFilter] = useState({ codigo: 1, dataInicial: '2024-01-01', dataFinal: '2024-12-12' });
 
-    const tableHeaders = ["Código", "Status", "Data de envio"];
-
-    const elements = [
-        { codigo: 1, status: 'ENVIADO', dtEnvio: '23/02/2024' },
-        { codigo: 2, status: 'EM ANÁLISE', dtEnvio: '22/02/2024' },
-        { codigo: 3, status: 'EM ANÁLISE', dtEnvio: '22/02/2024' },
-        { codigo: 4, status: 'ENVIADO', dtEnvio: '24/06/2024' },
-        { codigo: 5, status: 'ENVIADO', dtEnvio: '23/02/2024' },
-        { codigo: 6, status: 'EM ANÁLISE', dtEnvio: '22/02/2024' },
-        { codigo: 7, status: 'EM ANÁLISE', dtEnvio: '22/02/2024' },
-        { codigo: 8, status: 'ENVIADO', dtEnvio: '24/06/2024' },
-        { codigo: 9, status: 'ENVIADO', dtEnvio: '23/02/2024' },
-    ];
+    const tableHeaders = ["Código", "Status", "Nome", "Data de envio", "Enviado Por"];
 
     const additionalButtons = [
         { id: 1, icon: <IconFileInfo />, onClick: () => 1 },
     ];
 
+    const fetchRelatorios = async () => {
+        const relatorios = await RelatorioService.fetchAllRelatorios();
+        const relatoriosList = relatorios?.content?.map(relatorio => ({
+            id: relatorio?.id,
+            status: relatorio?.status,
+            nome: relatorio?.nome,
+            dataDeEnvio: relatorio?.dataDeEnvio,
+            enviadoPor: relatorio?.enviadoPor?.nome,
+        }));
+        setRelatorios(relatoriosList);
+    };
+
     return (
         <>
-            <ModalDropzone open={opened} close={close}/>
-            
+            <ModalDropzone
+                open={opened}
+                close={close}
+                onDrop={async files => {
+                    try {
+                        const file = files[0];
+
+                        await RelatorioService.createRelatorio({
+                            nome: file.name,
+                        });
+                        
+                        let formData = new FormData();
+                        formData.append('documento',
+                            JSON.stringify({
+                                "bucket": "namedida",
+                                "objectName": file.name,
+                                "file": {
+                                    "fileName": file.name,
+                                    "contentType": file.type
+                                }
+                            })
+                        );
+                        formData.append('file', file, file.name);
+                        await MinioService.upload(formData);
+                        notifications.show({ title: 'Relatório salvo com sucesso', message: '', position: 'bottom-left', color: 'blue' });
+
+                        close()
+                        fetchRelatorios();
+                    } catch (error) {
+                        notifications.show({ title: 'Erro ao salvar relatório', message: error?.message, position: 'bottom-left', color: 'red' });
+                    }
+                }}
+            />
             <Box
                 w='100%'
                 h="89vh"
                 display='flex'
                 style={{ flexDirection: 'column' }}>
-
+            
                 <Grid h='auto' mt='1rem'>
-                    <Grid.Col span={3}>
-                        <ClearableInput placeholder="Código" label="Código" />
-                    </Grid.Col>
-
-                    <Grid.Col span={2}>
-                        <DateInput
-                            onChange={() => 1}
-                            label="Data inicial"
-                            placeholder={filter.dataInicial}
+                    <Grid.Col span={6}>
+                        <ClearableInput
+                            placeholder="Pesquisar"
+                            label='Pesquisar'
+                            value={searchField}
+                            setValue={setSearchField}
                         />
                     </Grid.Col>
-
-                    <Grid.Col span={2}>
-                        <DateInput
-                            onChange={() => 1}
-                            label="Data final"
-                            placeholder={filter.dataFinal}
-                        />
-                    </Grid.Col>
-
-                    <Grid.Col span={5} display='flex' style={{ justifyContent: 'end' }}>
+                    <Grid.Col span={3} offset={3} display='flex' style={{ justifyContent: 'flex-end' }}>
                         <Button h='4rem' w='4rem' variant="gradient" onClick={open} style={{ borderRadius: '10rem' }}>
-                            <IconUpload size={23} />
+                            <IconPlus size={23} />
                         </Button>
                     </Grid.Col>
                 </Grid>
 
-                <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
+                <DataTable headerElements={tableHeaders} elements={relatorios} additionalButtons={additionalButtons} />
 
             </Box>
         </>
@@ -90,4 +114,4 @@ export default withFormik({
     validateOnChange: false,
     validateOnBlur: false,
     handleSubmit: () => 1
-})(RelatoriosEscola);
+})(Relatoriosrelatorio);

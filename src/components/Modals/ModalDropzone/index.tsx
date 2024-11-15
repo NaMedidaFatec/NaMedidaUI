@@ -8,9 +8,8 @@ interface ModalDropzoneProps extends Partial<DropzoneProps> {
 }
 
 
-export default function ModalDropzone({ open, close, ...props }: ModalDropzoneProps) {
+export default function ModalDropzone({ open, close, onDrop = () => {}, onReject = () => {}, ...props }: ModalDropzoneProps) {
     return (
-
         <Modal
             opened={open}
             onClose={close}
@@ -24,8 +23,10 @@ export default function ModalDropzone({ open, close, ...props }: ModalDropzonePr
             <Dropzone
                 h='30vh'
                 loading={false}
-                onDrop={(files) => console.log('accepted files', files)}
-                onReject={(files) => console.log('rejected files', files)}
+                onDrop={onDrop}
+                onReject={onReject}
+                // onDrop={(files) => console.log('accepted files', files)}
+                // onReject={(files) => console.log('rejected files', files)}
                 maxSize={5 * 1024 ** 2}
                 accept={PDF_MIME_TYPE}
                 {...props}
