@@ -61,7 +61,7 @@ function DepartamentoEstoque(props: any) {
                     </Grid.Col>
                 </Grid>
 
-                <DataTable headerElements={tableHeaders} elements={elements} additionalButtons={additionalButtons} />
+                <DataTable headerElements={tableHeaders} elements={elements} />
 
             </Box>
         </>

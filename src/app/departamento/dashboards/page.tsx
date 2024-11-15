@@ -218,13 +218,13 @@ function DepartamentoDashboards(props: any) {
                 h="2.5rem"
                 my='xl'
             >
-                <Button
+                {/* <Button
                     variant="gradient"
                     size='lg'
                     fullWidth
                     leftSection={<IconFileTypePdf size={23} />}>
                     Gerar relatório
-                </Button>
+                </Button> */}
 
             </Box>
 

@@ -81,7 +81,7 @@ const DataTable: React.FC<MyComponentProps> = ({
 
     const [selectedRows, setSelectedRows] = useState<number[]>([]);
 
-    const keys = elements.length > 0 ? Object.keys(elements[0]) : [];
+    const keys = elements?.length > 0 ? Object.keys(elements[0]) : [];
 
     const headerKeys = headerElements.length > 0 ? headerElements : [];
 
@@ -99,7 +99,7 @@ const DataTable: React.FC<MyComponentProps> = ({
         </Table.Tr>
     );
 
-    const rows = elements.map((element, index) => (
+    const rows = elements?.map((element, index) => (
         <Table.Tr key={index}>
 
             {selection && (

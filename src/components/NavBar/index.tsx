@@ -1,6 +1,6 @@
 import React from "react";
 import { Group, Code, Image, useComputedColorScheme } from "@mantine/core";
-import { IconSettings, IconHome, IconSchool, IconUsers, IconPackages, IconChartBar, IconFileAnalytics, IconTruckDelivery, IconTruckReturn } from "@tabler/icons-react";
+import { IconSettings, IconHome, IconSchool, IconUsers, IconPackages, IconChartBar, IconFileAnalytics, IconTruckDelivery, IconTruckReturn, IconBox } from "@tabler/icons-react";
 import classes from "./NavBar.module.css";
 import { usePathname } from "next/navigation";
 
@@ -15,6 +15,7 @@ const data = {
   departamento: [
     { link: "/departamento/dashboards", label: "Dashboards", icon: IconChartBar },
     { link: "/departamento/escolas", label: "Escolas", icon: IconSchool },
+    { link: "/departamento/produtos", label: "Produtos", icon: IconBox },
     { link: "/departamento/estoque", label: "Estoque", icon: IconPackages },
     { link: "/departamento/pedidos", label: "Pedidos", icon: IconTruckReturn },
   ],

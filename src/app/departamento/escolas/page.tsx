@@ -94,7 +94,7 @@ function DetalhesEscola(props: any) {
             );
         } catch (error) {
             console.log(error?.message);
-            notifications.show({ title: 'Erro no login!', message: error?.message, position: 'bottom-left', color: 'red' })
+            notifications.show({ title: 'Erro ao desativar!', message: error?.message, position: 'bottom-left', color: 'red' })
         }
     };
 

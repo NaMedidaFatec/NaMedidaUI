@@ -1,29 +1,29 @@
 import api from '../../../api';
 
 
-export default class ProdutoService {
+export default class LoteService {
 
-    static createProduto = async (produto) => {
+    static createLote = async (lote) => {
         try {
-            const { data } = await api.post(`/produtos/save`, produto)
+            const { data } = await api.post(`/lotes/save`, lote)
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);
         }
     }
 
-    static saveProduto = async (produtoId, produto) => {
+    static saveLote = async (loteId, lote) => {
         try {
-            const { data } = await api.put(`/produtos/${produtoId}`, produto)
+            const { data } = await api.put(`/lotes/${loteId}`, lote)
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);
         }
     }
 
-    static fetchProduto = async (id) => {
+    static fetchLote = async (id) => {
         try{
-           const { data } = await api.get(`/produtos/${id}`)
+           const { data } = await api.get(`/lotes/${id}`)
            return data;
         }catch(e){
             throw new Error(e?.response?.data?.message);
@@ -32,25 +32,25 @@ export default class ProdutoService {
 
     static fetchAll = async () => {
         try{
-           const { data } = await api.get(`/produtos`)
+           const { data } = await api.get(`/lotes`)
            return data;
         }catch(e){
             throw new Error(e?.response?.data?.message);
         }  
     }
 
-    static deleteProduto = async (id) => {
+    static deleteLote = async (id) => {
         try {
-            const { data } = await api.delete(`/produtos/${id}`)
+            const { data } = await api.delete(`/lotes/${id}`)
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);
         }
     }
 
-    static toggleStatusProduto = async (id) => {
+    static toggleStatusLote = async (id) => {
         try {
-            const { data } = await api.put(`/produtos/toggle/${id}`)
+            const { data } = await api.put(`/lotes/toggle/${id}`)
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);
