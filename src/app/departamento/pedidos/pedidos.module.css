@@ -1,0 +1,16 @@
+.icon {
+  display: flex;
+  flex-direction: row;
+  min-width: 90px;
+  padding: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.txtDetails {
+  color: black
+}
+
+.txtCancel {
+  color: red
+}
