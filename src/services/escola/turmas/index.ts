@@ -14,7 +14,7 @@ export default class EscolaTurmaService {
 
     static saveTurma = async (turmaId, turma) => {
         try {
-            const { data } = await api.put(`/unidadeensinoturma/save/${turmaId}`, turma)
+            const { data } = await api.put(`/unidadeensinoturma/${turmaId}`, turma)
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);

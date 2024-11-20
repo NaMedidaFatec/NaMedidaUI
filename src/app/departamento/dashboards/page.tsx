@@ -5,9 +5,9 @@ import { withFormik } from 'formik';
 import { AreaChart, CompositeChart } from '@mantine/charts';
 import ChartCard from '../../../components/ChartCard';
 import { IconCoin, IconCurrencyDollar, IconDeviceIpadDollar, IconFileTypePdf, IconLicense, IconUserExclamation } from '@tabler/icons-react';
-import { DateInput } from '@mantine/dates';
 import { useEffect, useState } from 'react';
 import { useUpdateTitle } from '../../../hooks/useTitle';
+import DateInput from '../../../components/general/DateInput';
 
 function DepartamentoDashboards(props: any) {
 
@@ -137,17 +137,15 @@ function DepartamentoDashboards(props: any) {
 
                         <Grid.Col span={3}>
                             <DateInput
-                                onChange={() => 1}
+                                setValue={() => 1}
                                 label="Data inicial"
-                                placeholder={filter.dataInicial}
                             />
                         </Grid.Col>
 
                         <Grid.Col span={3}>
                             <DateInput
-                                onChange={() => 1}
+                                setValue={() => 1}
                                 label="Data final"
-                                placeholder={filter.dataFinal}
                             />
                         </Grid.Col>
                     </Grid>
@@ -183,17 +181,15 @@ function DepartamentoDashboards(props: any) {
 
                         <Grid.Col span={3}>
                             <DateInput
-                                onChange={() => 1}
+                                setValue={() => 1}
                                 label="Data inicial"
-                                placeholder={filter.dataInicial}
                             />
                         </Grid.Col>
 
                         <Grid.Col span={3}>
                             <DateInput
-                                onChange={() => 1}
+                                setValue={() => 1}
                                 label="Data final"
-                                placeholder={filter.dataFinal}
                             />
                         </Grid.Col>
                     </Grid>

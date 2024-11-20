@@ -5,8 +5,8 @@ import ClearableInput from "../../general/ClearableInput";
 import { IconChevronDown } from "@tabler/icons-react";
 import ProdutoService from "../../../services/departamento/estoque/produto";
 import { notifications } from "@mantine/notifications";
-import { DateInput, DateTimePicker } from "@mantine/dates";
 import LoteService from "../../../services/departamento/estoque/lotes";
+import DateInput from "../../general/DateInput";
 
 interface ComponentProps {
     open?: boolean;
@@ -130,7 +130,7 @@ export default function ModalCadastroLote({ open, close }: ComponentProps) {
                 <Grid>
                     <Grid.Col span={6}>
                         <DateInput
-                            onChange={(value) => setFormData((prevState) => ({
+                            setValue={(value) => setFormData((prevState) => ({
                                 ...prevState,
                                 dataFabricacao: value
                             }))}
@@ -143,7 +143,7 @@ export default function ModalCadastroLote({ open, close }: ComponentProps) {
 
                     <Grid.Col span={6}>
                         <DateInput
-                            onChange={(value) => setFormData((prevState) => ({
+                            setValue={(value) => setFormData((prevState) => ({
                                 ...prevState,
                                 dataValidade: value
                             }))}

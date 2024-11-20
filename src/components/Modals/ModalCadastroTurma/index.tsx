@@ -2,36 +2,64 @@ import { Box, Button, Divider, Grid, Modal, NumberInput, Select, Text, TextInput
 import { useEffect, useState } from "react";
 import DataTable from "../../general/DataTable";
 import ClearableInput from "../../general/ClearableInput";
-import { DateInput, TimeInput } from "@mantine/dates";
 import EscolaTurmaService from "../../../services/escola/turmas";
 import { notifications } from "@mantine/notifications";
+import DateInput from "../../general/DateInput";
 
 interface ComponentProps {
     open?: boolean;
     close?: () => void;
+    fetchTurmas?: () => void;
+    isEdicao?: boolean;
+    editTurma?: {
+        ativo?: true
+        descricao?: string
+        horarioFinal?: string
+        horarioInicial?: string
+        id?: number
+        qtdAlunos?: number
+        sala?: string
+    };
 }
 
-export default function ModalCadastroTurma({ open, close }: ComponentProps) {
-    useEffect(() => {
-        const loggedUser = JSON.parse(localStorage.getItem('@namedida:user'));
-        setFormData(prevState => ({
-            ...prevState,
-            unidadeEnsino: loggedUser?.unidadeEnsino.id ? loggedUser?.unidadeEnsino.id : 0
-        }));
-    }, [open]);
-
-    const [formData, setFormData] = useState({
+export default function ModalCadastroTurma({ open, close, isEdicao, editTurma, fetchTurmas }: ComponentProps) {
+    const originalFormData = {
         nome: '',
         quantidade: 0,
         horarioInicial: undefined,
         horarioFinal: undefined,
         sala: '',
         unidadeEnsino: 0,
-    });
+    };
+
+    const [formData, setFormData] = useState(originalFormData);
+
+    useEffect(() => {
+        const loggedUser = JSON.parse(localStorage.getItem('@namedida:user'));
+        setFormData(prevState => ({
+            ...prevState,
+            unidadeEnsino: loggedUser?.unidadeEnsino.id ? loggedUser?.unidadeEnsino.id : 0,
+        }));
+        if (isEdicao) {
+            prepararEdicao();
+        } else {
+            setFormData(originalFormData);
+        }
+    }, [open]);
+
+    const prepararEdicao = () => {
+        setFormData(prevState => ({
+            ...prevState,
+            nome: isEdicao ? editTurma?.descricao : '',
+            quantidade: isEdicao ? editTurma?.qtdAlunos : 0,
+            horarioInicial: isEdicao ? editTurma?.horarioInicial : undefined,
+            horarioFinal: isEdicao ? editTurma?.horarioFinal : undefined,
+            sala: isEdicao ? editTurma?.sala : '',
+        }));
+    }
 
     const handleChange = (e) => {
         const { name, value } = e?.target;
-        console.log(e?.target.value);
 
         setFormData((prevState) => ({
             ...prevState,
@@ -41,17 +69,21 @@ export default function ModalCadastroTurma({ open, close }: ComponentProps) {
 
     const saveTurma = async () => {
         try {
-            await EscolaTurmaService.createTurma(formData);
+            if (isEdicao) {
+                await EscolaTurmaService.saveTurma(editTurma?.id, formData);
+            } else {
+                await EscolaTurmaService.createTurma(formData);
+            }
             notifications.show({ title: 'Salvo com sucesso', message: '', position: 'bottom-left', color: 'blue' });
             setTimeout(() => {
-                window.location.reload();
-            }, 2500);
+                fetchTurmas();
+            }, 750);
+            close();
         } catch (error) {
             console.log(error);
             notifications.show({ title: 'Erro ao salvar', message: error?.message, position: 'bottom-left', color: 'red' });
         }
     };
-
 
     return (
         <>
@@ -66,7 +98,7 @@ export default function ModalCadastroTurma({ open, close }: ComponentProps) {
                 }}
                 title={
                     <Text size="xl" fw={200}>
-                        Nova Turma
+                        {isEdicao ? "Editar turma" : "Nova Turma"}
                     </Text>}
             >
                 <Divider size="xs" />
@@ -106,26 +138,20 @@ export default function ModalCadastroTurma({ open, close }: ComponentProps) {
                 <Grid>
                     <Grid.Col span={6}>
                         <DateInput
-                            onChange={(value) => setFormData((prevState) => ({
-                                ...prevState,
-                                horarioInicial: value
-                            }))}
+                            setValue={(value) => setFormData({ ...formData, horarioInicial: value })}
+                            value={formData.horarioInicial}
                             name="horarioInicial"
                             label="Data inicial"
-                            placeholder={formData.horarioInicial}
                             required
                         />
                     </Grid.Col>
 
                     <Grid.Col span={6}>
                         <DateInput
-                            onChange={(value) => setFormData((prevState) => ({
-                                ...prevState,
-                                horarioFinal: value
-                            }))}
+                            setValue={(value) => setFormData({ ...formData, horarioFinal: value })}
+                            value={formData.horarioFinal}
                             name="horarioFinal"
                             label="Data final"
-                            placeholder={formData.horarioFinal}
                             required
                         />
                     </Grid.Col>
@@ -138,7 +164,7 @@ export default function ModalCadastroTurma({ open, close }: ComponentProps) {
                     fs='22rem'
                     onClick={saveTurma}
                 >
-                    CADASTRAR
+                    SALVAR
                 </Button>
             </Modal>
         </>

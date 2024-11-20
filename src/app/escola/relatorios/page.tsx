@@ -6,7 +6,6 @@ import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
 import { IconFileInfo, IconPlus, IconUpload } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
-import { DateInput } from '@mantine/dates';
 import { useUpdateTitle } from '../../../hooks/useTitle';
 import { useDisclosure } from '@mantine/hooks';
 import ModalDropzone from '../../../components/Modals/ModalDropzone';

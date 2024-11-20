@@ -13,7 +13,6 @@ import { useDisclosure } from '@mantine/hooks';
 import EscolaService from '../../../services/escola';
 import { notifications } from '@mantine/notifications';
 import ModalCadastroEscola from '../../../components/Modals/ModalCadastroEscola';
-import UserService from '../../../services/user';
 import ModalSelecaoRepresentante from '../../../components/Modals/ModalSelecaoRepresentante';
 
 function DetalhesEscola(props: any) {

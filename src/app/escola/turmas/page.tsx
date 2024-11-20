@@ -1,16 +1,15 @@
 'use client'
 
-import { Pagination, Text, Box, Button, Grid, Paper, useComputedColorScheme } from '@mantine/core';
+import { Box, Button, Grid } from '@mantine/core';
 import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
-import { IconFileInfo, IconPlus } from '@tabler/icons-react';
+import { IconFileInfo, IconFilePencil, IconPlus } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useUpdateTitle } from '../../../hooks/useTitle';
 import ModalCadastroTurma from '../../../components/Modals/ModalCadastroTurma';
 import ModalDetalheTurma from '../../../components/Modals/ModalDetalheTurma';
 import { useDisclosure } from '@mantine/hooks';
-import EscolaService from '../../../services/escola';
 import EscolaTurmaService from '../../../services/escola/turmas';
 import { notifications } from '@mantine/notifications';
 
@@ -19,6 +18,8 @@ function DetalhesTurmas(props: any) {
     const [searchField, setSearchField] = useState("");
     const [selectedTurma, setSelectedTurma] = useState({});
     const [filteredTurmas, setFilteredTurmas] = useState([]);
+    const [isEdicao, setEdicao] = useState(false);
+
 
     const [openedCadastro, { open, close }] = useDisclosure(false);
     const [openedDetalhe, handlers] = useDisclosure(false);
@@ -33,7 +34,6 @@ function DetalhesTurmas(props: any) {
     useEffect(() => {
         search();
     }, [searchField])
-
 
     const search = async () => {
         if (turmas && searchField) {
@@ -81,9 +81,20 @@ function DetalhesTurmas(props: any) {
         }
     };
 
-    const openInfoModal = async (clickedItemId: string) => {
+    const openInfoModal = (clickedItemId: string) => {
         setSelectedTurma(turmas.find((element) => element?.id === clickedItemId));
         handlers.open();
+    };
+
+    const openCreateModal = () => {
+        setEdicao(false);
+        open();
+    };
+
+    const openEditModal = (clickedItemId: string) => {
+        setSelectedTurma(turmas.find((element) => element?.id === clickedItemId));
+        setEdicao(true);
+        open();
     };
 
     const tableHeaders = ["CÓD", "DESC.", "QTD ALUNOS", "SALA", "STATUS"];
@@ -91,6 +102,11 @@ function DetalhesTurmas(props: any) {
     const additionalButtons = [
         {
             id: 1,
+            icon: <IconFilePencil />,
+            onClick: (element: any) => openEditModal(element?.id)
+        },
+        {
+            id: 2,
             icon: <IconFileInfo />,
             onClick: (element: any) => openInfoModal(element?.id)
         },
@@ -98,7 +114,7 @@ function DetalhesTurmas(props: any) {
 
     return (
         <>
-            <ModalCadastroTurma open={openedCadastro} close={close} />
+            <ModalCadastroTurma open={openedCadastro} close={close} isEdicao={isEdicao} editTurma={selectedTurma} fetchTurmas={fetchTurmas}/>
 
             <ModalDetalheTurma open={openedDetalhe} close={handlers?.close} turma={selectedTurma} />
 
@@ -118,7 +134,7 @@ function DetalhesTurmas(props: any) {
                         />
                     </Grid.Col>
                     <Grid.Col span={3} offset={3} display='flex' style={{ justifyContent: 'flex-end' }}>
-                        <Button h='4rem' w='4rem' variant="gradient" onClick={open} style={{ borderRadius: '10rem' }}>
+                        <Button h='4rem' w='4rem' variant="gradient" onClick={openCreateModal} style={{ borderRadius: '10rem' }}>
                             <IconPlus size={23} />
                         </Button>
                     </Grid.Col>
