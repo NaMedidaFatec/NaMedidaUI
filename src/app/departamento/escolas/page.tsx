@@ -1,8 +1,8 @@
 'use client'
 
-import { Table, Box, Grid } from '@mantine/core';
+import { Box, Grid } from '@mantine/core';
 import { Button } from '../../../components/general';
-import { IconFileInfo, IconPlus } from "@tabler/icons-react";
+import { IconFileInfo, IconPlus, IconUserFilled } from "@tabler/icons-react";
 import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
@@ -80,12 +80,10 @@ function DetalhesEscola(props: any) {
             numero: escola?.endereco?.numero,
             cep: escola?.endereco?.cep
         }));
-    
+
         setEscolas(escolasList);
         setFilteredEscolas(escolasList);
     };
-
-    const tableHeaders = ["CÓD", "NOME DA ESCOLA", 'REPRESENTANTE', 'STATUS'];
 
     const toggleActivationFunction = async (element: any) => {
         try {
@@ -98,15 +96,31 @@ function DetalhesEscola(props: any) {
         }
     };
 
-    const openInfoModal = async (rowId: any) => {
-        setSelectedEscola(escolas.find((element) => element?.id === rowId));
+    const openInfoModal = (clickedItemId: string) => {
+        setSelectedEscola(escolas.find((element) => element?.id === clickedItemId));
         open();
     };
 
-    const fetchRepresentantes = async (rowId: any) => {
+    const fetchRepresentantes = async (clickedItemId: any) => {
         // const representantes = await UserService.fetchAllUsersResponsaveis();
         setOpenedResponsavel(true)
     };
+
+    const tableHeaders = ["CÓD", "NOME DA ESCOLA", 'REPRESENTANTE', 'STATUS'];
+
+    const additionalButtons = [
+        {
+            id: 1,
+            icon: <IconFileInfo />,
+            onClick: (element: any) => openInfoModal(element?.id)
+        },
+        {
+            id: 2,
+            icon: <IconUserFilled />,
+            onClick: (element: any) => fetchRepresentantes(element?.id)
+        },
+    ];
+
 
     return (
         <>
@@ -146,12 +160,10 @@ function DetalhesEscola(props: any) {
                         representante: escola?.representante,
                         ativo: escola?.ativo,
                     }))}
-                    representanteButton
-                    openRepresentanteModal={fetchRepresentantes}
-                    infoButton
-                    openInfoModal={openInfoModal}
+                    additionalButtons={additionalButtons}
                     activate
-                    toggleActivationFunction={toggleActivationFunction} />
+                    toggleActivationFunction={toggleActivationFunction}
+                />
 
             </Box>
         </>

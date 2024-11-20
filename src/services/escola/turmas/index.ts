@@ -48,4 +48,12 @@ export default class EscolaTurmaService {
         }
     }
 
+    static toggleStatusTurma = async (id) => {
+        try {
+            const { data } = await api.put(`/unidadeensinoturma/toggle/${id}`)
+            return data;
+        } catch (e) {
+            throw new Error(e?.response?.data?.message);
+        }
+    }
 }

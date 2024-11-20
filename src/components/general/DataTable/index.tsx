@@ -1,5 +1,4 @@
 import { Box, Button, Checkbox, NumberInput, Pagination, Paper, Table, Text, useComputedColorScheme } from "@mantine/core";
-import { IconFileInfo, IconUserFilled } from "@tabler/icons-react";
 import { useState } from "react";
 
 // EXEMPLO DE ELEMENTOS DE HEADER (array de strings)
@@ -29,8 +28,6 @@ interface MyComponentProps {
     headerElements: string[];
     elements: Element[];
     activate?: boolean;
-    infoButton?: boolean;
-    representanteButton?: boolean;
     selection?: boolean;
     stripped?: boolean;
     withColumnBorders?: boolean;
@@ -39,16 +36,13 @@ interface MyComponentProps {
     withBgColor?: boolean;
     withTableBorder?: boolean;
     toggleActivationFunction?: (element: any) => Promise<void>;
-    openInfoModal?: (element: any) => Promise<void>;
-    openRepresentanteModal?: (element: any) => Promise<void>;
+    additionalButtons?: Element[];
 }
 
 const DataTable: React.FC<MyComponentProps> = ({
     headerElements,
     elements,
     activate = false,
-    infoButton = false,
-    representanteButton = false,
     selection = false,
     stripped = true,
     withColumnBorders = false,
@@ -57,8 +51,7 @@ const DataTable: React.FC<MyComponentProps> = ({
     withBgColor = true,
     withTableBorder = false,
     toggleActivationFunction = undefined,
-    openInfoModal = undefined,
-    openRepresentanteModal = undefined,
+    additionalButtons = [],
 }) => {
 
     const computedColorScheme = useComputedColorScheme("light", {
@@ -69,14 +62,6 @@ const DataTable: React.FC<MyComponentProps> = ({
         if (toggleActivationFunction) {
             toggleActivationFunction(rowData);
         }
-    };
-
-    const returnRowId = (rowId: any, ) => {
-        openInfoModal?.(rowId);
-    };
-    
-    const returnRowIdRepresentante = (rowId: any, ) => {
-        openRepresentanteModal?.(rowId);
     };
 
     const [selectedRows, setSelectedRows] = useState<number[]>([]);
@@ -142,28 +127,17 @@ const DataTable: React.FC<MyComponentProps> = ({
             ))}
 
             <Table.Td style={{ display: 'flex', justifyContent: 'end' }}>
-                {representanteButton && (
+                {additionalButtons?.map((button) => (
                     <Button
+                        key={button?.id}
                         variant="subtle"
                         miw='4rem'
                         radius="md"
-                        onClick={() => returnRowIdRepresentante(element?.id)}
+                        onClick={() => button?.onClick(element)}
                         ml="1.5rem">
-                        <IconUserFilled />
+                        {button?.icon}
                     </Button>
-                )}
-
-
-                {infoButton && (
-                    <Button
-                        variant="subtle"
-                        miw='4rem'
-                        radius="md"
-                        onClick={() => returnRowId(element?.id)}
-                        ml="1.5rem">
-                        <IconFileInfo />
-                    </Button>
-                )}
+                ))}
 
                 {activate && (
                     <Button

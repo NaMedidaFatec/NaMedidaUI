@@ -12,7 +12,7 @@ class EscolaService {
         }
     }
 
-    static saveTurma = async (escolaId, escola) => {
+    static saveEscola = async (escolaId, escola) => {
         try {
             const { data } = await api.put(`/unidadeensino/${escolaId}`, escola)
             return data;

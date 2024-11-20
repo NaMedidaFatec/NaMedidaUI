@@ -12,6 +12,7 @@ import ModalDetalheTurma from '../../../components/Modals/ModalDetalheTurma';
 import { useDisclosure } from '@mantine/hooks';
 import EscolaService from '../../../services/escola';
 import EscolaTurmaService from '../../../services/escola/turmas';
+import { notifications } from '@mantine/notifications';
 
 function DetalhesTurmas(props: any) {
     const [turmas, setTurmas] = useState([]);
@@ -55,31 +56,51 @@ function DetalhesTurmas(props: any) {
 
     const fetchTurmas = async () => {
         const turmas = await EscolaTurmaService.fetchAllTurmas();
-        const turmasList = turmas?.content?.map(escola => ({
-            id: escola?.id,
-            descricao: escola?.nome,
-            sala: escola?.sala,
-            qtdAlunos: escola?.quantidade,
-            horarioInicial: escola?.horarioInicial,
-            horarioFinal: escola?.horarioFinal,
+        const turmasList = turmas?.content?.map(turma => ({
+            id: turma?.id,
+            descricao: turma?.nome,
+            sala: turma?.sala,
+            qtdAlunos: turma?.quantidade,
+            ativo: turma?.enabled,
+            horarioInicial: turma?.horarioInicial,
+            horarioFinal: turma?.horarioFinal,
         }));
 
         setTurmas(turmasList);
         setFilteredTurmas(turmasList);
     };
 
-    const tableHeaders = ["CÓD", "DESC.", "QTD ALUNOS", "SALA"];
+    const toggleActivationFunction = async (element: any) => {
+        try {
+            await EscolaTurmaService.toggleStatusTurma(element?.id).then(
+                fetchTurmas
+            );
+        } catch (error) {
+            console.log(error?.message);
+            notifications.show({ title: 'Erro ao desativar!', message: error?.message, position: 'bottom-left', color: 'red' })
+        }
+    };
 
-    const openInfoModal = async (rowId: any) => {
-        setSelectedTurma(turmas.find((element) => element?.id === rowId));
+    const openInfoModal = async (clickedItemId: string) => {
+        setSelectedTurma(turmas.find((element) => element?.id === clickedItemId));
         handlers.open();
     };
+
+    const tableHeaders = ["CÓD", "DESC.", "QTD ALUNOS", "SALA", "STATUS"];
+
+    const additionalButtons = [
+        {
+            id: 1,
+            icon: <IconFileInfo />,
+            onClick: (element: any) => openInfoModal(element?.id)
+        },
+    ]
 
     return (
         <>
             <ModalCadastroTurma open={openedCadastro} close={close} />
 
-            <ModalDetalheTurma open={openedDetalhe} close={handlers?.close} turma={selectedTurma}/>
+            <ModalDetalheTurma open={openedDetalhe} close={handlers?.close} turma={selectedTurma} />
 
             <Box
                 w='100%'
@@ -110,9 +131,12 @@ function DetalhesTurmas(props: any) {
                         descricao: turma?.descricao,
                         qtdAlunos: turma?.qtdAlunos,
                         sala: turma?.sala,
+                        ativo: turma?.ativo
                     }))}
-                    openInfoModal={openInfoModal}
-                    infoButton />
+                    additionalButtons={additionalButtons}
+                    activate
+                    toggleActivationFunction={toggleActivationFunction}
+                />
 
             </Box>
         </>
