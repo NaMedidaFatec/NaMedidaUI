@@ -102,16 +102,49 @@ function Login(props) {
 
       setTimeout(() => {
         window.location.reload();
-      }, 2500);
+      }, 2000);
     } catch (error) {
       console.error(error);
-      notifications.show({ title: 'Erro no registro!', message: error, position: 'bottom-left', color: 'red' })
+      notifications.show({ title: 'Erro no registro!', message: error?.message, position: 'bottom-left', color: 'red' })
     }
   };
 
-  const handleCPFChange = (event) => {
-    const formattedCPF = formatarCPF(event.target.value);
-    setRegisterFields({ ...registerFields, cpf: formattedCPF });
+  const handleFormattingChange = (event, fieldName) => {
+    let formattedField = "";
+    if (fieldName === "cpf") {
+      formattedField = formatarCPF(event?.target?.value);
+      setRegisterFields({ ...registerFields, cpf: formattedField });
+    }
+    if (fieldName === "ddd") {
+      formattedField = formatarDDD(event?.target?.value);
+      setRegisterFields({
+        ...registerFields,
+        telefoneForm: {
+          ...registerFields.telefoneForm,
+          ddd: formattedField
+        }
+      })
+    }
+    if (fieldName === "telefone") {
+      formattedField = formatarTelefone(event?.target?.value);
+      setRegisterFields({
+        ...registerFields,
+        telefoneForm: {
+          ...registerFields.telefoneForm,
+          numero: formattedField
+        }
+      })
+    }
+    if (fieldName === "cep") {
+      formattedField = formatarCEP(event?.target?.value);
+      setRegisterFields({
+        ...registerFields,
+        enderecoForm: {
+          ...registerFields.enderecoForm,
+          cep: formattedField
+        }
+      })
+    }
   };
 
   const formatarCPF = (cpf) => {
@@ -121,12 +154,41 @@ function Login(props) {
     // Maximo 11 digitos
     cpf = cpf.slice(0, 11);
 
-    // Formatar com pontos a cada 3 numeros e hifen
     cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
     cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
     cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
 
     return cpf;
+  }
+
+  const formatarDDD = (ddd) => {
+    // Apenas numeros
+    ddd = ddd.replace(/\D/g, '');
+
+    // Maximo 4 digitos
+    ddd = ddd.slice(0, 2);
+
+    return ddd.replace(/(\d{2})/, '($1)');
+  }
+
+  const formatarTelefone = (telefone) => {
+    // Apenas numeros
+    telefone = telefone.replace(/\D/g, '');
+
+    // Maximo 10 digitos
+    telefone = telefone.slice(0, 9);
+
+    return telefone.replace(/(\d{5})(\d{4})$/, '$1-$2');
+  }
+
+  const formatarCEP = (telefone) => {
+    // Apenas numeros
+    telefone = telefone.replace(/\D/g, '');
+
+    // Maximo 8 digitos
+    telefone = telefone.slice(0, 8);
+
+    return telefone.replace(/(\d{5})(\d{3})$/, '$1-$2');
   }
 
   const renderState = () => {
@@ -220,7 +282,7 @@ function Login(props) {
             <Input
               name="cpf"
               value={registerFields.cpf}
-              onChange={handleCPFChange}
+              onChange={(e) => handleFormattingChange(e, "cpf")}
               label="CPF"
               placeholder="CPF"
               onBlur={handleBlur}
@@ -234,13 +296,7 @@ function Login(props) {
                 <Input
                   name="ddd"
                   value={registerFields.telefoneForm?.ddd}
-                  onChange={(event) => setRegisterFields({
-                    ...registerFields,
-                    telefoneForm: {
-                      ...registerFields.telefoneForm,
-                      ddd: event.target.value
-                    }
-                  })}
+                  onChange={(e) => handleFormattingChange(e, "ddd")}
                   label="DDD"
                   placeholder="DDD"
                   onBlur={handleBlur}
@@ -253,13 +309,7 @@ function Login(props) {
                 <Input
                   name="telefone"
                   value={registerFields.telefoneForm?.numero}
-                  onChange={(event) => setRegisterFields({
-                    ...registerFields,
-                    telefoneForm: {
-                      ...registerFields.telefoneForm,
-                      numero: event.target.value
-                    }
-                  })}
+                  onChange={(e) => handleFormattingChange(e, "telefone")}
                   label="Telefone"
                   placeholder="Contato"
                   onBlur={handleBlur}
@@ -444,13 +494,7 @@ function Login(props) {
               <Input
                 name="registroCEP"
                 value={registerFields.enderecoForm?.cep}
-                onChange={(event) => setRegisterFields({
-                  ...registerFields,
-                  enderecoForm: {
-                    ...registerFields.enderecoForm,
-                    cep: event.target.value
-                  }
-                })}
+                onChange={(e) => handleFormattingChange(e, "cep")}
                 label="CEP"
                 placeholder="CEP"
                 onBlur={handleBlur}

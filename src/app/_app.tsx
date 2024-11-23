@@ -99,7 +99,7 @@ function Application({ children, ...props }) {
                     display='flex'
                     style={{ justifyContent: "flex-end" }} >
                     <Grid>
-                      <Grid.Col span={4} >
+                      <Grid.Col span={6} >
                         <ActionIcon
                           onClick={() =>
                             setColorScheme(
@@ -122,19 +122,7 @@ function Application({ children, ...props }) {
                           )}
                         </ActionIcon>
                       </Grid.Col>
-                      <Grid.Col span={4}>
-                        <ActionIcon
-                          onClick={() => { }}
-                          variant="default"
-                          size="xl"
-                        >
-                          <IconBellRinging
-                            className={cx(classes.icon, classes.dark)}
-                            stroke={1.5}
-                          />
-                        </ActionIcon>
-                      </Grid.Col>
-                      <Grid.Col span={4}>
+                      <Grid.Col span={6}>
                         <ActionIcon
                           onClick={signout}
                           variant="default"
