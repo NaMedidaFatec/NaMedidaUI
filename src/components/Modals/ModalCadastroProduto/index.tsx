@@ -9,24 +9,50 @@ import { notifications } from "@mantine/notifications";
 interface ComponentProps {
     open?: boolean;
     close?: () => void;
+    fetchProdutos?: () => void;
+    isEdicao?: boolean;
+    editProduto?: {
+        id?: number;
+        nome?: string,
+        descricao?: string,
+        codigoDeBarras?: string,
+        categoria?: string
+    };
 }
 
-export default function ModalCadastroProduto({ open, close }: ComponentProps) {
-    useEffect(() => {
-        const loggedUser = JSON.parse(localStorage.getItem('@namedida:user'));
-        setFormData(prevState => ({
-            ...prevState,
-            departamento: loggedUser?.departamento.id ? loggedUser?.departamento.id : undefined
-        }));
-    }, [open]);
-
-    const [formData, setFormData] = useState({
+export default function ModalCadastroProduto({ open, close, fetchProdutos, isEdicao, editProduto }: ComponentProps) {
+    const originalFormData = {
         nome: '',
         descricao: '',
         codigoDeBarras: '',
         categoria: 'ALIMENTICIOS',
-        departamento: undefined,
-    });
+        departamento: 0,
+    };
+
+    const [formData, setFormData] = useState(originalFormData);
+
+    useEffect(() => {
+        const loggedUser = JSON.parse(localStorage.getItem('@namedida:user'));
+        if (isEdicao) {
+            prepararEdicao();
+        } else {
+            setFormData(originalFormData);
+        }
+        setFormData(prevState => ({
+            ...prevState,
+            departamento: loggedUser?.departamento.id ? loggedUser?.departamento.id : 0
+        }));
+    }, [open]);
+
+    const prepararEdicao = () => {
+        setFormData(prevState => ({
+            ...prevState,
+            nome: isEdicao ? editProduto?.nome : '',
+            descricao: isEdicao ? editProduto?.descricao : '',
+            codigoDeBarras: isEdicao ? editProduto?.codigoDeBarras : '',
+            categoria: isEdicao ? editProduto?.categoria : '',
+        }));
+    }
 
     const handleChange = (e) => {
         const { name, value } = e?.target;
@@ -39,16 +65,22 @@ export default function ModalCadastroProduto({ open, close }: ComponentProps) {
 
     const saveProduto = async () => {
         try {
-            await ProdutoService.createProduto(formData);
+            if (isEdicao) {
+                await ProdutoService.saveProduto(editProduto?.id, formData)
+            } else {
+                await ProdutoService.createProduto(formData);
+            }
             notifications.show({ title: 'Salvo com sucesso', message: '', position: 'bottom-left', color: 'blue' });
             setTimeout(() => {
-                window.location.reload();
-            }, 2500);
+                fetchProdutos();
+            }, 750);
+            close();
         } catch (error) {
             console.log(error);
             notifications.show({ title: 'Erro ao salvar', message: error?.message, position: 'bottom-left', color: 'red' });
         }
     };
+console.log(formData);
 
     return (
         <>
@@ -74,7 +106,6 @@ export default function ModalCadastroProduto({ open, close }: ComponentProps) {
                             name="nome"
                             onChange={handleChange}
                             value={formData.nome}
-                            placeholder="Macarrão"
                             label='Nome'
                             required
                         />
@@ -84,7 +115,6 @@ export default function ModalCadastroProduto({ open, close }: ComponentProps) {
                             name="descricao"
                             onChange={handleChange}
                             value={formData.descricao}
-                            placeholder="Macarrão espaguete nro. 8"
                             label='Descrição'
                             required
                         />
@@ -97,7 +127,6 @@ export default function ModalCadastroProduto({ open, close }: ComponentProps) {
                             name="codigoDeBarras"
                             onChange={handleChange}
                             value={formData.codigoDeBarras}
-                            placeholder="Código"
                             label='Código de barras'
                             required
                         />

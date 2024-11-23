@@ -2,7 +2,7 @@
 
 import { Box, Grid } from '@mantine/core';
 import { Button } from '../../../components/general';
-import { IconFileInfo, IconPlus, IconUserFilled } from "@tabler/icons-react";
+import { IconFileInfo, IconFilePencil, IconPlus, IconUserFilled } from "@tabler/icons-react";
 import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
@@ -20,9 +20,10 @@ function DetalhesEscola(props: any) {
     const [searchField, setSearchField] = useState("");
     const [selectedEscola, setSelectedEscola] = useState({});
     const [filteredEscolas, setFilteredEscolas] = useState([]);
-
-    const [opened, { open, close }] = useDisclosure(false);
-    const [openedCadastro, handlers] = useDisclosure(false);
+    const [isEdicao, setEdicao] = useState(false);
+    
+    const [opened, handlers] = useDisclosure(false);
+    const [openedCadastro, { open, close }] = useDisclosure(false);
     const [openedResponsavel, setOpenedResponsavel] = useState(false);
 
     const updateTitle = useUpdateTitle();
@@ -77,7 +78,16 @@ function DetalhesEscola(props: any) {
             logradouro: escola?.endereco?.logradouro,
             bairro: escola?.endereco?.bairro,
             numero: escola?.endereco?.numero,
-            cep: escola?.endereco?.cep
+            cep: escola?.endereco?.cep,
+            endNumero: escola?.endereco?.numero,
+            endComplemento: escola?.endereco?.complemento,
+            cnpj: escola?.cnpj,
+            razaoSocial: escola?.razaoSocial,
+            horarioAbertura: escola?.horarioAbertura,
+            horarioFechamento: escola?.horarioFechamento,
+            nivelEnsino: escola?.nivelEnsino?.id,
+            cidade: escola?.endereco?.cidade?.id,
+            tipoPessoa: escola?.tipoPessoa
         }));
 
         setEscolas(escolasList);
@@ -95,14 +105,25 @@ function DetalhesEscola(props: any) {
         }
     };
 
-    const openInfoModal = (clickedItemId: string) => {
-        setSelectedEscola(escolas.find((element) => element?.id === clickedItemId));
-        open();
-    };
-
     const fetchRepresentantes = async (clickedItemId: any) => {
         // const representantes = await UserService.fetchAllUsersResponsaveis();
         setOpenedResponsavel(true)
+    };
+
+    const openInfoModal = (clickedItemId: string) => {
+        setSelectedEscola(escolas.find((element) => element?.id === clickedItemId));
+        handlers?.open();
+    };
+
+    const openCreateModal = () => {
+        setEdicao(false);
+        open();
+    };
+
+    const openEditModal = (clickedItemId: string) => {
+        setSelectedEscola(escolas.find((element) => element?.id === clickedItemId));
+        setEdicao(true);
+        open();
     };
 
     const tableHeaders = ["CÓD", "NOME DA ESCOLA", 'REPRESENTANTE', 'STATUS'];
@@ -110,22 +131,27 @@ function DetalhesEscola(props: any) {
     const additionalButtons = [
         {
             id: 1,
-            icon: <IconFileInfo />,
-            onClick: (element: any) => openInfoModal(element?.id)
+            icon: <IconUserFilled />,
+            onClick: (element: any) => fetchRepresentantes(element?.id)
         },
         {
             id: 2,
-            icon: <IconUserFilled />,
-            onClick: (element: any) => fetchRepresentantes(element?.id)
+            icon: <IconFilePencil />,
+            onClick: (element: any) => openEditModal(element?.id)
+        },
+        {
+            id: 3,
+            icon: <IconFileInfo />,
+            onClick: (element: any) => openInfoModal(element?.id)
         },
     ];
 
 
     return (
         <>
-            <ModalDetalheEscola open={opened} close={close} escola={selectedEscola} />
+            <ModalDetalheEscola open={opened} close={handlers?.close} escola={selectedEscola} />
 
-            <ModalCadastroEscola open={openedCadastro} close={handlers?.close} />
+            <ModalCadastroEscola open={openedCadastro} close={close} isEdicao={isEdicao} editEscola={selectedEscola} fetchEscolas={fetchEscolas}/>
 
             <ModalSelecaoRepresentante open={openedResponsavel} close={() => setOpenedResponsavel(false)} />
 
@@ -145,7 +171,7 @@ function DetalhesEscola(props: any) {
                         />
                     </Grid.Col>
                     <Grid.Col span={3} offset={3} display='flex' style={{ justifyContent: 'flex-end' }}>
-                        <Button h='4rem' w='4rem' variant="gradient" onClick={handlers?.open} style={{ borderRadius: '10rem' }}>
+                        <Button h='4rem' w='4rem' variant="gradient" onClick={openCreateModal} style={{ borderRadius: '10rem' }}>
                             <IconPlus size={23} />
                         </Button>
                     </Grid.Col>

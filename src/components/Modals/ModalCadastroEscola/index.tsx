@@ -1,7 +1,5 @@
-import { Box, Button, Divider, Grid, Input, Modal, NumberInput, Select, Text, TextInput } from "@mantine/core";
+import { Button, Divider, Grid, Input, Modal, Text, TextInput } from "@mantine/core";
 import { useEffect, useState } from "react";
-import DataTable from "../../general/DataTable";
-import ClearableInput from "../../general/ClearableInput";
 import { TimeInput } from "@mantine/dates";
 import { IconChevronDown } from "@tabler/icons-react";
 import UserService from "../../../services/user";
@@ -11,27 +9,41 @@ import { notifications } from "@mantine/notifications";
 interface ComponentProps {
     open?: boolean;
     close?: () => void;
+    fetchEscolas?: () => void;
+    isEdicao?: boolean;
+    editEscola?: {
+        ativo?: boolean;
+        bairro?: string;
+        cep?: string;
+        cie?: string;
+        ddd?: string;
+        email?: string;
+        id?: number;
+        logradouro?: string;
+        nome?: string;
+        numero?: string;
+        telefone?: string;
+        cnpj?: string;
+        razaoSocial?: string;
+        horarioAbertura?: string;
+        horarioFechamento?: string;
+        nivelEnsino?: string;
+        cidade?: number;
+        tipoPessoa?: string;
+        endNumero?: string;
+        endComplemento?: string,
+    };
 }
 
-export default function ModalCadastroEscola({ open, close }: ComponentProps) {
-    useEffect(() => {
-        const loggedUser = JSON.parse(localStorage.getItem('@namedida:user'));
-        setFormData(prevState => ({
-            ...prevState,
-            departamento: loggedUser?.departamento.id ? loggedUser?.departamento.id : undefined
-        }));
-        fetchCidades();
-    }, [open]);
-
-    const [cidades, setCidades] = useState([]);
-
-    const [formData, setFormData] = useState({
+export default function ModalCadastroEscola({ open, close, isEdicao, editEscola, fetchEscolas }: ComponentProps) {
+    const originalFormData = {
         nome: '',
         razaoSocial: '',
+        cie: '',
         cnpj: '',
         email: '',
         tipoPessoa: 'PJ',
-        departamento: undefined,
+        departamento: 0,
         horarioAbertura: '06:00',
         horarioFechamento: '18:00',
         nivelEnsino: 'INFANTIL',
@@ -47,7 +59,51 @@ export default function ModalCadastroEscola({ open, close }: ComponentProps) {
             cep: '',
             cidade: undefined
         },
-    });
+    };
+
+    const [cidades, setCidades] = useState([]);
+
+    const [formData, setFormData] = useState(originalFormData);
+
+    useEffect(() => {
+        const loggedUser = JSON.parse(localStorage.getItem('@namedida:user'));
+        if (isEdicao) {
+            prepararEdicao();
+        } else {
+            setFormData(originalFormData);
+        }
+        setFormData(prevState => ({
+            ...prevState,
+            departamento: loggedUser?.departamento ? loggedUser?.departamento?.id : 0
+        }));
+        fetchCidades();
+    }, [open]);
+
+    const prepararEdicao = () => {
+        setFormData(prevState => ({
+            ...prevState,
+            nome: isEdicao ? editEscola?.nome : '',
+            razaoSocial: isEdicao ? editEscola?.razaoSocial : '',
+            cnpj: isEdicao ? editEscola?.cnpj : '',
+            email: isEdicao ? editEscola?.email : '',
+            tipoPessoa: isEdicao ? editEscola?.tipoPessoa : 'PJ',
+            horarioAbertura: isEdicao ? editEscola?.horarioAbertura?.substring(0, 5) : '06:00',
+            horarioFechamento: isEdicao ? editEscola?.horarioFechamento?.substring(0, 5) : '18:00',
+            nivelEnsino: isEdicao ? editEscola?.nivelEnsino : '',
+            telefoneForm: {
+                numero: isEdicao ? editEscola?.numero : '',
+                ddd: isEdicao ? editEscola?.ddd : ''
+            },
+            enderecoForm: {
+                numero: isEdicao ? editEscola?.endNumero : '',
+                logradouro: isEdicao ? editEscola?.logradouro : '',
+                complemento: isEdicao ? editEscola?.endComplemento : '',
+                bairro: isEdicao ? editEscola?.bairro : '',
+                cep: isEdicao ? editEscola?.cep : '',
+                cidade: isEdicao ? editEscola?.cidade : undefined
+            },
+        }));
+    }
 
     const handleChange = (e) => {
         const { name, value } = e?.target;
@@ -81,16 +137,23 @@ export default function ModalCadastroEscola({ open, close }: ComponentProps) {
 
     const saveEscola = async () => {
         try {
-            await EscolaService.createEscola(formData);
+            if (isEdicao) {
+                await EscolaService.saveEscola(editEscola?.id, formData);
+            } else {
+                await EscolaService.createEscola(formData);
+            }
             notifications.show({ title: 'Salvo com sucesso', message: '', position: 'bottom-left', color: 'blue' });
             setTimeout(() => {
-                window.location.reload();
-            }, 2500);
+                fetchEscolas();
+            }, 750);
+            close();
         } catch (error) {
             console.log(error);
             notifications.show({ title: 'Erro ao salvar', message: error?.message, position: 'bottom-left', color: 'red' });
         }
     };
+
+    console.log(formData);
 
     return (
         <>
@@ -192,6 +255,7 @@ export default function ModalCadastroEscola({ open, close }: ComponentProps) {
                             <Input
                                 component="select"
                                 name="nivelEnsino"
+                                value={formData.nivelEnsino}
                                 onChange={handleChange}
                                 rightSection={<IconChevronDown size={14} stroke={1.5} />}
                                 pointer
@@ -268,6 +332,7 @@ export default function ModalCadastroEscola({ open, close }: ComponentProps) {
                             <Input
                                 component="select"
                                 name="enderecoForm.cidade"
+                                value={formData?.enderecoForm?.cidade}
                                 onChange={handleChange}
                                 rightSection={<IconChevronDown size={14} stroke={1.5} />}
                                 pointer
@@ -299,7 +364,7 @@ export default function ModalCadastroEscola({ open, close }: ComponentProps) {
                     fs='22rem'
                     onClick={saveEscola}
                 >
-                    CADASTRAR
+                    SALVAR
                 </Button>
             </Modal>
         </>

@@ -36,15 +36,15 @@ export default function ModalCadastroTurma({ open, close, isEdicao, editTurma, f
 
     useEffect(() => {
         const loggedUser = JSON.parse(localStorage.getItem('@namedida:user'));
-        setFormData(prevState => ({
-            ...prevState,
-            unidadeEnsino: loggedUser?.unidadeEnsino.id ? loggedUser?.unidadeEnsino.id : 0,
-        }));
         if (isEdicao) {
             prepararEdicao();
         } else {
             setFormData(originalFormData);
         }
+        setFormData(prevState => ({
+            ...prevState,
+            unidadeEnsino: loggedUser?.unidadeEnsino ? loggedUser?.unidadeEnsino?.id : 0,
+        }));
     }, [open]);
 
     const prepararEdicao = () => {

@@ -12,12 +12,14 @@ import ModalCadastroProduto from '../../../components/Modals/ModalCadastroProdut
 import ProdutoService from '../../../services/departamento/estoque/produto';
 import { notifications } from '@mantine/notifications';
 import ModalCadastroLote from '../../../components/Modals/ModalCadastroLote';
+import { IconFilePencil } from '@tabler/icons-react';
 
 function DepartamentoProdutos(props: any) {
     const [produtos, setProdutos] = useState([]);
     const [searchField, setSearchField] = useState("");
     const [selectedProduto, setSelectedProduto] = useState({});
     const [filteredProdutos, setFilteredProdutos] = useState([]);
+    const [isEdicao, setEdicao] = useState(false);
 
     const [openedProduto, { open, close }] = useDisclosure(false);
     const [openedLote, handlers] = useDisclosure(false);
@@ -59,9 +61,11 @@ function DepartamentoProdutos(props: any) {
         const produtosList = produtos?.content?.map(produto => ({
             id: produto?.id,
             nome: produto?.nome,
+            descricao: produto?.descricao,
             codigoDeBarras: produto?.codigoDeBarras,
             quantidadeEstoque: produto?.quantidadeEstoque,
-            ativo: produto?.enabled
+            ativo: produto?.enabled,
+            categoria: produto?.categoria?.id
         }));
 
         setProdutos(produtosList);
@@ -79,9 +83,28 @@ function DepartamentoProdutos(props: any) {
         }
     };
 
+    const openCreateModal = () => {
+        setEdicao(false);
+        open();
+    };
+
+    const openEditModal = (clickedItemId: string) => {
+        setSelectedProduto(produtos.find((element) => element?.id === clickedItemId));
+        setEdicao(true);
+        open();
+    };
+
+    const additionalButtons = [
+        {
+            id: 1,
+            icon: <IconFilePencil />,
+            onClick: (element: any) => openEditModal(element?.id)
+        },
+    ]
+
     return (
         <>
-            <ModalCadastroProduto open={openedProduto} close={close} />
+            <ModalCadastroProduto open={openedProduto} close={close} editProduto={selectedProduto} fetchProdutos={fetchProdutos} isEdicao={isEdicao}/>
 
             <ModalCadastroLote open={openedLote} close={handlers.close} />
 
@@ -105,7 +128,7 @@ function DepartamentoProdutos(props: any) {
                         span={2}
                         display='flex'
                         style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                        <Button variant="gradient" fullWidth onClick={open}>
+                        <Button variant="gradient" fullWidth onClick={openCreateModal}>
                             NOVO PRODUTO
                         </Button>
                     </Grid.Col>
@@ -121,9 +144,17 @@ function DepartamentoProdutos(props: any) {
 
                 <DataTable
                     headerElements={tableHeaders}
-                    elements={filteredProdutos} 
+                    elements={filteredProdutos?.map(produto => ({
+                        id: produto?.id,
+                        nome: produto?.nome,
+                        descricao: produto?.codigoDeBarras,
+                        quantidadeEstoque: produto?.quantidadeEstoque,
+                        ativo: produto?.ativo,
+                    }))}
                     activate
-                    toggleActivationFunction={toggleActivationFunction}/>
+                    toggleActivationFunction={toggleActivationFunction}
+                    additionalButtons={additionalButtons}
+                    />
 
             </Box>
         </>
