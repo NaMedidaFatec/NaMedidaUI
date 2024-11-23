@@ -153,8 +153,6 @@ export default function ModalCadastroEscola({ open, close, isEdicao, editEscola,
         }
     };
 
-    console.log(formData);
-
     return (
         <>
             <Modal

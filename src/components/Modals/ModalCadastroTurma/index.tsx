@@ -1,7 +1,5 @@
-import { Box, Button, Divider, Grid, Modal, NumberInput, Select, Text, TextInput } from "@mantine/core";
+import { Button, Divider, Grid, Modal, NumberInput, Text, TextInput } from "@mantine/core";
 import { useEffect, useState } from "react";
-import DataTable from "../../general/DataTable";
-import ClearableInput from "../../general/ClearableInput";
 import EscolaTurmaService from "../../../services/escola/turmas";
 import { notifications } from "@mantine/notifications";
 import DateInput from "../../general/DateInput";

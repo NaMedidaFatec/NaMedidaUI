@@ -70,7 +70,7 @@ function Pedido(props: any) {
 
   return (
     <>
-      <ModalDetalhePedido open={openedDetalhe} close={() => handlers?.close()} />
+      {/* <ModalDetalhePedido open={openedDetalhe} close={() => handlers?.close()} /> */}
 
       <ModalCadastroPedido open={openedCadastro} close={close} />
       <Box

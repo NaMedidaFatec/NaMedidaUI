@@ -80,7 +80,6 @@ export default function ModalCadastroProduto({ open, close, fetchProdutos, isEdi
             notifications.show({ title: 'Erro ao salvar', message: error?.message, position: 'bottom-left', color: 'red' });
         }
     };
-console.log(formData);
 
     return (
         <>

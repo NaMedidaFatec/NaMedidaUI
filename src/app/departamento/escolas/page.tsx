@@ -146,7 +146,6 @@ function DetalhesEscola(props: any) {
         },
     ];
 
-
     return (
         <>
             <ModalDetalheEscola open={opened} close={handlers?.close} escola={selectedEscola} />
@@ -182,7 +181,7 @@ function DetalhesEscola(props: any) {
                     elements={filteredEscolas?.map(escola => ({
                         id: escola?.id,
                         nome: escola?.nome,
-                        representante: escola?.representante,
+                        representante: escola?.representante || "N/A",
                         ativo: escola?.ativo,
                     }))}
                     additionalButtons={additionalButtons}
