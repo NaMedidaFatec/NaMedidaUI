@@ -13,7 +13,7 @@ import ClearableInput from "../../../components/general/ClearableInput";
 import DataTable from "../../../components/general/DataTable";
 import ModalDetalhePedido from "../../../components/Modals/ModalDetalhePedido";
 import { useDisclosure } from "@mantine/hooks";
-import ModalCadastroPedido from "../../../components/Modals/ModalCadastroPedido";
+import ModalCadastroPedido from "../../../components/Modals/ModalCadastroPedidoItens";
 import { notifications } from "@mantine/notifications";
 import RequisicaoService from "../../../services/general/requisicao";
 import classes from "./pedidos.module.css";

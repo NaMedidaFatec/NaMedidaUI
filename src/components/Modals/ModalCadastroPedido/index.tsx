@@ -1,28 +1,50 @@
-import { Badge, Box, Button, Divider, Group, Modal, Text } from "@mantine/core";
+import { Badge, Box, Button, Divider, Group, Modal, Text, TextInput } from "@mantine/core";
 import DataTable from "../../general/DataTable";
 import ClearableInput from "../../general/ClearableInput";
 import { useCounter } from "@mantine/hooks";
+import RequisicaoService from "../../../services/general/requisicao";
+import { useEffect, useState } from "react";
+import { notifications } from "@mantine/notifications";
+import ProdutoService from "../../../services/departamento/estoque/produto";
 
 interface ComponentProps {
     open?: boolean;
     close?: () => void;
+    fetchPedidos?: () => void;
 }
 
-export default function ModalCadastroPedido({ open, close }: ComponentProps) {
-    const tableHeaders = ["Código", "Produto", "Disponível", "Quantidade"];
+export default function ModalCadastroPedido({ open, close, fetchPedidos }: ComponentProps) {
+    const originalFormData = {
+        observacoes: '',
+        data: new Date,
+        finalizada: false,
+        unidadeEnsino: 0,
+        departamento: 1,
+    };
 
-    const elements = [
-        { id: 1, produto: 'Arroz', desc: 50, quantidade: 10 },
-        { id: 2, produto: 'Feijão', desc: 50, quantidade: 10 },
-        { id: 3, produto: 'Laranja', desc: 50, quantidade: 10 },
-        { id: 4, produto: 'Pão', desc: 50, quantidade: 10 },
-    ];
+    const [formData, setFormData] = useState(originalFormData);
 
-    const additionalButtons = [
-        { id: 1, icon: "SELECIONAR", onClick: () => 1 },
-    ];
+    useEffect(() => {
+        const loggedUser = JSON.parse(localStorage.getItem('@namedida:user'));
+        setFormData(prevState => ({
+            ...prevState,
+            unidadeEnsino: loggedUser?.unidadeEnsino ? loggedUser?.unidadeEnsino?.id : 0,
+        }));
+    }, [open]);
 
-    const [count, { increment, decrement }] = useCounter(3, { min: 0 });
+    const saveRequisicao = async () => {
+        try {
+            await RequisicaoService.createPedido(formData);
+            notifications.show({ title: 'Salvo com sucesso', message: '', position: 'bottom-left', color: 'blue' });
+            setTimeout(() => {
+                fetchPedidos();
+            }, 750);
+            close();
+        } catch (error) {
+            console.log(error);
+            notifications.show({ title: 'Erro ao salvar', message: error?.message, position: 'bottom-left', color: 'red' });
+        }
+    };
 
     return (
         <>
@@ -43,29 +65,18 @@ export default function ModalCadastroPedido({ open, close }: ComponentProps) {
                 <Divider size="xs" />
 
                 <Box my='md'>
-                    <ClearableInput placeholder="Pesquisar" label="Pesquisar" />
+                    <TextInput
+                        value={formData.observacoes}
+                        name="nome"
+                        onChange={(event) => setFormData({ ...formData, observacoes: event?.target?.value })}
+                        label='Observações deste pedido?'
+                        description="*NÃO OBRIGATÓRIO"
+                    />
                 </Box>
 
-                <Group wrap="nowrap" mt="md">
-                    <Badge>Arroz 10</Badge>
-                    <Badge>Feijão 1</Badge>
-                    <Badge>Laranja 7</Badge>
-                    <Badge>Pão 2</Badge>
-                </Group>
-
-                <DataTable
-                    headerElements={tableHeaders}
-                    elements={elements}
-                    stripped={false}
-                    withRowBorders
-                    withBgColor={false}
-                    withTableBorder
-                    additionalButtons={additionalButtons}
-                />
-
                 <Box mt='md' display="flex" style={{ justifyContent: "flex-end" }}>
-                    <Button size="md" variant="gradient">
-                        Finalizar Pedido
+                    <Button size="md" variant="gradient" onClick={saveRequisicao}>
+                        Criar Pedido
                     </Button>
                 </Box>
 

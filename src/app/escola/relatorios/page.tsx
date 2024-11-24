@@ -40,13 +40,7 @@ function Relatoriosrelatorio(props: any) {
     dataFinal: "2024-12-12",
   });
 
-  const tableHeaders = [
-    "Código",
-    "Status",
-    "Nome",
-    "Data de envio",
-    "Enviado Por",
-  ];
+    const tableHeaders = ["CÓD", "STATUS", "NOME", "DATA ENVIO", "ENVIADO POR"];
 
   const additionalButtons = [
     {

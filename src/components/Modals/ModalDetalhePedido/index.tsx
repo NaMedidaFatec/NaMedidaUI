@@ -8,22 +8,20 @@ import RequisicaoService from "../../../services/general/requisicao";
 interface ComponentProps {
     open?: boolean;
     close?: () => void;
-    pedido: any;
+    pedido?: any;
 }
 
 export default function ModalDetalhePedido({ open, close, pedido }: ComponentProps) {
     const [itens, setItens] = useState([]);
-    const [pedido2, setPedido] = useState({});
 
     useEffect(() => {
         console.log(pedido)
         if (pedido.id) {
-            // fetchPedido(pedido)
             fetchItens(pedido)
         }
     }, [pedido])
 
-    const tableHeaders = ["Código", "Produto", "Descrição", "Quantidade"];
+    const tableHeaders = ["CÓD", "PRODUTO", "DESC.", "QUANTIDADE"];
 
     const fetchItens = async ({ id }) => {
         try {
@@ -70,7 +68,7 @@ export default function ModalDetalhePedido({ open, close, pedido }: ComponentPro
                         Código:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        {pedido.id}
+                        {pedido?.id}
                     </Text>
                 </Box>
 
@@ -79,7 +77,7 @@ export default function ModalDetalhePedido({ open, close, pedido }: ComponentPro
                         Escola solicitante:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        {pedido.unidadeEnsino}
+                        {pedido?.unidadeEnsino}
                     </Text>
                 </Box>
 
@@ -88,7 +86,7 @@ export default function ModalDetalhePedido({ open, close, pedido }: ComponentPro
                         Representante:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        {pedido.unidadeEnsino}
+                        {pedido?.unidadeEnsino}
                     </Text>
                 </Box>
 
@@ -97,7 +95,7 @@ export default function ModalDetalhePedido({ open, close, pedido }: ComponentPro
                         Endereço escola:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        {pedido2.unidadeEnsinoEnderecoCompleto}
+                        {/* {pedido2.unidadeEnsinoEnderecoCompleto} */}
                     </Text>
                 </Box>
                 <Box display={'flex'} >
@@ -105,7 +103,7 @@ export default function ModalDetalhePedido({ open, close, pedido }: ComponentPro
                         Telefone contato:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                    {pedido2.unidadeEnsinoTelefoneCompleto}
+                    {/* {pedido2.unidadeEnsinoTelefoneCompleto} */}
                     </Text>
                 </Box>
 
@@ -114,7 +112,7 @@ export default function ModalDetalhePedido({ open, close, pedido }: ComponentPro
                         Data do pedido:
                     </Text>
                     <Text size="1.1rem" fw={200} mt={'1.5rem'}>
-                        {pedido.data}
+                        {pedido?.data}
                     </Text>
                 </Box>
 

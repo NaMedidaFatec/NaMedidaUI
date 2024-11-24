@@ -54,7 +54,7 @@ function DepartamentoProdutos(props: any) {
         );
     };
 
-    const tableHeaders = ["CÓDIGO", "PRODUTO", "COD. BARRAS", "QTD. ESTOQUE", "ATIVO?"];
+    const tableHeaders = ["CÓD", "PRODUTO", "COD. BARRAS", "QTD. ESTOQUE", "ATIVO?"];
 
     const fetchProdutos = async () => {
         const produtos = await ProdutoService.fetchAll();
