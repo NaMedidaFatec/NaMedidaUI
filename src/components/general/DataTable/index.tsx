@@ -37,6 +37,7 @@ interface MyComponentProps {
     withTableBorder?: boolean;
     toggleActivationFunction?: (element: any) => Promise<void>;
     additionalButtons?: Element[];
+    handleQuantidadeChange?: (id: any, newQuantidade: any) => void;
 }
 
 const DataTable: React.FC<MyComponentProps> = ({
@@ -52,6 +53,7 @@ const DataTable: React.FC<MyComponentProps> = ({
     withTableBorder = false,
     toggleActivationFunction = undefined,
     additionalButtons = [],
+    handleQuantidadeChange = undefined,
 }) => {
 
     const computedColorScheme = useComputedColorScheme("light", {
@@ -115,7 +117,12 @@ const DataTable: React.FC<MyComponentProps> = ({
                                         : String(element[key]);
                                 case "quantidade":
                                     return Number.isInteger(element[key])
-                                        ? <NumberInput maw={'65%'} placeholder="Quantidade" />
+                                        ? <NumberInput
+                                            maw={'65%'}
+                                            placeholder="Quantidade"
+                                            value={element[key]}
+                                            onChange={(value) => handleQuantidadeChange(element?.id, value)}
+                                        />
                                         : String(element[key]);
                                 default:
                                     return String(element[key] !== null ? element[key] : "N/A");

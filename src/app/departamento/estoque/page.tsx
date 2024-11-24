@@ -21,7 +21,7 @@ function DepartamentoEstoque(props: any) {
 
     const [opened, { open, close }] = useDisclosure(false);
 
-    const tableHeaders = ["CÓDIGO", "PRODUTO", "CATEGORIA", "EM ESTOQUE"];
+    const tableHeaders = ["CÓD", "PRODUTO", "CATEGORIA", "EM ESTOQUE"];
 
     const elements = [
         { id: 1, produto: 'Arroz', categoria: 'Grãos', estoque: 5 },

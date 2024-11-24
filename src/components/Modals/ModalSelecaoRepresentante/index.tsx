@@ -9,7 +9,7 @@ interface ComponentProps {
 }
 
 export default function ModalSelecaoRepresentante({ open, close }: ComponentProps) {
-    const tableHeaders = ["Código", "Produto", "Descrição", "Quantidade"];
+    const tableHeaders = ["CÓD", "PRODUTO", "DESC", "QUANTIDADE"];
 
     // useEffect(() => {
     //     setFormData(prevState => ({

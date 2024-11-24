@@ -27,7 +27,7 @@ function Relatoriosrelatorio(props: any) {
 
     const [filter, setFilter] = useState({ codigo: 1, dataInicial: '2024-01-01', dataFinal: '2024-12-12' });
 
-    const tableHeaders = ["Código", "Status", "Nome", "Data de envio", "Enviado Por"];
+    const tableHeaders = ["CÓD", "STATUS", "NOME", "DATA ENVIO", "ENVIADO POR"];
 
     const additionalButtons = [
         { id: 1, icon: <IconFileInfo />, onClick: () => 1 },

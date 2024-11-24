@@ -3,7 +3,7 @@ import api from "../../api";
 
 export default class RequisicaoService {
 
-    static createPedidos = async (pedido) => {
+    static createPedido = async (pedido) => {
         try {
             const { data } = await api.post(`/requisicao/save`, pedido)
             return data;
@@ -12,7 +12,7 @@ export default class RequisicaoService {
         }
     }
 
-    static savePedidos = async (pedidoId, pedido) => {
+    static savePedido = async (pedidoId, pedido) => {
         try {
             const { data } = await api.put(`/requisicao/${pedidoId}`, pedido)
             return data;

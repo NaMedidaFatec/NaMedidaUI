@@ -9,7 +9,7 @@ interface ComponentProps {
 }
 
 export default function ModalEntradaEstoque({ open, close }: ComponentProps) {
-    const tableHeaders = ["Código", "Produto", "Descrição", "Quantidade"];
+    const tableHeaders = ["CÓD", "PRODUTO", "DESC.", "QUANTIDADE"];
 
     const elements = [
         { id: 1, produto: 'Arroz', desc: 'SEILA', qtd: 10 },
