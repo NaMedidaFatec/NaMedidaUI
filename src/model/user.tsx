@@ -3,11 +3,12 @@ class User {
   username?: string;
   email: string;
   password: string;
+  nome: string;
   tipoUsuario: string;
   isAdmin?: boolean;
   departamento?: any;
 
-  constructor({ id = null, username = '', email = '', password = '', isAdmin = false, tipoUsuario = '', departamento = {} } = {}) {
+  constructor({ id = null, username = '', email = '', password = '', isAdmin = false, tipoUsuario = '', departamento = {}, nome = '' } = {}) {
     this.id = id;
     this.username = username;
     this.email = email;
@@ -15,6 +16,7 @@ class User {
     this.tipoUsuario = tipoUsuario;
     this.isAdmin = isAdmin;
     this.departamento = departamento;
+    this.nome = nome;
   }
 }
 

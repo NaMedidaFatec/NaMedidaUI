@@ -29,6 +29,15 @@ class UserService {
         }
     }
 
+    static fetchAllUsersDepartamento = async () => {
+        try {
+            const { data } = await api.get('/usuarioDepartamento')
+            return data;
+        } catch (e) {
+            throw new Error(e?.response?.data?.message);
+        }
+    }
+
     static fetchCidades = async () => {
         try {
             const { data } = await api.get('/cidades')

@@ -18,40 +18,12 @@ export default function ModalDetalhePedido({ open, close, pedido }: ComponentPro
     useEffect(() => {
         console.log(pedido)
         if (pedido.id) {
-            fetchPedido(pedido)
+            // fetchPedido(pedido)
             fetchItens(pedido)
         }
     }, [pedido])
 
     const tableHeaders = ["Código", "Produto", "Descrição", "Quantidade"];
-
-    const fetchPedido = async ({ id }) => {
-        try {
-            let requisicao = await RequisicaoService.fetchPedido(id);
-            requisicao =  requisicao?.content || {};
-            await setPedido({
-                ...requisicao,
-                id: requisicao?.id,
-                unidadeEnsino: requisicao?.unidadeEnsino?.nome,
-                data: requisicao?.data,
-                enabled: requisicao?.enabled ? "Em aberto" : "Finalizado",
-                observacoes: requisicao?.observacoes,
-                solicitante: requisicao?.solicitante?.nome,
-                observacoesCancelamento: requisicao?.observacoesCancelamento,
-                unidadeEnsinoEnderecoCompleto: requisicao?.unidadeEnsino?.endereco?.enderecoCompleto,
-                unidadeEnsinoTelefoneCompleto: requisicao?.unidadeEnsino?.telefone?.telefoneCompleto,
-              });
-              console.log(pedido2)
-        } catch (error) {
-            console.log(error?.message);
-            notifications.show({
-            title: "Erro ao buscar as informações do pedido!",
-            message: error?.message,
-            position: "bottom-left",
-            color: "red",
-            });
-        }
-    };
 
     const fetchItens = async ({ id }) => {
         try {

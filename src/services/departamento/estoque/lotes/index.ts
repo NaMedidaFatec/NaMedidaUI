@@ -57,4 +57,12 @@ export default class LoteService {
         }
     }
 
+    static fetchAllByProduto = async (id) => {
+        try{
+           const { data } = await api.get(`/lotes/produto/${id}`)
+           return data;
+        }catch(e){
+            throw new Error(e?.response?.data?.message);
+        }  
+    }
 }

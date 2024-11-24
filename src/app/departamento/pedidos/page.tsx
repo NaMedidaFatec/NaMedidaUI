@@ -18,11 +18,18 @@ import { notifications } from "@mantine/notifications";
 import RequisicaoService from "../../../services/general/requisicao";
 import classes from "./pedidos.module.css";
 import cx from "clsx";
+import ModalSeparacaoPedido from "../../../components/Modals/ModalSeparacaoPedido";
+import RequisicaoSeparacaoService from "../../../services/general/requisicaoseparacao";
 
 function PedidoRetorno(props: any) {
   const updateTitle = useUpdateTitle();
   const [pedido, setPedido] = useState({});
+  const [pedidoSeparacao, setPedidoSeparacao] = useState({});
+
   const [pedidos, setPedidos] = useState([]);
+  const [pedidosList, setPedidosList] = useState([]);
+  const [isEdicao, setEdicao] = useState(false);
+  const [selectedSeparacao, setSelectedSeparacao] = useState({});
 
   useEffect(() => {
     updateTitle("Pedidos Pendente");
@@ -37,12 +44,14 @@ function PedidoRetorno(props: any) {
         id: requisicao?.id,
         unidadeEnsino: requisicao?.unidadeEnsino?.nome,
         data: requisicao?.data,
-        enabled: requisicao?.enabled ? "Em aberto" : "Finalizado",
+        // enabled: requisicao?.enabled ? "Em aberto" : "Finalizado",
         observacoes: requisicao?.observacoes,
         solicitante: requisicao?.solicitante?.nome,
         observacoesCancelamento: requisicao?.observacoesCancelamento,
       }));
-      setPedidos(pedidosList);
+
+      setPedidos(pedidos?.content);
+      setPedidosList(pedidosList);
     } catch (error) {
       console.log(error?.message);
       notifications.show({
@@ -54,13 +63,14 @@ function PedidoRetorno(props: any) {
     }
   };
 
-  const [openedDetalhe, handlers] = useDisclosure(false);
+  const [openedDetalhe, handlersDetalhes] = useDisclosure(false);
+  const [openedSeparacao, handlersSeparacao] = useDisclosure(false);
   const [openedCadastro, { open, close }] = useDisclosure(false);
   const tableHeaders = [
     "Código",
     "Solicitante",
     "Data do pedido",
-    "Situação",
+    // "Situação",
     "Observação",
     "Responsável pela Solicitação",
     "Observações cancelamento",
@@ -68,30 +78,63 @@ function PedidoRetorno(props: any) {
 
   const additionalButtons = [
     { id: 1, icon: (
-      <Grid className={cx(classes.icon)}>
+      <Grid className={cx(classes.iconDetails)}>
         <IconFileInfo  className={cx(classes.txtDetails)}/>
-        <Text className={cx(classes.txtDetails)}>Detalhes</Text>
+        <Text className={cx(classes.txtDetails)}></Text>
       </Grid>)
-      , onClick: pedido => {
-        handlers?.open()
-        setPedido(pedido)
-      } },
+      , onClick: (element: any) => openDetalhesModal(element?.id)
+      },
 
     { id: 1, icon: (
       <Grid className={cx(classes.icon)}>
-      <IconFileInfo className={cx(classes.txtCancel)}/>
-      <Text className={cx(classes.txtCancel)}>Cancelar</Text>
+      <IconFileInfo className={cx(classes.txtSeparacao)}/>
+      <Text className={cx(classes.txtSeparacao)}>Separação</Text>
     </Grid>)
-    , onClick: () => handlers?.open() },
+      , onClick: (element: any) => openSeparacaoModal(element?.id)
+     },
   ];  
+
+  const openDetalhesModal = (clickedItemId: string) => {
+    setPedido(pedidos.find((element) => element?.id === clickedItemId));
+    handlersDetalhes?.open()
+  };
+
+  const openSeparacaoModal = async (clickedItemId: string) => {
+    const pedido = (pedidos.find((element) => element?.id === clickedItemId));
+    setPedido(pedido)
+    await fetchPedidoSeparacao(pedido)
+    
+    handlersSeparacao?.open()
+  };
+
+
+  const fetchPedidoSeparacao = async ({ id }) => {
+      const pedidoSeparacao = await RequisicaoSeparacaoService.fetchSeparacao(id);
+      if (pedidoSeparacao?.content) {
+        setEdicao(true)
+      }
+      await setPedidoSeparacao(pedidoSeparacao?.content);
+  };
+
 
   return (
     <>
       <ModalDetalhePedido
         pedido={pedido}
         open={openedDetalhe}
-        close={() => handlers?.close()}
+        close={() => handlersDetalhes?.close()}
       />
+
+      <ModalSeparacaoPedido
+        isEdicao={isEdicao} 
+        editSeparacao={selectedSeparacao} 
+        fetchPedidos={fetchPedidos}
+        pedido={pedido}
+        pedidoSeparacao={pedidoSeparacao}
+        open={openedSeparacao}
+        close={() => handlersSeparacao?.close()}
+      />
+      
 
       <Box w="100%" h="89vh" display="flex" style={{ flexDirection: "column" }}>
         <Box h="auto" mt="1rem">
@@ -99,7 +142,7 @@ function PedidoRetorno(props: any) {
         </Box>
         <DataTable
           headerElements={tableHeaders}
-          elements={pedidos}
+          elements={pedidosList}
           additionalButtons={additionalButtons}
         />
       </Box>
