@@ -1,5 +1,4 @@
 import {
-    Box,
   Button,
   Divider,
   Grid,
@@ -9,10 +8,8 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { TimeInput } from "@mantine/dates";
 import { IconChevronDown, IconFileInfo } from "@tabler/icons-react";
 import UserService from "../../../services/user";
-import EscolaService from "../../../services/escola";
 import { notifications } from "@mantine/notifications";
 import { useAuth } from "../../../hooks/useAuth";
 import DateInput from "../../general/DateInput";
@@ -30,6 +27,7 @@ interface ComponentProps {
   pedidoSeparacao: any;
   close?: () => void;
   fetchPedidos?: () => void;
+  fetchSeparacao?: () => void;
   isEdicao?: boolean;
   editSeparacao?: {
     id?: number;
@@ -47,15 +45,15 @@ export default function ModalSeparacaoPedido({
   isEdicao,
   pedido,
   pedidoSeparacao,
-  editSeparacao,
+  fetchSeparacao,
   fetchPedidos,
 }: ComponentProps) {
   const { user } = useAuth();
   const tableHeaders = [
     "Código",
     "Produto",
-    "Quantidade Entregue",
-    "Quantidade Pendente",
+    "Qtd. Entregue",
+    "Qtd. Pendente",
   ];
 
   const [itens, setItens] = useState([]);
@@ -75,10 +73,8 @@ export default function ModalSeparacaoPedido({
 
   const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState(originalFormData);
-
   const [pedidoItem, setPedidoItem] = useState({});
   const [openedItems, handlersItems] = useDisclosure(false);
-  const [selectedSeparacaoItem, setSelectedSeparacaoItem] = useState({});
 
   const additionalButtons = [
     {
@@ -98,6 +94,12 @@ export default function ModalSeparacaoPedido({
     handlersItems?.open();
     close();
   };
+
+  const fetchPedidoItem = async (clickedItemId: string) => {
+    const item = itens.find((element) => element?.id === clickedItemId)
+    await setPedidoItem(item);
+    return item;
+  }
 
   useEffect(() => {
     if (pedido?.id) {
@@ -138,7 +140,6 @@ export default function ModalSeparacaoPedido({
 
     if (name.startsWith("telefoneForm") || name.startsWith("enderecoForm")) {
       const [section, field] = name.split(".");
-      console.log(section, field);
 
       setFormData((prevState) => ({
         ...prevState,
@@ -175,10 +176,9 @@ export default function ModalSeparacaoPedido({
         quantidadePendente: requisicaoitem?.quantidadePendente,
       }));
 
-      setItens(itens?.content);
-      setItensList(itensList);
+      await setItens(itens?.content);
+      await setItensList(itensList);
     } catch (error) {
-      console.log(error?.message);
       notifications.show({
         title: "Erro ao buscar os itens!",
         message: error?.message,
@@ -191,25 +191,23 @@ export default function ModalSeparacaoPedido({
   const savePedidoSeparacao = async () => {
     try {
       if (isEdicao) {
-        await RequisicaoSeparacaoService.updateSeparacao(
-          formData?.id,
-          formData
-        );
+        await RequisicaoSeparacaoService.updateSeparacao(formData?.id, formData)
       } else {
-        await RequisicaoSeparacaoService.createSeparacao(formData);
+        await RequisicaoSeparacaoService.createSeparacao(formData)
       }
+      
       notifications.show({
         title: "Salvo com sucesso",
         message: "",
         position: "bottom-left",
         color: "blue",
       });
-      setTimeout(() => {
-        fetchPedidos();
+      setTimeout(async () => {
+        await close();
+        await fetchPedidos();
+        fetchSeparacao();
       }, 750);
-      close();
     } catch (error) {
-      console.log(error);
       notifications.show({
         title: "Erro ao salvar",
         message: error?.message,
@@ -222,8 +220,12 @@ export default function ModalSeparacaoPedido({
   return (
     <>
       <ModalSeparacaoItemPedido
-        fetchItens={fetchItens}
+        fetchItens={() => fetchItens(pedido)}
         pedidoItem={pedidoItem}
+        fetchPedidoItem={() => fetchPedidoItem(pedidoItem?.id)}
+        onPedidoItem={(pedidoItem) => {
+          setPedidoItem(pedidoItem)
+        }}
         open={openedItems}
         close={() => handlersItems?.close()}
       />
@@ -244,7 +246,6 @@ export default function ModalSeparacaoPedido({
         }
       >
         <Divider size="xs" />
-
         <Grid mt="md">
           <Grid.Col span={6}>
             <TextInput
@@ -276,7 +277,6 @@ export default function ModalSeparacaoPedido({
               disabled
             />
           </Grid.Col>
-
           <Grid.Col span={12}>
             <TextInput
               name="observacoes"
@@ -287,7 +287,6 @@ export default function ModalSeparacaoPedido({
               multiple
             />
           </Grid.Col>
-
           <Grid.Col span={12}>
             <Input.Wrapper label={"Separado Por"} required>
               <Input
@@ -308,7 +307,6 @@ export default function ModalSeparacaoPedido({
             </Input.Wrapper>
           </Grid.Col>
         </Grid>
-
         <Button
           mt="md"
           fullWidth
@@ -318,7 +316,6 @@ export default function ModalSeparacaoPedido({
         >
           SALVAR
         </Button>
-
         {formData?.id && (
           <>
             <Divider size="xs" my="md" />

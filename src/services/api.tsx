@@ -1,3 +1,4 @@
+import { notifications } from "@mantine/notifications";
 import axios from "axios";
 import qs from "qs";
 
@@ -26,5 +27,29 @@ api.interceptors.request.use(
       return Promise.reject(error);
   }
 );
+
+api.interceptors.response.use((res) => {
+  const errors = res.data?.errors;
+  validateResponse(errors)
+  return res
+},(err) => {
+  const errors = err.response.data?.errors;
+  validateResponse(errors)
+  return err
+} );
+
+
+const validateResponse = (errors) => {
+  if (errors.length) {
+    const message = errors.map(i => typeof i === 'string' ? i : i.message).join(', ')
+    notifications.show({
+      title: "Erro ao salvar",
+      message,
+      position: "bottom-left",
+      color: "red",
+    });
+    throw new Error(message)
+  }
+}
 
 export default api;

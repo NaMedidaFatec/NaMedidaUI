@@ -7,20 +7,13 @@ import {
   Modal,
   NumberInput,
   Text,
-  TextInput,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { TimeInput } from "@mantine/dates";
-import { IconChevronDown, IconFileInfo } from "@tabler/icons-react";
+import { IconChevronDown, IconFilePencil, IconTrash } from "@tabler/icons-react";
 import UserService from "../../../services/user";
-import EscolaService from "../../../services/escola";
 import { notifications } from "@mantine/notifications";
 import { useAuth } from "../../../hooks/useAuth";
-import DateInput from "../../general/DateInput";
-import RequisicaoItemService from "../../../services/general/requisicaoitem";
 import DataTable from "../../general/DataTable";
-import classes from "./separacaoitempedido.module.css";
-import cx from "clsx";
 import RequisicaoSeparacaoItemService from "../../../services/general/requisicaoseparacaoitem";
 import LoteService from "../../../services/departamento/estoque/lotes";
 
@@ -29,88 +22,108 @@ interface ComponentProps {
   pedidoItem?: any;
   close?: () => void;
   fetchItens?: () => void;
-  isEdicao?: boolean;
-  editSeparacaoItem?: {
-    id?: number;
-    requisicao?: number;
-    data?: string;
-    observacoes?: string;
-    ativo?: boolean;
-    finalizada?: boolean;
-  };
+  onPedidoItem?: (pedido: any) => void;
+  fetchPedidoItem?: () => void;
 }
 
 export default function ModalSeparacaoItemPedido({
   open,
   close,
-  isEdicao,
   pedidoItem,
-  editSeparacaoItem,
   fetchItens,
+  onPedidoItem,
 }: ComponentProps) {
   const { user } = useAuth();
   const tableHeaders = [
-    "Código",
-    "Quantidade",
+    "Cód",
+    "Qtd",
     "Lote",
-    "Data de Vencimento",
-    "Data de Fabricação",
+    "Dt. Vencimento",
+    "Dt. Fabricação",
   ];
 
-  const [itens, setItens] = useState([]);
-
   const originalFormData = {
-    lote: undefined,
+    estoque: undefined,
+    quantidadeEntregue: undefined,
+    requisicaoItem: pedidoItem?.id,
   };
 
-  const [users, setUsers] = useState([]);
+  const [isEdicao, setIsEdicao] = useState(false);
   const [lotes, setLotes] = useState([]);
   const [lotesList, setLotesList] = useState([]);
-  const [produtos, setProdutos] = useState([]);
-  const [produto, setProduto] = useState({});
   const [lote, setLote] = useState({});
-
   const [formData, setFormData] = useState(originalFormData);
-
   const [separacaoItens, setSeparacaoItens] = useState([]);
   const [separacaoItensList, setSeparacaoItensList] = useState([]);
 
   const additionalButtons = [
     {
-      id: 1,
-      icon: (
-        <Grid className={cx(classes.icon)}>
-          <IconFileInfo className={cx(classes.txtSeparacao)} />
-          <Text className={cx(classes.txtSeparacao)}>Itens</Text>
-        </Grid>
-      ),
-      onClick: (element: any) => openDetalhesModal(element?.id),
+        id: 1,
+        icon: <IconFilePencil />,
+        onClick: (element: any) => {
+          const value = separacaoItens.find((i) => i?.id === element?.id);
+          setIsEdicao(true)
+          setLote(lotes.find((element) => element?.id === value?.estoque?.id));
+          setFormData({
+            ...value,
+            estoque: value?.estoque?.id,
+            requisicaoItem: {
+              id: pedidoItem?.id,
+              quantidade: pedidoItem.quantidade,
+              quantidadePendente: pedidoItem.quantidadePendente,
+              quantidadeEntregue: pedidoItem.quantidadeEntregue,
+              estoque: value?.estoque?.id,
+            },
+          })
+        }
+    },
+    {
+      id: 2,
+      icon: <IconTrash color="red" />,
+      onClick: async (element: any) => handleDeleteSeparacao(element),
     },
   ];
 
-  const openDetalhesModal = (clickedItemId: string) => {
-    // setPedido(pedidos.find((element) => element?.id === clickedItemId));
-    // handlersDetalhes?.open()
-  };
+  const handleDeleteSeparacao = async (element) => {
+    try {
+      const pedidoSeparacaoItem =  await RequisicaoSeparacaoItemService.deleteRequisicaoSeparacaoItem(element?.id)
+      const pedidoItem = pedidoSeparacaoItem?.content?.requisicaoItem;
+      await fetchItens();
+      await fetchSeparacaoItens(pedidoItem);
+      fetchLotes(pedidoItem?.produto?.id);
+      onPedidoItem(pedidoItem)
 
-  const openSeparacaoModal = (clickedItemId: string) => {
-    // setPedido(pedidos.find((element) => element?.id === clickedItemId));
-    // handlersSeparacao?.open()
-  };
+      setIsEdicao(false);
+      setFormData({
+        estoque: "",
+        quantidadeEntregue: pedidoItem?.quantidadePendente,
+        requisicaoItem: pedidoItem?.id,
+      })
+      
+      notifications.show({
+        title: "Item excluído com sucesso",
+        message: "",
+        position: "bottom-left",
+        color: "blue",
+      });
+    } catch (error) {
+      notifications.show({
+        title: "Erro ao remover o separação!",
+        message: error?.message,
+        position: "bottom-left",
+        color: "red",
+      });
+    } finally {
+    
+    }
+  }
 
   useEffect(() => {
-    // if (isEdicao) {
-    //   prepararEdicao();
-    // } else {
-    //   setFormData(originalFormData);
-    // }
-    // fetchUsersDepartamento();
     if (pedidoItem?.id) {
       fetchSeparacaoItens(pedidoItem);
-      fetchLotes(pedidoItem);
+      fetchLotes(pedidoItem?.produto?.id);
     }
   }, [open]);
-
 
   useEffect(() => {
     if (isEdicao) {
@@ -120,14 +133,9 @@ export default function ModalSeparacaoItemPedido({
     }
     setFormData((prevState) => ({
       ...prevState,
-      // data: new Date().toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' }),
-      // requisicao: pedidoitem?.id,
-      // departamento: user?.departamento ? user?.departamento?.id : undefined,
-      // separadoPor: user?.id,
+      requisicaoItem: pedidoItem?.id,
     }));
-    fetchUsersDepartamento();
   }, [open]);
-
 
   const fetchSeparacaoItens = async ({ id }) => {
     try {
@@ -135,13 +143,13 @@ export default function ModalSeparacaoItemPedido({
       const separacaoItensList = separacaoItens?.content?.map((requisicaoseparacaoitem) => ({
         id: requisicaoseparacaoitem?.id,
         quantidadeEntregue: requisicaoseparacaoitem?.quantidadeEntregue,
-        lote: requisicaoseparacaoitem?.estoque?.nome,
+        estoque: requisicaoseparacaoitem?.estoque?.nome,
         dataValidade: requisicaoseparacaoitem?.estoque?.dataValidade,
         dataFabricacao: requisicaoseparacaoitem?.estoque?.dataFabricacao,
       }));
 
-      setSeparacaoItens(separacaoItens?.content);
-      setSeparacaoItensList(separacaoItensList);
+      await setSeparacaoItens(separacaoItens?.content);
+      await setSeparacaoItensList(separacaoItensList);
     } catch (error) {
       console.log(error?.message);
       notifications.show({
@@ -153,14 +161,13 @@ export default function ModalSeparacaoItemPedido({
     }
   };
 
-
-  const fetchLotes = async ({ id }) => {
+  const fetchLotes = async (id) => {
     try {
-      const lotes = await LoteService.fetchAllByProduto(id);
+      const lotes = await LoteService.fetchAllByProdutoWithEstoqueLivre(id);
       const lotesList = lotes?.content?.map((lote) => ({
         id: lote?.id,
         quantidade: lote?.quantidade,
-        lote: lote?.nome,
+        estoque: lote?.nome,
         dataValidade: lote?.dataValidade,
         dataFabricacao: lote?.dataFabricacao,
       }));
@@ -170,7 +177,7 @@ export default function ModalSeparacaoItemPedido({
     } catch (error) {
       console.log(error?.message);
       notifications.show({
-        title: "Erro ao buscar as separações do item!",
+        title: "Erro ao buscar os lotes do produto!",
         message: error?.message,
         position: "bottom-left",
         color: "red",
@@ -178,33 +185,10 @@ export default function ModalSeparacaoItemPedido({
     }
   };
 
-
   const prepararEdicao = () => {
     setFormData((prevState) => ({
       ...prevState,
-      requisicao: pedidoitem?.id,
-      separadoPor: user?.id,
-      // data: new Date().toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }),
-      // nome: isEdicao ? editSeparacaoItem?.nome : '',
-      // razaoSocial: isEdicao ? editSeparacaoItem?.razaoSocial : '',
-      // cnpj: isEdicao ? editSeparacaoItem?.cnpj : '',
-      // email: isEdicao ? editSeparacaoItem?.email : '',
-      // tipoPessoa: isEdicao ? editSeparacaoItem?.tipoPessoa : 'PJ',
-      // horarioAbertura: isEdicao ? editSeparacaoItem?.horarioAbertura?.substring(0, 5) : '06:00',
-      // horarioFechamento: isEdicao ? editSeparacaoItem?.horarioFechamento?.substring(0, 5) : '18:00',
-      // nivelEnsino: isEdicao ? editSeparacaoItem?.nivelEnsino : '',
-      // telefoneForm: {
-      //     numero: isEdicao ? editSeparacaoItem?.numero : '',
-      //     ddd: isEdicao ? editSeparacaoItem?.ddd : ''
-      // },
-      // enderecoForm: {
-      //     numero: isEdicao ? editSeparacaoItem?.endNumero : '',
-      //     logradouro: isEdicao ? editSeparacaoItem?.logradouro : '',
-      //     complemento: isEdicao ? editSeparacaoItem?.endComplemento : '',
-      //     bairro: isEdicao ? editSeparacaoItem?.bairro : '',
-      //     cep: isEdicao ? editSeparacaoItem?.cep : '',
-      //     cidade: isEdicao ? editSeparacaoItem?.cidade : undefined
-      // },
+      requisicaoItem: pedidoItem?.id,
     }));
   };
 
@@ -230,57 +214,33 @@ export default function ModalSeparacaoItemPedido({
     }
   };
 
-  const fetchUsersDepartamento = async () => {
-    const users = await UserService.fetchAllUsersDepartamento();
-    setUsers(
-      users?.content?.map((user) => ({
-        id: user.id,
-        nome: user.nome,
-      }))
-    );
-  };
-
-  // const fetchItens = async ({ id }) => {
-  //     try {
-  //         const itens = await RequisicaoItemService.fetchAllByRequisicao(id);
-  //         const itensList = itens?.content?.map((requisicaoitem) => ({
-  //             id: requisicaoitem?.id,
-  //             produto: requisicaoitem?.produto?.nome,
-  //             quantidadeEntregue: requisicaoitem?.quantidadeEntregue,
-  //             quantidadePendente: requisicaoitem?.quantidadePendente,
-  //         }));
-
-  //         setItens(itensList);
-  //     } catch (error) {
-  //         console.log(error?.message);
-  //         notifications.show({
-  //         title: "Erro ao buscar os itens!",
-  //         message: error?.message,
-  //         position: "bottom-left",
-  //         color: "red",
-  //         });
-  //     }
-  //     };
-
   const saveSeparacaoItem = async () => {
     try {
-      if (isEdicao) {
-        await RequisicaoSeparacaoItemService.saveRequisicaoSeparacaoItem(formData?.id, formData);
-      } else {
-        await RequisicaoSeparacaoItemService.createRequisicaoSeparacaoItem(formData);
-      }
+      const pedidoSeparacao = isEdicao ? await RequisicaoSeparacaoItemService.saveRequisicaoSeparacaoItem(formData?.id, {
+        ...formData,
+        estoque: { id: formData?.estoque, quantidade: lote?.quantidade }
+      }) : await RequisicaoSeparacaoItemService.createRequisicaoSeparacaoItem(formData);
+
+      const pedidoItem = isEdicao ? pedidoSeparacao?.content?.requisicaoItem : pedidoSeparacao?.data.requisicaoItem;
+      await fetchItens();
+      await fetchSeparacaoItens(pedidoItem);
+      fetchLotes(pedidoItem?.produto?.id);
+      onPedidoItem(pedidoItem)
+      setIsEdicao(false);
+      setFormData({
+        estoque: "",
+        quantidadeEntregue: pedidoItem?.quantidadePendente,
+        requisicaoItem: pedidoItem?.id,
+      })
+
       notifications.show({
         title: "Salvo com sucesso",
         message: "",
         position: "bottom-left",
         color: "blue",
       });
-      setTimeout(() => {
-        fetchItens();
-      }, 750);
-      close();
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
       notifications.show({
         title: "Erro ao salvar",
         message: error?.message,
@@ -355,8 +315,8 @@ export default function ModalSeparacaoItemPedido({
             <Input.Wrapper label={"Lote"} required>
               <Input
                 component="select"
-                name="separadoPor"
-                value={formData?.lote}
+                name="estoque"
+                value={formData?.estoque}
                 onChange={e => {
                     const {  value } = e?.target;
                     setLote(lotes.find((element) => element?.id === value));
@@ -367,7 +327,6 @@ export default function ModalSeparacaoItemPedido({
               >
                 <option
                     defaultValue=""
-                    disabled
                     selected
                 >
                     Selecione o lote
@@ -383,7 +342,7 @@ export default function ModalSeparacaoItemPedido({
 
           <Grid.Col span={12}>
             <NumberInput
-              max={pedidoItem?.quantidadePendente}
+              // max={pedidoItem?.quantidadePendente}
               name="quantidadeEntregue"
               onChange={(quantidadeEntregue) =>
                 setFormData({
@@ -405,7 +364,7 @@ export default function ModalSeparacaoItemPedido({
           fs="22rem"
           onClick={saveSeparacaoItem}
         >
-          ADICIONAR
+          {isEdicao ? 'EDITAR' : 'ADICIONAR'}
         </Button>
 
         <Divider size="xs" my="md" />

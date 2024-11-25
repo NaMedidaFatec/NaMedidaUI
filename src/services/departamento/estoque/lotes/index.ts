@@ -1,6 +1,5 @@
 import api from '../../../api';
 
-
 export default class LoteService {
 
     static createLote = async (lote) => {
@@ -57,9 +56,9 @@ export default class LoteService {
         }
     }
 
-    static fetchAllByProduto = async (id) => {
+    static fetchAllByProdutoWithEstoqueLivre = async (id) => {
         try{
-           const { data } = await api.get(`/lotes/produto/${id}`)
+           const { data } = await api.get(`/lotes/livre/produto/${id}`)
            return data;
         }catch(e){
             throw new Error(e?.response?.data?.message);

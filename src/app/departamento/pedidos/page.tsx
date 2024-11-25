@@ -5,15 +5,13 @@ import { withFormik } from "formik";
 import UserValidation from "../../../validations/login";
 import { User } from "../../../model/user";
 import UserService from "../../../services/user";
-import { Button } from "../../../components/general";
 import { useUpdateTitle } from "../../../hooks/useTitle";
-import { Grid, keys, Box, GridCol, Text } from "@mantine/core";
-import { IconFileInfo, IconPlus } from "@tabler/icons-react";
+import { Grid, Box, Text } from "@mantine/core";
+import { IconFileInfo } from "@tabler/icons-react";
 import ClearableInput from "../../../components/general/ClearableInput";
 import DataTable from "../../../components/general/DataTable";
 import ModalDetalhePedido from "../../../components/Modals/ModalDetalhePedido";
 import { useDisclosure } from "@mantine/hooks";
-import ModalCadastroPedido from "../../../components/Modals/ModalCadastroPedidoItens";
 import { notifications } from "@mantine/notifications";
 import RequisicaoService from "../../../services/general/requisicao";
 import classes from "./pedidos.module.css";
@@ -29,7 +27,7 @@ function PedidoRetorno(props: any) {
   const [pedidos, setPedidos] = useState([]);
   const [pedidosList, setPedidosList] = useState([]);
   const [isEdicao, setEdicao] = useState(false);
-  const [selectedSeparacao, setSelectedSeparacao] = useState({});
+  const [selectedSeparacao] = useState({});
 
   useEffect(() => {
     updateTitle("Pedidos Pendente");
@@ -40,11 +38,9 @@ function PedidoRetorno(props: any) {
     try {
       const pedidos = await RequisicaoService.fetchAll();
       const pedidosList = pedidos?.content?.map((requisicao) => ({
-        //  ...requisicao,
         id: requisicao?.id,
         unidadeEnsino: requisicao?.unidadeEnsino?.nome,
         data: requisicao?.data,
-        // enabled: requisicao?.enabled ? "Em aberto" : "Finalizado",
         observacoes: requisicao?.observacoes,
         solicitante: requisicao?.solicitante?.nome,
         observacoesCancelamento: requisicao?.observacoesCancelamento,
@@ -65,12 +61,10 @@ function PedidoRetorno(props: any) {
 
   const [openedDetalhe, handlersDetalhes] = useDisclosure(false);
   const [openedSeparacao, handlersSeparacao] = useDisclosure(false);
-  const [openedCadastro, { open, close }] = useDisclosure(false);
   const tableHeaders = [
     "Código",
     "Solicitante",
     "Data do pedido",
-    // "Situação",
     "Observação",
     "Responsável pela Solicitação",
     "Observações cancelamento",
@@ -103,19 +97,16 @@ function PedidoRetorno(props: any) {
     const pedido = (pedidos.find((element) => element?.id === clickedItemId));
     setPedido(pedido)
     await fetchPedidoSeparacao(pedido)
-    
     handlersSeparacao?.open()
   };
-
 
   const fetchPedidoSeparacao = async ({ id }) => {
       const pedidoSeparacao = await RequisicaoSeparacaoService.fetchSeparacao(id);
       if (pedidoSeparacao?.content) {
-        setEdicao(true)
+        await setEdicao(true)
       }
       await setPedidoSeparacao(pedidoSeparacao?.content);
   };
-
 
   return (
     <>
@@ -127,14 +118,14 @@ function PedidoRetorno(props: any) {
 
       <ModalSeparacaoPedido
         isEdicao={isEdicao} 
-        editSeparacao={selectedSeparacao} 
+        editSeparacao={selectedSeparacao}
+        fetchSeparacao={() => openSeparacaoModal(pedido?.id)}
         fetchPedidos={fetchPedidos}
         pedido={pedido}
         pedidoSeparacao={pedidoSeparacao}
         open={openedSeparacao}
         close={() => handlersSeparacao?.close()}
       />
-      
 
       <Box w="100%" h="89vh" display="flex" style={{ flexDirection: "column" }}>
         <Box h="auto" mt="1rem">

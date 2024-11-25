@@ -13,9 +13,8 @@ interface ComponentProps {
 
 export default function ModalDetalhePedido({ open, close, pedido }: ComponentProps) {
     const [itens, setItens] = useState([]);
-
+    console.log(pedido)
     useEffect(() => {
-        console.log(pedido)
         if (pedido.id) {
             fetchItens(pedido)
         }
