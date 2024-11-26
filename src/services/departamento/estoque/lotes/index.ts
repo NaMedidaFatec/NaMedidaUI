@@ -20,22 +20,32 @@ export default class LoteService {
         }
     }
 
-    static fetchLote = async (id) => {
-        try{
-           const { data } = await api.get(`/lotes/${id}`)
-           return data;
-        }catch(e){
+
+    static adicionarAoEstoque = async (loteId, quantidade) => {
+        try {
+            const { data } = await api.put(`/lotes/entradaItens/${loteId}/${quantidade}`)
+            return data;
+        } catch (e) {
             throw new Error(e?.response?.data?.message);
-        }  
+        }
+    }
+
+    static fetchLote = async (id) => {
+        try {
+            const { data } = await api.get(`/lotes/${id}`)
+            return data;
+        } catch (e) {
+            throw new Error(e?.response?.data?.message);
+        }
     }
 
     static fetchAll = async () => {
-        try{
-           const { data } = await api.get(`/lotes`)
-           return data;
-        }catch(e){
+        try {
+            const { data } = await api.get(`/lotes`)
+            return data;
+        } catch (e) {
             throw new Error(e?.response?.data?.message);
-        }  
+        }
     }
 
     static deleteLote = async (id) => {
@@ -57,11 +67,11 @@ export default class LoteService {
     }
 
     static fetchAllByProdutoWithEstoqueLivre = async (id) => {
-        try{
-           const { data } = await api.get(`/lotes/livre/produto/${id}`)
-           return data;
-        }catch(e){
+        try {
+            const { data } = await api.get(`/lotes/livre/produto/${id}`)
+            return data;
+        } catch (e) {
             throw new Error(e?.response?.data?.message);
-        }  
+        }
     }
 }

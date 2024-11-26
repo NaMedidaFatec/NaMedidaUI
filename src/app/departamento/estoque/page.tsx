@@ -36,7 +36,7 @@ function DepartamentoEstoque(props: any) {
 
     return (
         <>
-            <ModalEntradaEstoque open={opened} close={close} />
+            <ModalEntradaEstoque open={opened} close={close} fetchLotes={() => 1}/>
             <Box
                 w='100%'
                 h="89vh"
