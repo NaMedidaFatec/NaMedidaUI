@@ -16,6 +16,7 @@ import UserService from "../../services/user";
 import moment from "moment";
 import { notifications } from "@mantine/notifications";
 import EscolaService from "../../services/escola";
+import { IconChevronDown } from "@tabler/icons-react";
 
 function Login(props) {
   const { errors, values, handleChange, handleSubmit, handleBlur, status } =
@@ -35,17 +36,17 @@ function Login(props) {
     email: "",
     username: "",
     password: "",
-    setor: undefined,
-    cargo: undefined,
-    registro: undefined,
-    unidadeEnsino: undefined,
+    setor: "",
+    cargo: "",
+    registro: "",
+    unidadeEnsino: 0,
     enderecoForm: {
       numero: "",
       logradouro: "",
       complemento: "",
       bairro: "",
       cep: "",
-      cidade: undefined
+      cidade: 0
     },
     telefoneForm: {
       numero: "",
@@ -104,7 +105,7 @@ function Login(props) {
         window.location.reload();
       }, 2000);
     } catch (error) {
-      console.error(error);
+      console.log(error);
       notifications.show({ title: 'Erro no registro!', message: error?.message, position: 'bottom-left', color: 'red' })
     }
   };
@@ -408,6 +409,44 @@ function Login(props) {
               onBlur={handleBlur}
               required
             />
+
+            <Container display="flex" px={0} style={{ gap: "1rem" }}>
+              <Input
+                name="registroSetor"
+                value={registerFields?.setor}
+                onChange={(event) => setRegisterFields({
+                  ...registerFields,
+                  setor: event.target.value
+                })}
+                label="Setor"
+                placeholder="Setor"
+                onBlur={handleBlur}
+                validate={errors.registroSetor}
+                required
+                type={undefined}
+                sufixComponent={undefined}
+                style={{ width: "50%" }}
+              />
+
+              <Select
+                name="registroCargo"
+                label="Cargo"
+                placeholder="Cargo"
+                onChange={(value) => setRegisterFields({
+                  ...registerFields,
+                  cargo: value
+                })}
+                onBlur={handleBlur}
+                required
+                style={{ width: "50%" }}
+                data={[
+                  { value: "DIRETORIA", label: "Diretoria" },
+                  { value: "COORDENAÇÃO", label: "Coordenação" },
+                  { value: "PROFESSOR", label: "Professor" },
+                  { value: "OUTROS", label: "Outros" },]}
+              >
+              </Select>
+            </Container>
 
             <Input
               name="registroRua"

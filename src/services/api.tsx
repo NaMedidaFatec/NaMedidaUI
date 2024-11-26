@@ -15,16 +15,16 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-      const accessToken = localStorage.getItem('@namedida:accessToken');
-      
-      if (accessToken) {
-          config.headers.Authorization = `Bearer ${accessToken}`;
-      }
-      
-      return config;
+    const accessToken = localStorage.getItem('@namedida:accessToken');
+
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    return config;
   },
   (error) => {
-      return Promise.reject(error);
+    return Promise.reject(error);
   }
 );
 
@@ -32,15 +32,15 @@ api.interceptors.response.use((res) => {
   const errors = res.data?.errors;
   validateResponse(errors)
   return res
-},(err) => {
+}, (err) => {
   const errors = err.response.data?.errors;
   validateResponse(errors)
   return err
-} );
+});
 
 
 const validateResponse = (errors) => {
-  if (errors.length) {
+  if (errors?.length) {
     const message = errors.map(i => typeof i === 'string' ? i : i.message).join(', ')
     notifications.show({
       title: "Erro ao salvar",

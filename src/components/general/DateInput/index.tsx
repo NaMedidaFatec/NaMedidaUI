@@ -20,12 +20,17 @@ export default function DateInput({ required, name, label, description, placehol
 
     const formatarData = (input: string) => {
         if (input) {
-            const dateParts = input.split("-"); // Separa a string pelo "-"
+            let dateParts = input.split("-"); // Separa a string pelo "-"
+            let formattedInput = ""
 
             if (dateParts.length === 3) {
                 // formata a data no formato dd/mm/yyyy
-                const formattedInput = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+                formattedInput = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
                 setFormattedDate(formattedInput);
+            } else {
+                dateParts = input.split("/");
+                formattedInput = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+                setValue(formattedInput);
             }
         }
     };

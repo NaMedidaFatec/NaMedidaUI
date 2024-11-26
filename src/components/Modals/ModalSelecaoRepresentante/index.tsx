@@ -19,6 +19,18 @@ export default function ModalSelecaoRepresentante({ open, close }: ComponentProp
     //     fetchCidades();
     // }, [open]);
 
+    // useEffect(() => {
+    //     if (isEdicao) {
+    //         prepararEdicao();
+    //     } else {
+    //         setFormData(originalFormData);
+    //     }
+    //     setFormData(prevState => ({
+    //         ...prevState,
+    //         departamento: user?.departamento ? user?.departamento?.id : undefined,
+    //     }));
+    //     // fetchCidades();
+    // }, [open]);
 
     return (
         <>

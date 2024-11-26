@@ -21,7 +21,7 @@ import RequisicaoSeparacaoService from "../../../services/general/requisicaosepa
 
 function PedidoRetorno(props: any) {
   const updateTitle = useUpdateTitle();
-  const [pedido, setPedido] = useState({});
+  const [pedido, setPedido] = useState({ id: '' });
   const [pedidoSeparacao, setPedidoSeparacao] = useState({});
 
   const [pedidos, setPedidos] = useState([]);
@@ -62,27 +62,26 @@ function PedidoRetorno(props: any) {
   const [openedDetalhe, handlersDetalhes] = useDisclosure(false);
   const [openedSeparacao, handlersSeparacao] = useDisclosure(false);
   const tableHeaders = [
-    "Código",
-    "Solicitante",
-    "Data do pedido",
-    "Observação",
-    "Responsável pela Solicitação",
-    "Observações cancelamento",
+    "CÓD",
+    "SOLICITANTE",
+    "DATA DO PEDIDO",
+    "OBS.",
+    "RESPONSÁVEL PELA SOLICITAÇÃO",
+    "OBS. CANCELAMENTO",
   ];
 
   const additionalButtons = [
-    { id: 1, icon: (
-      <Grid className={cx(classes.iconDetails)}>
-        <IconFileInfo  className={cx(classes.txtDetails)}/>
-        <Text className={cx(classes.txtDetails)}></Text>
-      </Grid>)
-      , onClick: (element: any) => openDetalhesModal(element?.id)
-      },
+    // { id: 1, icon: (
+    //   <Grid className={cx(classes.iconDetails)}>
+    //     <IconFileInfo  className={cx(classes.txtDetails)}/>
+    //     <Text className={cx(classes.txtDetails)}></Text>
+    //   </Grid>)
+    //   , onClick: (element: any) => openDetalhesModal(element?.id)
+    //   },
 
     { id: 1, icon: (
       <Grid className={cx(classes.icon)}>
-      <IconFileInfo className={cx(classes.txtSeparacao)}/>
-      <Text className={cx(classes.txtSeparacao)}>Separação</Text>
+      <Text className={cx(classes.txtSeparacao)}> SEPARAR</Text>
     </Grid>)
       , onClick: (element: any) => openSeparacaoModal(element?.id)
      },
@@ -110,11 +109,11 @@ function PedidoRetorno(props: any) {
 
   return (
     <>
-      <ModalDetalhePedido
+      {/* <ModalDetalhePedido
         pedido={pedido}
         open={openedDetalhe}
         close={() => handlersDetalhes?.close()}
-      />
+      /> */}
 
       <ModalSeparacaoPedido
         isEdicao={isEdicao} 
