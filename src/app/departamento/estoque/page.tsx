@@ -7,9 +7,12 @@ import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
 import { useUpdateTitle } from '../../../hooks/useTitle';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import ModalEntradaEstoque from '../../../components/Modals/ModalEntradaEstoque';
 import { useDisclosure } from '@mantine/hooks';
+import ModalCadastroLote from '../../../components/Modals/ModalCadastroLote';
+import LoteService from '../../../services/departamento/estoque/lotes';
+import { notifications } from '@mantine/notifications';
 
 function DepartamentoEstoque(props: any) {
 
@@ -17,26 +20,38 @@ function DepartamentoEstoque(props: any) {
 
     useEffect(() => {
         updateTitle('Estoque')
+        fetchLotes();
     }, [])
 
+    const [openedLote, handlers] = useDisclosure(false);
+
     const [opened, { open, close }] = useDisclosure(false);
+    const [lotes, setLotes] = useState([]);
 
-    const tableHeaders = ["CÓD", "PRODUTO", "CATEGORIA", "EM ESTOQUE"];
+    const fetchLotes = async () => {
+        try {
+            const listaLotes = await LoteService.fetchAll();
+            setLotes(listaLotes?.content?.map((lote) => ({
+                id: lote?.id,
+                nome: lote?.nome,
+                dataFabricacao: lote?.dataFabricacao,
+                dataValidade: lote?.dataValidade,
+                qtdDisponivel: lote?.quantidade,
+            })));
+        } catch (error) {
+            console.error(error?.message);
+            notifications.show({ title: 'Erro ao buscar lotes!', message: error?.message, position: 'bottom-left', color: 'red' })
+        }
+    }
 
-    const elements = [
-        { id: 1, produto: 'Arroz', categoria: 'Grãos', estoque: 5 },
-        { id: 2, produto: 'Feijão', categoria: "Grãos", estoque: 6 },
-        { id: 3, produto: 'Banana', categoria: "Frutas", estoque: 200 },
-        { id: 4, produto: 'Laranja', categoria: "Frutas", estoque: 600 },
-    ];
-
-    const additionalButtons = [
-        { id: 1, icon: <IconFileInfo />, onClick: () => 1 },
-    ];
+    const tableHeaders = ["CÓD", "NOME LOTE", "DATA FABRICAÇÃO", "DATA VALIDADE", "QTD. DISPONÍVEL"];
 
     return (
         <>
-            <ModalEntradaEstoque open={opened} close={close} fetchLotes={() => 1}/>
+            <ModalCadastroLote open={openedLote} close={handlers.close} fetchLotes={fetchLotes}/>
+
+            <ModalEntradaEstoque open={opened} close={close} fetchLotes={fetchLotes} />
+
             <Box
                 w='100%'
                 h="89vh"
@@ -45,23 +60,28 @@ function DepartamentoEstoque(props: any) {
 
 
                 <Grid h='auto' mt='1rem'>
-                    <Grid.Col span={5}>
+                    <Grid.Col span={8}>
                         <ClearableInput placeholder="Pesquisar" label='Pesquisar' />
                     </Grid.Col>
-                    <Grid.Col span={3}>
-                        <Select
-                            placeholder="Categoria" label='Categoria'
-                            data={['React', 'Angular', 'Vue', 'Svelte']}
-                        />
+                    <Grid.Col
+                        span={2}
+                        display='flex'
+                        style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                        <Button variant="gradient" fullWidth onClick={handlers?.open}>
+                            NOVO LOTE
+                        </Button>
                     </Grid.Col>
-                    <Grid.Col span={4} display='flex' style={{ justifyContent: 'flex-end' }}>
-                        <Button h='4rem' w='4rem' variant="gradient" onClick={open} style={{ borderRadius: '10rem' }}>
-                            <IconPackageImport size={23} />
+                    <Grid.Col
+                        span={2}
+                        display='flex'
+                        style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                        <Button variant="gradient" fullWidth onClick={open}>
+                            ENTRADA EM LOTE
                         </Button>
                     </Grid.Col>
                 </Grid>
 
-                <DataTable headerElements={tableHeaders} elements={elements} />
+                <DataTable headerElements={tableHeaders} elements={lotes} />
 
             </Box>
         </>

@@ -12,7 +12,7 @@ import ModalCadastroProduto from '../../../components/Modals/ModalCadastroProdut
 import ProdutoService from '../../../services/departamento/estoque/produto';
 import { notifications } from '@mantine/notifications';
 import ModalCadastroLote from '../../../components/Modals/ModalCadastroLote';
-import { IconFilePencil } from '@tabler/icons-react';
+import { IconFilePencil, IconPlus } from '@tabler/icons-react';
 
 function DepartamentoProdutos(props: any) {
     const [produtos, setProdutos] = useState([]);
@@ -22,7 +22,6 @@ function DepartamentoProdutos(props: any) {
     const [isEdicao, setEdicao] = useState(false);
 
     const [openedProduto, { open, close }] = useDisclosure(false);
-    const [openedLote, handlers] = useDisclosure(false);
 
     const updateTitle = useUpdateTitle();
 
@@ -106,8 +105,6 @@ function DepartamentoProdutos(props: any) {
         <>
             <ModalCadastroProduto open={openedProduto} close={close} editProduto={selectedProduto} fetchProdutos={fetchProdutos} isEdicao={isEdicao}/>
 
-            <ModalCadastroLote open={openedLote} close={handlers.close} />
-
             <Box
                 w='100%'
                 h="89vh"
@@ -116,7 +113,7 @@ function DepartamentoProdutos(props: any) {
 
 
                 <Grid h='auto' mt='1rem'>
-                    <Grid.Col span={8}>
+                    <Grid.Col span={6}>
                         <ClearableInput
                             placeholder="Pesquisar"
                             label='Pesquisar'
@@ -124,20 +121,9 @@ function DepartamentoProdutos(props: any) {
                             setValue={setSearchField}
                         />
                     </Grid.Col>
-                    <Grid.Col
-                        span={2}
-                        display='flex'
-                        style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                        <Button variant="gradient" fullWidth onClick={openCreateModal}>
-                            NOVO PRODUTO
-                        </Button>
-                    </Grid.Col>
-                    <Grid.Col
-                        span={2}
-                        display='flex'
-                        style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                        <Button variant="gradient" fullWidth onClick={handlers?.open}>
-                            NOVO LOTE
+                    <Grid.Col span={3} offset={3} display='flex' style={{ justifyContent: 'flex-end' }}>
+                        <Button h='4rem' w='4rem' variant="gradient" onClick={openCreateModal} style={{ borderRadius: '10rem' }}>
+                            <IconPlus size={23} />
                         </Button>
                     </Grid.Col>
                 </Grid>
