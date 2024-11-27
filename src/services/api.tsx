@@ -35,12 +35,12 @@ api.interceptors.response.use((res) => {
 }, (err) => {
   const errors = err.response.data?.errors;
   validateResponse(errors)
-  return err
+  return Promise.reject(err);
 });
 
 
 const validateResponse = (errors) => {
-  if (errors?.length) {
+  if (!!errors && errors?.length) {
     const message = errors.map(i => typeof i === 'string' ? i : i.message).join(', ')
     notifications.show({
       title: "Erro ao salvar",
