@@ -2,7 +2,7 @@
 
 import { Box, Select, Grid } from '@mantine/core';
 import { Button } from '../../../components/general';
-import { IconFileInfo, IconPackageImport } from "@tabler/icons-react";
+import { IconFileInfo, IconFilePencil, IconPackageImport } from "@tabler/icons-react";
 import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
@@ -23,10 +23,11 @@ function DepartamentoEstoque(props: any) {
         fetchLotes();
     }, [])
 
-    const [openedLote, handlers] = useDisclosure(false);
-
-    const [opened, { open, close }] = useDisclosure(false);
     const [lotes, setLotes] = useState([]);
+
+    const [openedLote, handlers] = useDisclosure(false);
+    const [opened, { open, close }] = useDisclosure(false);
+
 
     const fetchLotes = async () => {
         try {
@@ -36,7 +37,8 @@ function DepartamentoEstoque(props: any) {
                 nome: lote?.nome,
                 dataFabricacao: lote?.dataFabricacao,
                 dataValidade: lote?.dataValidade,
-                qtdDisponivel: lote?.quantidade,
+                quantidade: lote?.quantidade,
+                produto: lote?.produto?.id
             })));
         } catch (error) {
             console.error(error?.message);
@@ -48,7 +50,7 @@ function DepartamentoEstoque(props: any) {
 
     return (
         <>
-            <ModalCadastroLote open={openedLote} close={handlers.close} fetchLotes={fetchLotes}/>
+            <ModalCadastroLote open={openedLote} close={handlers.close} fetchLotes={fetchLotes} />
 
             <ModalEntradaEstoque open={opened} close={close} fetchLotes={fetchLotes} />
 
@@ -81,7 +83,16 @@ function DepartamentoEstoque(props: any) {
                     </Grid.Col>
                 </Grid>
 
-                <DataTable headerElements={tableHeaders} elements={lotes} />
+                <DataTable
+                    headerElements={tableHeaders}
+                    elements={lotes.map((lote) => ({
+                        id: lote?.id,
+                        nome: lote?.nome,
+                        dataFabricacao: lote?.dataFabricacao,
+                        dataValidade: lote?.dataValidade,
+                        quantidade: lote?.quantidade,
+                    }))}
+                />
 
             </Box>
         </>

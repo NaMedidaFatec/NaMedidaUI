@@ -35,6 +35,7 @@ interface MyComponentProps {
     highlightOnHover?: boolean;
     withBgColor?: boolean;
     withTableBorder?: boolean;
+    editableQuantity?: boolean;
     toggleActivationFunction?: (element: any) => Promise<void>;
     additionalButtons?: Element[];
     handleQuantidadeChange?: (id: any, newQuantidade: any) => void;
@@ -51,6 +52,7 @@ const DataTable: React.FC<MyComponentProps> = ({
     highlightOnHover = false,
     withBgColor = true,
     withTableBorder = false,
+    editableQuantity = false,
     toggleActivationFunction = undefined,
     additionalButtons = [],
     handleQuantidadeChange = undefined,
@@ -116,7 +118,7 @@ const DataTable: React.FC<MyComponentProps> = ({
                                         ? element[key] ? "ATIVO" : "INATIVO"
                                         : String(element[key]);
                                 case "quantidade":
-                                    return Number.isInteger(element[key])
+                                    return (Number.isInteger(element[key]) && editableQuantity)
                                         ? <NumberInput
                                             maw={'65%'}
                                             placeholder="Quantidade"

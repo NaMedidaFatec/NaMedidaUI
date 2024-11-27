@@ -56,6 +56,7 @@ export default function ModalCadastroLote({ open, close, fetchLotes }: Component
             setTimeout(() => {
                 fetchLotes();
             }, 750);
+            close();
         } catch (error) {
             console.log(error);
             notifications.show({ title: 'Erro ao salvar', message: error?.message, position: 'bottom-left', color: 'red' });
