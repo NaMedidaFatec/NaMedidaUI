@@ -61,18 +61,19 @@ export default function ModalSeparacaoItemPedido({
         id: 1,
         icon: <IconFilePencil />,
         onClick: (element: any) => {
-          const value = separacaoItens.find((i) => i?.id === element?.id);
+          const separacaoItem = separacaoItens.find((i) => i?.id === element?.id);
           setIsEdicao(true)
-          setLote(lotes.find((element) => element?.id === value?.estoque?.id));
+          setLote(lotes.find((element) => element?.id === separacaoItem?.estoque?.id));
           setFormData({
-            ...value,
-            estoque: value?.estoque?.id,
+            ...separacaoItem,
+            estoque: separacaoItem?.estoque?.id,
+            quantidadeAprovada: separacaoItem.quantidadeEntregue,
             requisicaoItem: {
               id: pedidoItem?.id,
               quantidade: pedidoItem.quantidade,
               quantidadePendente: pedidoItem.quantidadePendente,
               quantidadeEntregue: pedidoItem.quantidadeEntregue,
-              estoque: value?.estoque?.id,
+              estoque: separacaoItem?.estoque?.id,
             },
           })
         }
