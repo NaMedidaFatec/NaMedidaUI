@@ -60,6 +60,7 @@ function Application({ children, ...props }) {
   const [openedNotifications, handlers] = useDisclosure();
   const [opened, { toggle }] = useDisclosure();
   const currentTitle = useCurrentTitle();
+  
   return (
     <>
       <ModalNotifications open={openedNotifications} close={handlers.close} />
