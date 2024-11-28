@@ -2,35 +2,56 @@ import { Box, Button, Divider, Grid, Input, Modal, NumberInput, Select, Text } f
 import { useEffect, useState } from "react";
 import ClearableInput from "../../general/ClearableInput";
 import { IconChevronDown } from "@tabler/icons-react";
+import EscolaService from "../../../services/escola";
+import { notifications } from "@mantine/notifications";
 
 interface ComponentProps {
     open?: boolean;
     close?: () => void;
+    fetchEscolas?: () => void;
+    escolaSelecionada?: {
+        id?: number
+    }
 }
 
-export default function ModalSelecaoRepresentante({ open, close }: ComponentProps) {
-    const tableHeaders = ["CÓD", "PRODUTO", "DESC", "QUANTIDADE"];
+export default function ModalSelecaoRepresentante({ open, close, escolaSelecionada, fetchEscolas }: ComponentProps) {
+    const [representantes, setRepresentantes] = useState([]);
+    const [formData, setFormData] = useState({
+        escolaId: 0,
+        representanteId: 0,
+    });
 
-    // useEffect(() => {
-    //     setFormData(prevState => ({
-    //         ...prevState,
-    //         departamento: loggedUser?.departamento.id ? loggedUser?.departamento.id : undefined
-    //     }));
-    //     fetchCidades();
-    // }, [open]);
+    useEffect(() => {
+        setFormData((prevState) => ({
+            ...prevState,
+            escolaId: escolaSelecionada?.id || 0
+        }))
+        fetchRepresentantes();
+    }, [open]);
 
-    // useEffect(() => {
-    //     if (isEdicao) {
-    //         prepararEdicao();
-    //     } else {
-    //         setFormData(originalFormData);
-    //     }
-    //     setFormData(prevState => ({
-    //         ...prevState,
-    //         departamento: user?.departamento ? user?.departamento?.id : undefined,
-    //     }));
-    //     // fetchCidades();
-    // }, [open]);
+    const fetchRepresentantes = async () => {
+        try {
+            const listaRepresentantes = await EscolaService.fetchResponsaveis();
+            setRepresentantes(listaRepresentantes?.content);
+        } catch (error) {
+            console.error(error?.message)
+        }
+    }
+
+    const vincularResponsavel = async () => {
+        try {
+            const listaRepresentantes = await EscolaService.vincularResponsavel(formData.escolaId, formData.representanteId);
+            notifications.show({ title: 'Responsável vinculado com sucesso!', message: "", position: 'bottom-left' });
+            setTimeout(() => {
+                fetchEscolas();
+            }, 750)
+            close()
+        } catch (error) {
+            console.error(error?.message)
+            notifications.show({ title: 'Erro ao vincular responsavel!', message: error?.message, position: 'bottom-left', color: 'red' })
+        }
+    }
+    console.log(formData);
 
     return (
         <>
@@ -48,29 +69,29 @@ export default function ModalSelecaoRepresentante({ open, close }: ComponentProp
                         Selecionar representante
                     </Text>}
             >
-                <Divider size="xs" mb='sm'/>
+                <Divider size="xs" mb='sm' />
 
                 <Input.Wrapper label={"Representante"} required>
                     <Input
                         component="select"
-                        onChange={() => 1}
+                        onChange={(e) => setFormData({ ...formData, representanteId: Number(e?.target?.value) })}
                         rightSection={<IconChevronDown size={14} stroke={1.5} />}
                         pointer
                     >
                         <option
-                            defaultValue=""
+                            defaultValue={0}
                             selected
                         >
                             Selecione o representante
                         </option>
-                        {/* {tableHeaders.map(cidade => (
+                        {representantes?.map(representante => (
                             <option
-                                key={cidade?.id}
-                                value={Number(cidade?.id)}
+                                key={representante?.id}
+                                value={representante?.id}
                             >
-                                {cidade?.nome}
+                                {representante?.nome}
                             </option>
-                        ))} */}
+                        ))}
                     </Input>
                 </Input.Wrapper>
 
@@ -79,8 +100,9 @@ export default function ModalSelecaoRepresentante({ open, close }: ComponentProp
                     fullWidth
                     variant="gradient"
                     fs='22rem'
+                    onClick={vincularResponsavel}
                 >
-                    ENTRADA
+                    VINCULAR
                 </Button>
             </Modal>
         </>

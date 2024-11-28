@@ -106,7 +106,7 @@ function DetalhesEscola(props: any) {
     };
 
     const fetchRepresentantes = async (clickedItemId: any) => {
-        // const representantes = await UserService.fetchAllUsersResponsaveis();
+        setSelectedEscola(escolas.find((element) => element?.id === clickedItemId));
         setOpenedResponsavel(true)
     };
 
@@ -152,7 +152,7 @@ function DetalhesEscola(props: any) {
 
             <ModalCadastroEscola open={openedCadastro} close={close} isEdicao={isEdicao} editEscola={selectedEscola} fetchEscolas={fetchEscolas}/>
 
-            <ModalSelecaoRepresentante open={openedResponsavel} close={() => setOpenedResponsavel(false)} />
+            <ModalSelecaoRepresentante open={openedResponsavel} close={() => setOpenedResponsavel(false)} escolaSelecionada={selectedEscola} fetchEscolas={fetchEscolas}/>
 
             <Box
                 w='100%'

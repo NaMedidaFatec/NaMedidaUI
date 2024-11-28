@@ -68,7 +68,25 @@ class EscolaService {
 
     static saveResponsavel = async (nomeResponsavel) => {
         try {
-            const { data } = await api.post(`/unidadeensino/${nomeResponsavel}`)
+            const { data } = await api.post(`/responsavel/save/${nomeResponsavel}`)
+            return data;
+        } catch (e) {
+            throw new Error(e?.response?.data?.message);
+        }
+    }
+
+    static fetchResponsaveis = async () => {
+        try {
+            const { data } = await api.get(`/responsavel`)
+            return data;
+        } catch (e) {
+            throw new Error(e?.response?.data?.message);
+        }
+    }
+
+    static vincularResponsavel = async (escolaId, responsavelId) => {
+        try {
+            const { data } = await api.post(`/unidadeensino/vincular/${escolaId}/${responsavelId}`)
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);
