@@ -17,8 +17,8 @@ export default function ModalEntradaEstoque({ open, close, fetchLotes }: Compone
         dataFabricacao: '',
         dataValidade: '',
         quantidade: 0,
-        produto: 0,
-        loteId: 0,
+        produto: undefined,
+        loteId: undefined,
     };
 
     const [formData, setFormData] = useState(originalFormDataLote);
@@ -31,7 +31,9 @@ export default function ModalEntradaEstoque({ open, close, fetchLotes }: Compone
     }, [open]);
 
     useEffect(() => {
-        fetchLotesReferentesAoProduto(formData?.produto);
+        if (!!formData?.produto) {
+            fetchLotesReferentesAoProduto(formData?.produto);
+        }
     }, [formData?.produto]);
 
     const fetchProdutos = async () => {
