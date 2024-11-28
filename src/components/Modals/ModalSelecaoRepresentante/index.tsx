@@ -51,7 +51,6 @@ export default function ModalSelecaoRepresentante({ open, close, escolaSeleciona
             notifications.show({ title: 'Erro ao vincular responsavel!', message: error?.message, position: 'bottom-left', color: 'red' })
         }
     }
-    console.log(formData);
 
     return (
         <>

@@ -26,6 +26,8 @@ import { useDisclosure } from "@mantine/hooks";
 import Loading from "../components/loading";
 import { useCurrentTitle } from "../hooks/useCurrentTitle";
 import ModalNotifications from "../components/Notifications";
+import { notifications } from "@mantine/notifications";
+import NotificationService from "../services/general/notifications";
 
 function Application({ children, ...props }) {
   const router = useRouter();
@@ -57,13 +59,28 @@ function Application({ children, ...props }) {
     }
   }, [user, router]);
 
+  useEffect(() => {
+    fetchNotificacoes();
+  }, []);
+
   const [openedNotifications, handlers] = useDisclosure();
   const [opened, { toggle }] = useDisclosure();
   const currentTitle = useCurrentTitle();
-  
+
+  const [notificacoes, setNotificacoes] = useState([]);
+
+  const fetchNotificacoes = async () => {
+    try {
+      let notifications = await NotificationService.fetchAll();
+      setNotificacoes(notifications?.content.filter((notificacao) => notificacao?.visto === false));
+    } catch (error) {
+      console.error(error?.message)
+    }
+  }
+
   return (
     <>
-      <ModalNotifications open={openedNotifications} close={handlers.close} />
+      <ModalNotifications open={openedNotifications} close={handlers.close} notifications={notificacoes} fetchNotificacoes={fetchNotificacoes} />
 
       <Suspense fallback={<Loading />}>
         {loading ? (
@@ -117,14 +134,16 @@ function Application({ children, ...props }) {
                               stroke={1.5}
                             />
                           </ActionIcon>
-                          <Badge
-                            size="md"
-                            circle
-                            pos="absolute"
-                            style={{ top: '2.3rem', right: '7.7rem' }}
-                          >
-                            1
-                          </Badge>
+                          {notificacoes?.length > 0 && (
+                            <Badge
+                              size="md"
+                              circle
+                              pos="absolute"
+                              style={{ top: '2.3rem', right: '7.7rem' }}
+                            >
+                              {notificacoes.length}
+                            </Badge>
+                          )}
                         </Grid.Col>
                         <Grid.Col span={4} >
                           <ActionIcon

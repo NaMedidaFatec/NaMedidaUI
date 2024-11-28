@@ -1,29 +1,24 @@
 import { Drawer, Notification, Text } from '@mantine/core';
-import { useState } from 'react';
+import NotificationService from '../../services/general/notifications';
 
 interface ComponentProps {
     open?: boolean;
     close?: () => void;
+    fetchNotificacoes?: () => void;
+    notifications?: any[]
 }
 
-interface NotificationContent {
-    id: number;
-    mensagem: string;
-    horario: string;
-    visto: boolean;
-}
+export default function ModalNotifications({ open, close, notifications, fetchNotificacoes }: ComponentProps) {
 
-const initialContent: NotificationContent[] = [
-    { id: 1, mensagem: 'oi', horario: '08:00', visto: false },
-    { id: 2, mensagem: 'oi', horario: '08:00', visto: false },
-    { id: 3, mensagem: 'oi', horario: '08:00', visto: false }
-];
-
-export default function ModalNotifications({ open, close }: ComponentProps) {
-    const [content, setContent] = useState<NotificationContent[]>(initialContent);
-
-    const handleNotificationClose = (id: number) => {
-        setContent((prevContent) => prevContent.filter((message) => message.id !== id));
+    const handleNotificationClose = async (id: number) => {
+        try {
+            await NotificationService.markSeen(id);
+            setTimeout(() => {
+                fetchNotificacoes();
+            }, 200)
+        } catch (error) {
+            console.error(error?.message)
+        }
     };
 
     return (
@@ -35,13 +30,13 @@ export default function ModalNotifications({ open, close }: ComponentProps) {
             radius="lg"
             title={<Text size='xl' fw={900}> Notificações</Text>}
         >
-            {content.map((message) => (
+            {notifications.map((message) => (
                 <Notification
                     key={message.id}
                     title={message.horario}
                     closeButtonProps={{ 'aria-label': 'Hide notification' }}
                     mt='md'
-                    onClose={() => handleNotificationClose(message.id)}
+                    onClose={() => handleNotificationClose(message?.id)}
                 >
                     {message.mensagem}
                 </Notification>
