@@ -48,22 +48,20 @@ export default function ModalSelecaoRepresentante({ open, close }: ComponentProp
                         Selecionar representante
                     </Text>}
             >
-                <Divider size="xs" />
+                <Divider size="xs" mb='sm'/>
 
-                <Input.Wrapper label={"Cidade"} required>
+                <Input.Wrapper label={"Representante"} required>
                     <Input
                         component="select"
-                        name="enderecoForm.cidade"
                         onChange={() => 1}
                         rightSection={<IconChevronDown size={14} stroke={1.5} />}
                         pointer
                     >
                         <option
                             defaultValue=""
-                            disabled
                             selected
                         >
-                            Selecione a cidade
+                            Selecione o representante
                         </option>
                         {/* {tableHeaders.map(cidade => (
                             <option

@@ -78,11 +78,11 @@ function Login(props) {
   };
 
   const fetchEscolas = async () => {
-    const escolas = await EscolaService.fetchAll();
+    const escolas = await EscolaService.fetchAtivos(true);
     setEscolas(escolas?.content?.map(escola => ({
       id: escola.id,
       nome: escola.nome
-    })));;
+    })));
   };
 
 
@@ -97,7 +97,9 @@ function Login(props) {
 
   const handleRegistro = async (event) => {
     try {
-      const novoRegistro = await UserService.register(registerFields);
+      const novoRegistro = await UserService.register(registerFields).then(
+        await EscolaService.saveResponsavel(registerFields?.nome)
+      );
       console.log(novoRegistro);
       notifications.show({ title: 'Registrado com sucesso!', message: "Entre em sua conta agora", position: 'bottom-left' });
 

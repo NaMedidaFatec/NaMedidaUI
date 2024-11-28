@@ -11,9 +11,10 @@ import DateInput from "../../general/DateInput";
 interface ComponentProps {
     open?: boolean;
     close?: () => void;
+    fetchLotes?: () => void;
 }
 
-export default function ModalCadastroLote({ open, close }: ComponentProps) {
+export default function ModalCadastroLote({ open, close, fetchLotes }: ComponentProps) {
     const [produtosList, setProdutosList] = useState([]);
 
     useEffect(() => {
@@ -53,8 +54,9 @@ export default function ModalCadastroLote({ open, close }: ComponentProps) {
             await LoteService.createLote(formData);
             notifications.show({ title: 'Salvo com sucesso', message: '', position: 'bottom-left', color: 'blue' });
             setTimeout(() => {
-                window.location.reload();
-            }, 2500);
+                fetchLotes();
+            }, 750);
+            close();
         } catch (error) {
             console.log(error);
             notifications.show({ title: 'Erro ao salvar', message: error?.message, position: 'bottom-left', color: 'red' });

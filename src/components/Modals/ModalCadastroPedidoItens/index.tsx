@@ -171,6 +171,7 @@ export default function ModalCadastroPedidoItens({ open, close, pedidoId, fetchP
                     stripped={false}
                     withRowBorders
                     withBgColor={false}
+                    editableQuantity
                     withTableBorder
                     additionalButtons={additionalButtons}
                     handleQuantidadeChange={handleQuantidadeChange}

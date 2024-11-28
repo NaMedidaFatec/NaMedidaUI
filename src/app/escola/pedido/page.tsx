@@ -35,7 +35,7 @@ function Pedido(props: any) {
   const [openedCadastroItens, { open, close }] = useDisclosure(false);
   const [isOpenedCadastro, setOpenedCadastro] = useState(false);
 
-  const tableHeaders = ["CÓD", "DATA PEDIDO", "ÚLTIMA ATT.", "SITUAÇÃO", "OBS."];
+  const tableHeaders = ["CÓD", "DATA PEDIDO", "ÚLTIMA ATT.", "SITUAÇÃO", "OBS.", "MOTIVO CANCELAMENTO"];
 
   const fetchPedidos = async () => {
     try {
@@ -46,6 +46,7 @@ function Pedido(props: any) {
         ultimaAtualizacao: pedido?.updatedAt,
         situacao: pedido?.observacoesCancelamento ? "CANCELADO"
           : (pedido?.finalizada ? "FINALIZADO" : "EM ANDAMENTO"),
+        observacoes: pedido?.observacoes,
         observacoesCancelamento: pedido?.observacoesCancelamento,
       }));
 

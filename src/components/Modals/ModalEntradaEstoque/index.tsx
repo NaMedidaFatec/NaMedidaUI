@@ -180,8 +180,7 @@ export default function ModalEntradaEstoque({ open, close, fetchLotes }: Compone
                             name="quantidade"
                             onChange={(value) => setFormData({ ...formData, quantidade: Number(value) })}
                             value={formData.quantidade}
-                            label="Nº Alunos"
-                            placeholder="Nº Alunos"
+                            label="Quantidade de entrada"
                             required
                         />
                     </Grid.Col>

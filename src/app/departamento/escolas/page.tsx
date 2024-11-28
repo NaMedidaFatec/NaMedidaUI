@@ -64,7 +64,7 @@ function DetalhesEscola(props: any) {
     };
 
     const fetchEscolas = async () => {
-        const escolas = await EscolaService.fetchAll();
+        const escolas = await EscolaService.fetchAtivos(true);
         const escolasList = escolas?.content?.map(escola => ({
             id: escola?.id,
             nome: escola?.nome,
