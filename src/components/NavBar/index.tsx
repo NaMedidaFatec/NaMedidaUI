@@ -18,6 +18,7 @@ const data = {
     { link: "/departamento/produtos", label: "Produtos", icon: IconBox },
     { link: "/departamento/estoque", label: "Estoque", icon: IconPackages },
     { link: "/departamento/pedidos", label: "Pedidos", icon: IconTruckReturn },
+    { link: "/departamento/relatorios", label: "Relatórios", icon: IconFileAnalytics },
   ],
 };
 

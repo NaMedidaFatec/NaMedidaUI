@@ -13,7 +13,7 @@ class RelatorioService {
 
     static saveRelatorio = async (relatorioId, relatorio) => {
         try {
-            const { data } = await api.put(`/relatorio/save/${relatorioId}`, relatorio)
+            const { data } = await api.put(`/relatorio/${relatorioId}`, relatorio)
             return data;
         } catch (e) {
             throw new Error(e?.response?.data?.message);
@@ -32,6 +32,15 @@ class RelatorioService {
     static fetchAllRelatorios = async () => {
         try{
            const { data } = await api.get(`/relatorio`)
+           return data;
+        }catch(e){
+            throw new Error(e?.response?.data?.message);
+        }  
+    }
+
+    static fetchAllRelatoriosByUnidadeEnsino = async (escolaId) => {
+        try{
+           const { data } = await api.get(`/relatorio/unidadeensino/${escolaId}`)
            return data;
         }catch(e){
             throw new Error(e?.response?.data?.message);

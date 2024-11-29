@@ -1,0 +1,25 @@
+.iconReprovar {
+  display: flex;
+  flex-direction: row;
+  min-width: 120px;
+  padding: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconAprovar {
+  display: flex;
+  flex-direction: row;
+  min-width: 120px;
+  padding: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.txtAprovar {
+  color: gren
+}
+
+.txtReprovar {
+  color: red
+}

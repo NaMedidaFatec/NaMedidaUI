@@ -24,6 +24,8 @@ function DepartamentoEstoque(props: any) {
     }, [])
 
     const [lotes, setLotes] = useState([]);
+    const [lotesList, setLotesList] = useState([]);
+
 
     const [openedLote, handlers] = useDisclosure(false);
     const [opened, { open, close }] = useDisclosure(false);
@@ -31,14 +33,16 @@ function DepartamentoEstoque(props: any) {
 
     const fetchLotes = async () => {
         try {
-            const listaLotes = await LoteService.fetchAll();
-            setLotes(listaLotes?.content?.map((lote) => ({
+            const lotes = await LoteService.fetchAll();
+            setLotes(lotes)
+            setLotesList(lotes?.content?.map((lote) => ({
                 id: lote?.id,
                 nome: lote?.nome,
                 dataFabricacao: lote?.dataFabricacao,
                 dataValidade: lote?.dataValidade,
                 quantidade: lote?.quantidade,
-                produto: lote?.produto?.id
+                produto: lote?.produto?.id,
+                valorUnitario: lote?.valorUnitario,
             })));
         } catch (error) {
             console.error(error?.message);
@@ -46,7 +50,7 @@ function DepartamentoEstoque(props: any) {
         }
     }
 
-    const tableHeaders = ["CÓD", "NOME LOTE", "DATA FABRICAÇÃO", "DATA VALIDADE", "QTD. DISPONÍVEL"];
+    const tableHeaders = ["CÓD", "NOME LOTE", "DATA FABRICAÇÃO", "DATA VALIDADE", "QTD. DISPONÍVEL", "VALOR UNITÁRIO"];
 
     return (
         <>
@@ -85,13 +89,7 @@ function DepartamentoEstoque(props: any) {
 
                 <DataTable
                     headerElements={tableHeaders}
-                    elements={lotes.map((lote) => ({
-                        id: lote?.id,
-                        nome: lote?.nome,
-                        dataFabricacao: lote?.dataFabricacao,
-                        dataValidade: lote?.dataValidade,
-                        quantidade: lote?.quantidade,
-                    }))}
+                    elements={lotesList}
                 />
 
             </Box>
