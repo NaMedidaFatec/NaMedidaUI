@@ -1,13 +1,13 @@
 import React from "react";
 import { Group, Code, Image, useComputedColorScheme } from "@mantine/core";
-import { IconSettings, IconHome, IconSchool, IconUsers, IconPackages, IconChartBar, IconFileAnalytics, IconTruckDelivery, IconTruckReturn, IconBox } from "@tabler/icons-react";
+import { IconSettings, IconHome, IconSchool, IconUsers, IconPackages, IconChartBar, IconFileAnalytics, IconTruckDelivery, IconTruckReturn, IconBox, IconToolsKitchen2 } from "@tabler/icons-react";
 import classes from "./NavBar.module.css";
 import { usePathname } from "next/navigation";
 
 const data = {
   "escola": [
-    { link: "/escola", label: "Home", icon: IconHome },
     { link: "/escola/turmas", label: "Turmas", icon: IconUsers },
+    { link: "/escola", label: "Refeições", icon: IconToolsKitchen2 },
     { link: "/escola/pedido", label: "Pedido", icon: IconTruckDelivery },
     { link: "/escola/relatorios", label: "Relatorios", icon: IconFileAnalytics },
     { link: "/escola/settings", label: "Configurações", icon: IconSettings },

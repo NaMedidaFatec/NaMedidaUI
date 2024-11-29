@@ -65,7 +65,7 @@ function Relatoriosrelatorio(props: any) {
     const relatorios = await RelatorioService.fetchAllRelatorios();
     const relatoriosList = relatorios?.content?.map((relatorio) => ({
       id: relatorio?.id,
-      status: relatorio?.status,
+      status: relatorio?.status?.descricao,
       nome: relatorio?.nome,
       dataDeEnvio: relatorio?.dataDeEnvio,
       enviadoPor: relatorio?.enviadoPor?.nome,

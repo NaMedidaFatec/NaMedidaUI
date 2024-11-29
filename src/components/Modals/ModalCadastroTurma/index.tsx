@@ -55,7 +55,7 @@ export default function ModalCadastroTurma({ open, close, isEdicao, editTurma, f
             sala: isEdicao ? editTurma?.sala : '',
         }));
     }
-
+    
     const handleChange = (e) => {
         const { name, value } = e?.target;
 
@@ -68,7 +68,19 @@ export default function ModalCadastroTurma({ open, close, isEdicao, editTurma, f
     const saveTurma = async () => {
         try {
             if (isEdicao) {
-                await EscolaTurmaService.saveTurma(editTurma?.id, formData);
+                await EscolaTurmaService.saveTurma(editTurma?.id, {
+                    ...formData,
+                    horarioInicial: new Date(formData.horarioInicial).toLocaleDateString('pt-BR', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                    }),
+                    horarioFinal: new Date(formData.horarioFinal).toLocaleDateString('pt-BR', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                    })
+                 });
             } else {
                 await EscolaTurmaService.createTurma(formData);
             }

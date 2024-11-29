@@ -92,6 +92,42 @@ class EscolaService {
             throw new Error(e?.response?.data?.message);
         }
     }
+
+    static fetchRefeicoes = async () => {
+        try {
+            const { data } = await api.get(`/unidadeensinorefeicao`)
+            return data;
+        } catch (e) {
+            throw new Error(e?.response?.data?.message);
+        }
+    }
+
+    static createRefeicao = async (form) => {
+        try {
+            const { data } = await api.post(`/unidadeensinorefeicao/save`, form)
+            return data;
+        } catch (e) {
+            throw new Error(e?.response?.data?.message);
+        }
+    }
+
+    static createRefeicaoItens = async (form) => {
+        try {
+            const { data } = await api.post(`/refeicaoitem/save`, form)
+            return data;
+        } catch (e) {
+            throw new Error(e?.response?.data?.message);
+        }
+    }
+
+    static fetchRefeicaoItens = async (id) => {
+        try {
+            const { data } = await api.get(`/refeicaoitem/refeicao/${id}`)
+            return data;
+        } catch (e) {
+            throw new Error(e?.response?.data?.message);
+        }
+    }
 }
 
 export default EscolaService;

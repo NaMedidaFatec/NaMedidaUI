@@ -141,7 +141,7 @@ function Application({ children, ...props }) {
                               pos="absolute"
                               style={{ top: '2.3rem', right: '7.7rem' }}
                             >
-                              {notificacoes.length}
+                              {notificacoes?.length}
                             </Badge>
                           )}
                         </Grid.Col>

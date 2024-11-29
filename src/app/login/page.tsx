@@ -194,6 +194,14 @@ function Login(props) {
     return telefone.replace(/(\d{5})(\d{3})$/, '$1-$2');
   }
 
+  const isPasswordStrong = (senha) => {
+    const hasUpperCase = /[A-Z]/.test(senha);
+    const hasLowerCase = /[a-z]/.test(senha);
+    const hasNumber = /\d/.test(senha);
+
+    return hasUpperCase && hasLowerCase && hasNumber;
+  };
+
   const renderState = () => {
     switch (currentState) {
       case "LOGIN":
@@ -362,6 +370,25 @@ function Login(props) {
               />
             </Container>
 
+            <Radio.Group
+              label="Sou um usuário:"
+              withAsterisk
+              mt='sm'
+            >
+              <Group mt="xs">
+                <Radio
+                  name="tipoUsuario"
+                  value="DEPARTAMENTO"
+                  label="DEPARTAMENTO"
+                  onChange={(e) => setRegisterFields({ ...registerFields, tipoUsuario: e?.target?.value })} />
+                <Radio
+                  name="tipoUsuario"
+                  value="UNIDADE_ENSINO"
+                  label="ESCOLA"
+                  onChange={(e) => setRegisterFields({ ...registerFields, tipoUsuario: e?.target?.value })} />
+              </Group>
+            </Radio.Group>
+
             <Button
               fullWidth
               mt="xl"
@@ -369,6 +396,10 @@ function Login(props) {
               onClick={() => {
                 if (registerFields.password !== values.registroSenhaConfirmar) {
                   notifications.show({ title: 'Erro no registro!', message: "Senhas não coincidem!", position: 'bottom-left', color: 'red' })
+                  return;
+                }
+                if (!isPasswordStrong(registerFields?.password)) {
+                  notifications.show({ title: 'Erro no registro!', message: "Senha muito fraca!", position: 'bottom-left', color: 'red' })
                   return;
                 }
                 setCurrentState("CONTINUARREGISTRO");
@@ -396,21 +427,22 @@ function Login(props) {
             <Title order={2} ta="center" mt="md" mb={50}>
               Concluir registro
             </Title>
-
-            <Select
-              data={escolas?.map(escola => ({
-                value: escola.id.toString(),
-                label: escola.nome
-              }))}
-              label="Escola"
-              placeholder="Escola"
-              onChange={(value) => setRegisterFields({
-                ...registerFields,
-                unidadeEnsino: parseInt(value)
-              })}
-              onBlur={handleBlur}
-              required
-            />
+            {registerFields?.tipoUsuario === 'UNIDADE_ENSINO' && (
+              <Select
+                data={escolas?.map(escola => ({
+                  value: escola.id.toString(),
+                  label: escola.nome
+                }))}
+                label="Escola"
+                placeholder="Escola"
+                onChange={(value) => setRegisterFields({
+                  ...registerFields,
+                  unidadeEnsino: parseInt(value)
+                })}
+                onBlur={handleBlur}
+                required
+              />
+            )}
 
             <Container display="flex" px={0} style={{ gap: "1rem" }}>
               <Input
