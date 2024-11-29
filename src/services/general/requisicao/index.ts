@@ -47,4 +47,11 @@ export default class RequisicaoService {
             throw new Error(e?.response?.data?.message);
         }
     }
+
+    static async downloadRelatorioExcel(id) {
+        const { data } = await api.get(`/requisicao/${id}/download-relatorio-excel`, {
+          responseType: 'arraybuffer',
+        });
+        return data;
+      }
 }

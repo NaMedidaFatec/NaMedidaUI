@@ -8,11 +8,12 @@ import {
   Grid,
   Paper,
   useComputedColorScheme,
+  Input,
 } from "@mantine/core";
 import DataTable from "../../../components/general/DataTable";
 import ClearableInput from "../../../components/general/ClearableInput";
 import { withFormik } from "formik";
-import { IconPlus, IconUpload, IconDownload } from "@tabler/icons-react";
+import { IconPlus, IconUpload, IconDownload, IconChevronDown } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useUpdateTitle } from "../../../hooks/useTitle";
 import { useDisclosure } from "@mantine/hooks";
@@ -32,6 +33,7 @@ function Relatoriosrelatorio(props: any) {
 
   const [searchField, setSearchField] = useState("");
   const [relatorios, setRelatorios] = useState([]);
+
   const [opened, { open, close }] = useDisclosure(false);
 
   const [filter, setFilter] = useState({
