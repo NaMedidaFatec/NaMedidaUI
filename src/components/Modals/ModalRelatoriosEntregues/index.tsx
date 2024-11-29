@@ -1,6 +1,6 @@
 import { Divider, Grid, Modal, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { IconDownload, IconFileInfo } from "@tabler/icons-react";
+import { IconCheck, IconDownload, IconFileInfo, IconX } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import DataTable from "../../general/DataTable";
 import MinioService from "../../../services/general/minio";
@@ -52,10 +52,10 @@ export default function ModalRelatoriosEntregues({ open, close, isEdicao, editEs
         const relatorios = await RelatorioService.fetchAllRelatoriosByUnidadeEnsino(escolaId);
         const relatoriosList = relatorios?.content?.map((relatorio) => ({
             id: relatorio?.id,
-            status: relatorio?.status?.descricao ?? 'N/A',
             nome: relatorio?.nome,
             dataDeEnvio: relatorio?.dataDeEnvio,
             enviadoPor: relatorio?.enviadoPor?.nome,
+            status: relatorio?.status?.descricao ?? 'N/A',
         }));
         setRelatorios(relatorios?.content);
         setRelatoriosList(relatoriosList);
@@ -66,8 +66,8 @@ export default function ModalRelatoriosEntregues({ open, close, isEdicao, editEs
             id: 1,
             icon: (
                 <Grid className={cx(classes.iconReprovar)}>
-                <IconFileInfo className={cx(classes.txtReprovar)} />
-                <Text className={cx(classes.txtReprovar)}>Aprovar</Text>
+                <IconCheck className={cx(classes.txtAprovar)} />
+                <Text className={cx(classes.txtAprovar)}>Aprovar</Text>
               </Grid>
             ),
             onClick: async (element) => {
@@ -78,7 +78,8 @@ export default function ModalRelatoriosEntregues({ open, close, isEdicao, editEs
                         enviadoPor: {
                             id: relatorio?.enviadoPor?.id ?? undefined,
                         },
-                        status: 'APROVADO'
+                        status: 'APROVADO',
+                        unidadeEnsino: editEscola?.id
                     })
 
                     notifications.show({ title: 'Relatório aprovado com sucesso', message: '', position: 'bottom-left', color: 'blue' });
@@ -94,8 +95,8 @@ export default function ModalRelatoriosEntregues({ open, close, isEdicao, editEs
             id: 2,
             icon: (
                 <Grid className={cx(classes.iconAprovar)}>
-                <IconFileInfo className={cx(classes.txtAprovar)} />
-                <Text className={cx(classes.txtAprovar)}>Reprovar</Text>
+                <IconX className={cx(classes.txtReprovar)} />
+                <Text className={cx(classes.txtReprovar)}>Reprovar</Text>
               </Grid>
             ),
             onClick: async (element) => {
@@ -103,7 +104,8 @@ export default function ModalRelatoriosEntregues({ open, close, isEdicao, editEs
                 try {
                     await RelatorioService.saveRelatorio(relatorio?.id, {
                         ...relatorio,
-                        status: 'REPROVADO'
+                        status: 'REPROVADO',
+                        unidadeEnsino: editEscola?.id
                     })
 
                     notifications.show({ title: 'Relatório reprovado com sucesso', message: '', position: 'bottom-left', color: 'blue' });
@@ -134,18 +136,18 @@ export default function ModalRelatoriosEntregues({ open, close, isEdicao, editEs
 
       ];
 
-    const tableHeaders = ["CÓD", "STATUS", "NOME", "DATA ENVIO", "ENVIADO POR"];
+    const tableHeaders = ["CÓD", "NOME", "DATA ENVIO", "ENVIADO POR", "STATUS"];
 
-    const toggleActivationFunction = async (element: any) => {
-        try {
-            await Rela.toggleStatusEscola(element?.id).then(
-                fetchEscolas
-            );
-        } catch (error) {
-            console.log(error?.message);
-            notifications.show({ title: 'Erro ao desativar!', message: error?.message, position: 'bottom-left', color: 'red' })
-        }
-    };
+    // const toggleActivationFunction = async (element: any) => {
+    //     try {
+    //         await Rela.toggleStatusEscola(element?.id).then(
+    //             fetchEscolas
+    //         );
+    //     } catch (error) {
+    //         console.log(error?.message);
+    //         notifications.show({ title: 'Erro ao desativar!', message: error?.message, position: 'bottom-left', color: 'red' })
+    //     }
+    // };
 
     return (
         <>
