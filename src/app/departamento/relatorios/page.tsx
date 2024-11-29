@@ -2,34 +2,29 @@
 
 import { Box, Grid } from '@mantine/core';
 import { Button } from '../../../components/general';
-import { IconFileInfo, IconFilePencil, IconPlus, IconUserFilled } from "@tabler/icons-react";
+import { IconFilePencil, IconPlus } from "@tabler/icons-react";
 import DataTable from '../../../components/general/DataTable';
 import ClearableInput from '../../../components/general/ClearableInput';
 import { withFormik } from 'formik';
 import { useUpdateTitle } from '../../../hooks/useTitle';
 import { useEffect, useState } from 'react';
-import ModalDetalheEscola from '../../../components/Modals/ModalDetalheEscola';
 import { useDisclosure } from '@mantine/hooks';
 import EscolaService from '../../../services/escola';
 import { notifications } from '@mantine/notifications';
-import ModalCadastroEscola from '../../../components/Modals/ModalCadastroEscola';
-import ModalSelecaoRepresentante from '../../../components/Modals/ModalSelecaoRepresentante';
+import ModalRelatoriosEntregues from '../../../components/Modals/ModalRelatoriosEntregues';
 
-function DetalhesEscola(props: any) {
+function RelatoriosEscola(props: any) {
     const [escolas, setEscolas] = useState([]);
     const [searchField, setSearchField] = useState("");
     const [selectedEscola, setSelectedEscola] = useState({});
     const [filteredEscolas, setFilteredEscolas] = useState([]);
     const [isEdicao, setEdicao] = useState(false);
-    
-    const [opened, handlers] = useDisclosure(false);
-    const [openedCadastro, { open, close }] = useDisclosure(false);
-    const [openedResponsavel, setOpenedResponsavel] = useState(false);
+    const [openedRelatoriosModal, { open, close }] = useDisclosure(false);
 
     const updateTitle = useUpdateTitle();
 
     useEffect(() => {
-        updateTitle('Escolas Cadastradas')
+        updateTitle('Relatórios Entregues')
         fetchEscolas();
     }, [])
 
@@ -89,31 +84,11 @@ function DetalhesEscola(props: any) {
             cidade: escola?.endereco?.cidade?.id,
             tipoPessoa: escola?.tipoPessoa,
             qtdAlunosMatriculados: escola?.qtdAlunosMatriculados,
+            qtdRelatoriosEntregues: escola?.qtdRelatoriosEntregues,
         }));
 
         setEscolas(escolasList);
         setFilteredEscolas(escolasList);
-    };
-
-    const toggleActivationFunction = async (element: any) => {
-        try {
-            await EscolaService.toggleStatusEscola(element?.id).then(
-                fetchEscolas
-            );
-        } catch (error) {
-            console.log(error?.message);
-            notifications.show({ title: 'Erro ao desativar!', message: error?.message, position: 'bottom-left', color: 'red' })
-        }
-    };
-
-    const fetchRepresentantes = async (clickedItemId: any) => {
-        setSelectedEscola(escolas.find((element) => element?.id === clickedItemId));
-        setOpenedResponsavel(true)
-    };
-
-    const openInfoModal = (clickedItemId: string) => {
-        setSelectedEscola(escolas.find((element) => element?.id === clickedItemId));
-        handlers?.open();
     };
 
     const openCreateModal = () => {
@@ -121,40 +96,25 @@ function DetalhesEscola(props: any) {
         open();
     };
 
-    const openEditModal = (clickedItemId: string) => {
+    const openRelatoriosModal = (clickedItemId: string) => {
         setSelectedEscola(escolas.find((element) => element?.id === clickedItemId));
         setEdicao(true);
         open();
     };
 
-    const tableHeaders = ["CÓD", "NOME DA ESCOLA", 'REPRESENTANTE', 'STATUS', 'QTD ALUNOS MATRICULADOS'];
+    const tableHeaders = ["CÓD", "NOME DA ESCOLA", 'REPRESENTANTE', 'STATUS', 'QTD ALUNOS', 'QTD RELATORIOS'];
 
     const additionalButtons = [
         {
-            id: 1,
-            icon: <IconUserFilled />,
-            onClick: (element: any) => fetchRepresentantes(element?.id)
-        },
-        {
             id: 2,
             icon: <IconFilePencil />,
-            onClick: (element: any) => openEditModal(element?.id)
-        },
-        {
-            id: 3,
-            icon: <IconFileInfo />,
-            onClick: (element: any) => openInfoModal(element?.id)
+            onClick: (element: any) => openRelatoriosModal(element?.id)
         },
     ];
 
     return (
         <>
-            <ModalDetalheEscola open={opened} close={handlers?.close} escola={selectedEscola} />
-
-            <ModalCadastroEscola open={openedCadastro} close={close} isEdicao={isEdicao} editEscola={selectedEscola} fetchEscolas={fetchEscolas}/>
-
-            <ModalSelecaoRepresentante open={openedResponsavel} close={() => setOpenedResponsavel(false)} escolaSelecionada={selectedEscola} fetchEscolas={fetchEscolas}/>
-
+            <ModalRelatoriosEntregues open={openedRelatoriosModal} close={close} isEdicao={isEdicao} editEscola={selectedEscola} fetchEscolas={fetchEscolas}/>
             <Box
                 w='100%'
                 h="89vh"
@@ -185,12 +145,10 @@ function DetalhesEscola(props: any) {
                         representante: escola?.representante || "N/A",
                         ativo: escola?.ativo,
                         qtdAlunosMatriculados: escola?.qtdAlunosMatriculados,
+                        qtdRelatoriosEntregues: escola?.qtdRelatoriosEntregues,
                     }))}
                     additionalButtons={additionalButtons}
-                    activate
-                    toggleActivationFunction={toggleActivationFunction}
                 />
-
             </Box>
         </>
     );
@@ -200,4 +158,4 @@ export default withFormik({
     validateOnChange: false,
     validateOnBlur: false,
     handleSubmit: () => 1
-})(DetalhesEscola);
+})(RelatoriosEscola);

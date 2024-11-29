@@ -16,18 +16,20 @@ interface ComponentProps {
 
 export default function ModalCadastroLote({ open, close, fetchLotes }: ComponentProps) {
     const [produtosList, setProdutosList] = useState([]);
-
-    useEffect(() => {
-        fetchProdutos();
-    }, [open]);
-
-    const [formData, setFormData] = useState({
+    const originalFormData = {
         nome: '',
         dataFabricacao: undefined,
         dataValidade: undefined,
         quantidade: 0,
         produto: 0,
-    });
+        valorUnitario: undefined,
+    }
+    useEffect(() => {
+        setFormData(originalFormData)
+        fetchProdutos();
+    }, [open]);
+
+    const [formData, setFormData] = useState(originalFormData);
 
     const handleChange = (e) => {
         const { name, value } = e?.target;
@@ -91,7 +93,7 @@ export default function ModalCadastroLote({ open, close, fetchLotes }: Component
                             required
                         />
                     </Grid.Col>
-                    <Grid.Col span={4}>
+                    <Grid.Col span={6}>
                         <Input.Wrapper label={"Produto"} required>
                             <Input
                                 component="select"
@@ -118,7 +120,19 @@ export default function ModalCadastroLote({ open, close, fetchLotes }: Component
                             </Input>
                         </Input.Wrapper>
                     </Grid.Col>
-                    <Grid.Col span={2}>
+                    <Grid.Col span={6}>
+                        <NumberInput
+                            name="valorUnitario"
+                            onChange={(value) => setFormData({ ...formData, valorUnitario: Number(value) })}
+                            value={formData.valorUnitario}
+                            label="Valor unitário"
+                            required
+                            min={0}
+                            step={0.01}
+                        />
+                    </Grid.Col>
+                        
+                    <Grid.Col span={6}>
                         <NumberInput
                             name="quantidade"
                             onChange={(value) => setFormData({ ...formData, quantidade: Number(value) })}
