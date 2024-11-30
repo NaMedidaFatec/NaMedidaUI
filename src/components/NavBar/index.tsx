@@ -6,19 +6,18 @@ import { usePathname } from "next/navigation";
 
 const data = {
   "escola": [
-    { link: "/escola/turmas", label: "Turmas", icon: IconUsers },
-    { link: "/escola", label: "Refeições", icon: IconToolsKitchen2 },
-    { link: "/escola/pedido", label: "Pedido", icon: IconTruckDelivery },
-    { link: "/escola/relatorios", label: "Relatorios", icon: IconFileAnalytics },
-    { link: "/escola/settings", label: "Configurações", icon: IconSettings },
+    { link: "/NaMedidaUI/escola/turmas", label: "Turmas", icon: IconUsers },
+    { link: "/NaMedidaUI/escola", label: "Refeições", icon: IconToolsKitchen2 },
+    { link: "/NaMedidaUI/escola/pedido", label: "Pedido", icon: IconTruckDelivery },
+    { link: "/NaMedidaUI/escola/relatorios", label: "Relatorios", icon: IconFileAnalytics },
   ],
   departamento: [
-    { link: "/departamento/dashboards", label: "Dashboards", icon: IconChartBar },
-    { link: "/departamento/escolas", label: "Escolas", icon: IconSchool },
-    { link: "/departamento/produtos", label: "Produtos", icon: IconBox },
-    { link: "/departamento/estoque", label: "Estoque", icon: IconPackages },
-    { link: "/departamento/pedidos", label: "Pedidos", icon: IconTruckReturn },
-    { link: "/departamento/relatorios", label: "Relatórios", icon: IconFileAnalytics },
+    { link: "/NaMedidaUI/departamento/dashboards", label: "Dashboards", icon: IconChartBar },
+    { link: "/NaMedidaUI/departamento/escolas", label: "Escolas", icon: IconSchool },
+    { link: "/NaMedidaUI/departamento/produtos", label: "Produtos", icon: IconBox },
+    { link: "/NaMedidaUI/departamento/estoque", label: "Estoque", icon: IconPackages },
+    { link: "/NaMedidaUI/departamento/relatorios", label: "Relatórios", icon: IconFileAnalytics },
+    { link: "/NaMedidaUI/departamento/pedidos", label: "Pedidos", icon: IconTruckReturn },
   ],
 };
 
@@ -49,10 +48,10 @@ export default function NavBar() {
       </div>
       <Group className={classes.footer} justify="space-between">
         <Image
-          src={computedColorScheme === "dark" ? "/logoDark.png" : "/logo.png"}
+          src={computedColorScheme === "dark" ? "logoDark.png" : "logo.png"}
           w={'8rem'}
         />
-        <Code fw={700}>v0.8.5</Code>
+        <Code fw={700}>v0.9.5</Code>
       </Group>
     </>
   );
