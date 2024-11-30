@@ -126,8 +126,8 @@ export default function ModalRelatoriosEntregues({ open, close, isEdicao, editEs
                         objectName: relatorio.nome,
                         bucket: process.env.NEXT_PUBLIC_API_NAMEDIDA,
                     });
-                    blob = new Blob([blob], { type: 'application/pdf' });
-                    save(blob, `${relatorio.nome}.pdf`);
+                    blob = new Blob([blob], { type: 'application/vnd.ms-excel' });
+                    save(blob, `${relatorio.nome}`);
                 } catch (error) {
                     
                 }

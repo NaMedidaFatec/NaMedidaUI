@@ -53,8 +53,8 @@ function Relatoriosrelatorio(props: any) {
                     objectName: relatorio.nome,
                     bucket: process.env.NEXT_PUBLIC_API_NAMEDIDA,
                 });
-                blob = new Blob([blob], { type: 'application/pdf' });
-                saveAs(blob, `${relatorio.nome}.pdf`);
+                blob = new Blob([blob], { type: 'application/vnd.ms-excel' });
+                saveAs(blob, `${relatorio.nome}`);
             } catch (error) {
                 
             }
