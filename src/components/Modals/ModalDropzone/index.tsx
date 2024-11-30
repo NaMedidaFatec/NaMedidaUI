@@ -1,6 +1,6 @@
 import { Divider, Grid, Group, Input, Modal, Text, rem } from '@mantine/core';
 import { IconUpload, IconPhoto, IconX, IconPdf, IconFileExport, IconChevronDown } from '@tabler/icons-react';
-import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE, PDF_MIME_TYPE } from '@mantine/dropzone';
+import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE, MS_EXCEL_MIME_TYPE, PDF_MIME_TYPE } from '@mantine/dropzone';
 import { useEffect, useState } from 'react';
 import RequisicaoService from '../../../services/general/requisicao';
 import { notifications } from '@mantine/notifications';
@@ -96,7 +96,7 @@ export default function ModalDropzone({ open, close, onDrop = () => {}, onReject
                 // onDrop={(files) => console.log('accepted files', files)}
                 // onReject={(files) => console.log('rejected files', files)}
                 maxSize={5 * 1024 ** 2}
-                accept={PDF_MIME_TYPE}
+                accept={{PDF_MIME_TYPE, MS_EXCEL_MIME_TYPE}}
                 {...props}
             >
                 <Group justify="center" gap="xl" mih={220} style={{ pointerEvents: 'none' }}>
