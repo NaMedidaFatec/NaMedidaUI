@@ -6,18 +6,18 @@ import { usePathname } from "next/navigation";
 
 const data = {
   "escola": [
-    { link: "NaMedidaUI/escola/turmas", label: "Turmas", icon: IconUsers },
-    { link: "NaMedidaUI/escola", label: "Refeições", icon: IconToolsKitchen2 },
-    { link: "NaMedidaUI/escola/pedido", label: "Pedido", icon: IconTruckDelivery },
-    { link: "NaMedidaUI/escola/relatorios", label: "Relatorios", icon: IconFileAnalytics },
+    { link: "/turmas", label: "Turmas", icon: IconUsers },
+    { link: "/escola", label: "Refeições", icon: IconToolsKitchen2 },
+    { link: "/pedido", label: "Pedido", icon: IconTruckDelivery },
+    { link: "/relatorios", label: "Relatorios", icon: IconFileAnalytics },
   ],
   departamento: [
-    { link: "NaMedidaUI/departamento/dashboards", label: "Dashboards", icon: IconChartBar },
-    { link: "NaMedidaUI/departamento/escolas", label: "Escolas", icon: IconSchool },
-    { link: "NaMedidaUI/departamento/produtos", label: "Produtos", icon: IconBox },
-    { link: "NaMedidaUI/departamento/estoque", label: "Estoque", icon: IconPackages },
-    { link: "NaMedidaUI/departamento/relatorios", label: "Relatórios", icon: IconFileAnalytics },
-    { link: "NaMedidaUI/departamento/pedidos", label: "Pedidos", icon: IconTruckReturn },
+    { link: "/dashboards", label: "Dashboards", icon: IconChartBar },
+    { link: "/escolas", label: "Escolas", icon: IconSchool },
+    { link: "/produtos", label: "Produtos", icon: IconBox },
+    { link: "/estoque", label: "Estoque", icon: IconPackages },
+    { link: "/relatorios", label: "Relatórios", icon: IconFileAnalytics },
+    { link: "/pedidos", label: "Pedidos", icon: IconTruckReturn },
   ],
 };
 
