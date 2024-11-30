@@ -21,7 +21,8 @@ import ModalDropzone from "../../../components/Modals/ModalDropzone";
 import MinioService from "../../../services/general/minio";
 import RelatorioService from "../../../services/general/relatorio";
 import { notifications } from "@mantine/notifications";
-import { save } from 'save-file'
+import save from "save-file";
+
 
 function Relatoriosrelatorio(props: any) {
   const updateTitle = useUpdateTitle();
