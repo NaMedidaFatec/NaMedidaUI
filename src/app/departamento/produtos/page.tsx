@@ -53,7 +53,7 @@ function DepartamentoProdutos(props: any) {
         );
     };
 
-    const tableHeaders = ["CÓD", "PRODUTO", "COD. BARRAS", "QTD. ESTOQUE", "ATIVO?"];
+    const tableHeaders = ["CÓD", "PRODUTO", "COD. BARRAS", "COD. BARRAS", "QTD. ESTOQUE", "ATIVO?"];
 
     const fetchProdutos = async () => {
         const produtos = await ProdutoService.fetchAll();
@@ -133,7 +133,8 @@ function DepartamentoProdutos(props: any) {
                     elements={filteredProdutos?.map(produto => ({
                         id: produto?.id,
                         nome: produto?.nome,
-                        descricao: produto?.codigoDeBarras,
+                        descricao: produto?.descricao,
+                        codigoDeBarras: produto?.codigoDeBarras,
                         quantidadeEstoque: produto?.quantidadeEstoque,
                         ativo: produto?.ativo,
                     }))}

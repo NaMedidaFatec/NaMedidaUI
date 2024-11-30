@@ -16,6 +16,7 @@ import { useDisclosure } from "@mantine/hooks";
 import ModalCadastroPedido from "../../../components/Modals/ModalCadastroPedido";
 import ModalCadastroPedidoItens from "../../../components/Modals/ModalCadastroPedidoItens";
 import RequisicaoService from "../../../services/general/requisicao";
+import ModalDataTableSimples from "../../../components/Modals/ModalDataTableSimples";
 
 function Pedido(props: any) {
   const updateTitle = useUpdateTitle();
@@ -86,22 +87,27 @@ function Pedido(props: any) {
     open();
   };
 
+  const openDetail = (id: any) => {
+    setSelectedPedidoId(id);
+    handlers?.open()
+  };
+
   const additionalButtons = [
     {
       id: 1,
       icon: <IconCubePlus />,
       onClick: (element: any) => openCadastroItensModal(element?.id)
     },
-    // {
-    //   id: 2,
-    //   icon: <IconFileInfo />,
-    //   onClick: () => handlers?.open()
-    // },
+    {
+      id: 2,
+      icon: <IconFileInfo />,
+      onClick: (element: any) => openDetail(element?.id)
+    },
   ];
 
   return (
     <>
-      {/* <ModalDetalhePedido open={openedDetalhe} close={() => handlers?.close()} /> */}
+      <ModalDataTableSimples open={openedDetalhe} close={() => handlers?.close()} refeicaoId={selectedPedidoId}/>
 
       <ModalCadastroPedido open={isOpenedCadastro} close={() => setOpenedCadastro(false)} fetchPedidos={fetchPedidos} />
 

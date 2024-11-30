@@ -40,7 +40,7 @@ export default function ModalDataTableSimples({ open, close, refeicaoId }) {
                 }}
                 title={
                     <Text size="xl" fw={200}>
-                        Itens da refeição
+                        Itens
                     </Text>}
             >
                 <Divider size="xs" />

@@ -137,7 +137,7 @@ export default function ModalCadastroLote({ open, close, fetchLotes }: Component
                             name="quantidade"
                             onChange={(value) => setFormData({ ...formData, quantidade: Number(value) })}
                             value={formData.quantidade}
-                            label="Quantidade"
+                            label="Quantidade à inserir"
                             required
                         />
                     </Grid.Col>

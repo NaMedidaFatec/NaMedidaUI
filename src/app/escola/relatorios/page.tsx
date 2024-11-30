@@ -41,8 +41,7 @@ function Relatoriosrelatorio(props: any) {
     dataInicial: "2024-01-01",
     dataFinal: "2024-12-12",
   });
-
-    const tableHeaders = ["CÓD", "STATUS", "NOME", "DATA ENVIO", "ENVIADO POR"];
+    const tableHeaders = ["CÓD", "NOME", "DATA ENVIO", "ENVIADO POR"];
 
   const additionalButtons = [
     {
@@ -67,7 +66,6 @@ function Relatoriosrelatorio(props: any) {
     const relatorios = await RelatorioService.fetchAllRelatorios();
     const relatoriosList = relatorios?.content?.map((relatorio) => ({
       id: relatorio?.id,
-      status: relatorio?.status?.descricao,
       nome: relatorio?.nome,
       dataDeEnvio: relatorio?.dataDeEnvio,
       enviadoPor: relatorio?.enviadoPor?.nome,

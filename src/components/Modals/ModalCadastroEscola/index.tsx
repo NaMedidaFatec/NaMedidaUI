@@ -138,7 +138,8 @@ export default function ModalCadastroEscola({ open, close, isEdicao, editEscola,
     const saveEscola = async () => {
         try {
             if (isEdicao) {
-                await EscolaService.saveEscola(editEscola?.id, formData);
+                const { departamento, ...rest } = formData;
+                await EscolaService.saveEscola(editEscola?.id, rest);
             } else {
                 await EscolaService.createEscola(formData);
             }

@@ -191,7 +191,14 @@ export default function ModalSeparacaoPedido({
   const savePedidoSeparacao = async () => {
     try {
       if (isEdicao) {
-        await RequisicaoSeparacaoService.updateSeparacao(formData?.id, formData)
+        await RequisicaoSeparacaoService.updateSeparacao(formData?.id, {
+          ...formData,
+          data: new Date(formData.data).toLocaleDateString('pt-BR', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+          })
+       });
       } else {
         await RequisicaoSeparacaoService.createSeparacao(formData)
       }

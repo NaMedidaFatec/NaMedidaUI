@@ -10,15 +10,14 @@ const data = {
     { link: "/escola", label: "Refeições", icon: IconToolsKitchen2 },
     { link: "/escola/pedido", label: "Pedido", icon: IconTruckDelivery },
     { link: "/escola/relatorios", label: "Relatorios", icon: IconFileAnalytics },
-    { link: "/escola/settings", label: "Configurações", icon: IconSettings },
   ],
   departamento: [
     { link: "/departamento/dashboards", label: "Dashboards", icon: IconChartBar },
     { link: "/departamento/escolas", label: "Escolas", icon: IconSchool },
     { link: "/departamento/produtos", label: "Produtos", icon: IconBox },
     { link: "/departamento/estoque", label: "Estoque", icon: IconPackages },
-    { link: "/departamento/pedidos", label: "Pedidos", icon: IconTruckReturn },
     { link: "/departamento/relatorios", label: "Relatórios", icon: IconFileAnalytics },
+    { link: "/departamento/pedidos", label: "Pedidos", icon: IconTruckReturn },
   ],
 };
 
