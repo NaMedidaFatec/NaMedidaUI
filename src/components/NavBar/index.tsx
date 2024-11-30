@@ -6,18 +6,18 @@ import { usePathname } from "next/navigation";
 
 const data = {
   "escola": [
-    { link: "/turmas", label: "Turmas", icon: IconUsers },
+    { link: "/escola/turmas", label: "Turmas", icon: IconUsers },
     { link: "/escola", label: "Refeições", icon: IconToolsKitchen2 },
-    { link: "/pedido", label: "Pedido", icon: IconTruckDelivery },
-    { link: "/relatorios", label: "Relatorios", icon: IconFileAnalytics },
+    { link: "/escola/pedido", label: "Pedido", icon: IconTruckDelivery },
+    { link: "/escola/relatorios", label: "Relatorios", icon: IconFileAnalytics },
   ],
   departamento: [
-    { link: "/dashboards", label: "Dashboards", icon: IconChartBar },
-    { link: "/escolas", label: "Escolas", icon: IconSchool },
-    { link: "/produtos", label: "Produtos", icon: IconBox },
-    { link: "/estoque", label: "Estoque", icon: IconPackages },
-    { link: "/relatorios", label: "Relatórios", icon: IconFileAnalytics },
-    { link: "/pedidos", label: "Pedidos", icon: IconTruckReturn },
+    { link: "/departamento/dashboards", label: "Dashboards", icon: IconChartBar },
+    { link: "/departamento/escolas", label: "Escolas", icon: IconSchool },
+    { link: "/departamento/produtos", label: "Produtos", icon: IconBox },
+    { link: "/departamento/estoque", label: "Estoque", icon: IconPackages },
+    { link: "/departamento/relatorios", label: "Relatórios", icon: IconFileAnalytics },
+    { link: "/departamento/pedidos", label: "Pedidos", icon: IconTruckReturn },
   ],
 };
 
