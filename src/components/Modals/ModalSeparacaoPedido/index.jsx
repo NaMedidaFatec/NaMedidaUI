@@ -21,23 +21,23 @@ import { useDisclosure } from "@mantine/hooks";
 import ModalSeparacaoItemPedido from "../ModalSeparacaoItemPedido";
 import RequisicaoSeparacaoService from "../../../services/general/requisicaoseparacao";
 
-interface ComponentProps {
-  open?: boolean;
-  pedido?: any;
-  pedidoSeparacao: any;
-  close?: () => void;
-  fetchPedidos?: () => void;
-  fetchSeparacao?: () => void;
-  isEdicao?: boolean;
-  editSeparacao?: {
-    id?: number;
-    requisicao?: number;
-    data?: string;
-    observacoes?: string;
-    ativo?: boolean;
-    finalizada?: boolean;
-  };
-}
+// interface ComponentProps {
+//   open?: boolean;
+//   pedido?: any;
+//   pedidoSeparacao: any;
+//   close?: () => void;
+//   fetchPedidos?: () => void;
+//   fetchSeparacao?: () => void;
+//   isEdicao?: boolean;
+//   editSeparacao?: {
+//     id?: number;
+//     requisicao?: number;
+//     data?: string;
+//     observacoes?: string;
+//     ativo?: boolean;
+//     finalizada?: boolean;
+//   };
+// }
 
 export default function ModalSeparacaoPedido({
   open,
@@ -47,7 +47,7 @@ export default function ModalSeparacaoPedido({
   pedidoSeparacao,
   fetchSeparacao,
   fetchPedidos,
-}: ComponentProps) {
+}) {
   const { user } = useAuth();
   const tableHeaders = [
     "Código",
@@ -85,17 +85,17 @@ export default function ModalSeparacaoPedido({
           <Text className={cx(classes.txtSeparacao)}>Itens</Text>
         </Grid>
       ),
-      onClick: (element: any) => openItensModal(element?.id),
+      onClick: (element) => openItensModal(element?.id),
     },
   ];
 
-  const openItensModal = (clickedItemId: string) => {
+  const openItensModal = (clickedItemId) => {
     setPedidoItem(itens.find((element) => element?.id === clickedItemId));
     handlersItems?.open();
     close();
   };
 
-  const fetchPedidoItem = async (clickedItemId: string) => {
+  const fetchPedidoItem = async (clickedItemId) => {
     const item = itens.find((element) => element?.id === clickedItemId)
     await setPedidoItem(item);
     return item;
@@ -194,15 +194,15 @@ export default function ModalSeparacaoPedido({
         await RequisicaoSeparacaoService.updateSeparacao(formData?.id, {
           ...formData,
           data: new Date(formData.data).toLocaleDateString('pt-BR', {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit'
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
           })
-       });
+        });
       } else {
         await RequisicaoSeparacaoService.createSeparacao(formData)
       }
-      
+
       notifications.show({
         title: "Salvo com sucesso",
         message: "",
