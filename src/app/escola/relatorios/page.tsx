@@ -21,8 +21,7 @@ import ModalDropzone from "../../../components/Modals/ModalDropzone";
 import MinioService from "../../../services/general/minio";
 import RelatorioService from "../../../services/general/relatorio";
 import { notifications } from "@mantine/notifications";
-import save from "save-file";
-
+import { saveAs } from 'file-saver';
 
 function Relatoriosrelatorio(props: any) {
   const updateTitle = useUpdateTitle();
@@ -55,7 +54,7 @@ function Relatoriosrelatorio(props: any) {
                     bucket: process.env.NEXT_PUBLIC_API_NAMEDIDA,
                 });
                 blob = new Blob([blob], { type: 'application/pdf' });
-                save(blob, `${relatorio.nome}.pdf`);
+                saveAs(blob, `${relatorio.nome}.pdf`);
             } catch (error) {
                 
             }

@@ -43,7 +43,7 @@ export default function ModalSeparacaoItemPedido({
   ];
 
   const originalFormData = {
-    id: 0,
+    id: undefined,
     estoque: undefined,
     quantidadeEntregue: undefined,
     requisicaoItem: pedidoItem?.id,
