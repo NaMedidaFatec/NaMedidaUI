@@ -2,6 +2,7 @@
   "name": "namedida-ui",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://namedidafatec.github.io/NaMedidaUI",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
