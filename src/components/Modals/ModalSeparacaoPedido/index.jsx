@@ -43,6 +43,7 @@ export default function ModalSeparacaoPedido({
   open,
   close,
   isEdicao,
+  editSeparacao,
   pedido,
   pedidoSeparacao,
   fetchSeparacao,
