@@ -611,7 +611,7 @@ function Login(props) {
         <Grid.Col span={7}>
           <Image
             h="100vh"
-            src="/loginImage.png"
+            src="loginImage.png"
           />
         </Grid.Col>
         <Grid.Col span={5} >
@@ -623,7 +623,7 @@ function Login(props) {
             style={{ alignItems: "center", flexDirection: "column" }}
           >
             <Image
-              src={computedColorScheme === "dark" ? "/logoDark.png" : "/logo.png"}
+              src={computedColorScheme === "dark" ? "logoDark.png" : "logo.png"}
               maw={'30rem'}
               fit="contain"
               style={{ marginBlock: '6rem' }}

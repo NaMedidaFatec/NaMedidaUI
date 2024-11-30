@@ -48,10 +48,10 @@ export default function NavBar() {
       </div>
       <Group className={classes.footer} justify="space-between">
         <Image
-          src={computedColorScheme === "dark" ? "/logoDark.png" : "/logo.png"}
+          src={computedColorScheme === "dark" ? "logoDark.png" : "logo.png"}
           w={'8rem'}
         />
-        <Code fw={700}>v0.8.5</Code>
+        <Code fw={700}>v0.9.5</Code>
       </Group>
     </>
   );
