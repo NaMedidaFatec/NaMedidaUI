@@ -8,7 +8,7 @@ import classes from "./loading.module.css";
 export default function Loading(props: any) {
   return (
     <Box className={classes.loading}>
-      <Group spacing={20}>
+      <Group >
         <IconCircle size={40} />
         <Text>Loading...</Text>
       </Group>
