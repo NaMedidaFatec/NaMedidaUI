@@ -43,6 +43,7 @@ export default function ModalSeparacaoItemPedido({
   ];
 
   const originalFormData = {
+    id: 0,
     estoque: undefined,
     quantidadeEntregue: undefined,
     requisicaoItem: pedidoItem?.id,
@@ -51,7 +52,7 @@ export default function ModalSeparacaoItemPedido({
   const [isEdicao, setIsEdicao] = useState(false);
   const [lotes, setLotes] = useState([]);
   const [lotesList, setLotesList] = useState([]);
-  const [lote, setLote] = useState({});
+  const [lote, setLote] = useState({ quantidade: 0 });
   const [formData, setFormData] = useState(originalFormData);
   const [separacaoItens, setSeparacaoItens] = useState([]);
   const [separacaoItensList, setSeparacaoItensList] = useState([]);
@@ -96,6 +97,7 @@ export default function ModalSeparacaoItemPedido({
 
       setIsEdicao(false);
       setFormData({
+        id: 0,
         estoque: "",
         quantidadeEntregue: pedidoItem?.quantidadePendente,
         requisicaoItem: pedidoItem?.id,
@@ -229,6 +231,7 @@ export default function ModalSeparacaoItemPedido({
       onPedidoItem(pedidoItem)
       setIsEdicao(false);
       setFormData({
+        id:0,
         estoque: "",
         quantidadeEntregue: pedidoItem?.quantidadePendente,
         requisicaoItem: pedidoItem?.id,
